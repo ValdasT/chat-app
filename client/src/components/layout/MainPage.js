@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import Chatbar from '../Chatbar/Chatbar'
 import ChatList from '../Chatwindow/ChatList'
-import { Paper } from '@material-ui/core';
 
 const App = () =>
 
