@@ -2,12 +2,10 @@ import React, { Fragment, useState, useContext } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { InputAdornment } from '@material-ui/core';
 import { GlobalContext } from '../../context/GlobalState';
-import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment';
 import './Chatbar.css';
 
 const Chatbar = () => {
-    const { addMessage } = useContext(GlobalContext);
+    const { addMessage, getAnswer } = useContext(GlobalContext);
     const [message, setMessage] = useState('');
 
     const newMessage = () => {
@@ -15,12 +13,11 @@ const Chatbar = () => {
 
         if (lastMessage.length) {
             addMessage({
-                id: uuidv4(),
                 message: lastMessage,
                 sender: 'me',
-                time: moment().calendar()
             });
         }
+        getAnswer();
         setMessage('')
     }
 

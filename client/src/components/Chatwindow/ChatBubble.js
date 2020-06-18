@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Grid, ListItem, Avatar } from '@material-ui/core';
+import ReactHtmlParser from 'react-html-parser';
 import './Chat.css';
 
 const ChatBubble = ({ message }) => {
@@ -11,7 +12,7 @@ const ChatBubble = ({ message }) => {
                         <div>
                             <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                         </div>
-                        <div className={message.sender === 'hugo' ? "bubble bubble-left" : "bubble bubble-right"}> {message.message} </div>
+                        <div className={message.sender === 'hugo' ? "bubble bubble-left" : "bubble bubble-right"}>{ReactHtmlParser(message.message)}</div>
                     </Grid>
                     <Grid item xs={12}>
                         <div className="messageTime" align={message.sender === 'hugo' ? "left" : "right"} >{message.time}</div>

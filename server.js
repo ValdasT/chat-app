@@ -16,6 +16,7 @@ authentication.init(app);
 
 // Define Routes
 app.use('/api/users', require('./routes/users'));
+app.use('/api/hugo', require('./routes/hugo'));
 // app.use('/api/auth', require('./routes/api/auth'));
 // app.use('/api/profile', require('./routes/api/profile'));
 // app.use('/api/posts', require('./routes/api/posts'));
