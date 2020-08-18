@@ -1,14 +1,7 @@
 .messageArea{
-    height: 85vh;
-    overflow-y: auto;
-    /* display: flex;
-    flex-direction: column-reverse */
-  }
-
-   @media (max-width: 55em) {
-    .messageArea {
-        height: 79vh;
-    }
+    overflow-y: scroll;
+    padding-top: 70px !important;
+    padding-bottom: 70px !important;
   }
 
   .bubble{

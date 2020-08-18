@@ -3,9 +3,9 @@ const router = express.Router();
 const axios = require('axios')
 
 router.post('/get-answer', (req, res, next) => {
-    console.log('started!!!!!!!!');
+    console.log(req.body.message);
     let data = {
-        "question": 'hi',
+        "question": req.body.message,
         "token": 'nGKHwSH89Q4qMjMK',
         "user": 'Local' + " " + 'Developer',
         "email": 'local@ibm.com',

@@ -1,16 +1,16 @@
-import React, { Fragment } from 'react';
-import { AppBar, Toolbar, Typography } from '@material-ui/core';
+import React, { Fragment, useContext } from 'react';
+import { GlobalContext } from '../../context/GlobalState';
 
 const Navbar = () => {
+    const { setshowDrawer, showDrawer } = useContext(GlobalContext)
     return (
         <Fragment>
-            <AppBar position="static" color="inherit">
-                <Toolbar>
-                    <Typography variant="h6">
-                        Help me Hugo!
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+            <nav className="navbar fixed-top navbar-light bg-light">
+                <button className="navbar-toggler" type="button"
+                    onClick={() => setshowDrawer(!showDrawer)}>
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+            </nav>
         </Fragment>
     )
 }
