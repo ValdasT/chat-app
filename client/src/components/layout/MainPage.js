@@ -9,13 +9,15 @@ const MainPage = () => {
     const { setshowDrawer, showDrawer } = useContext(GlobalContext)
     return (<Fragment>
         <div className="row">
-            {showDrawer ? <div className="col-md-5" >
+            {showDrawer ? <div className="col-md-4" >
                 <Drawer />
             </div> : null}
-            <div className={showDrawer ? "col-md-7" : 'col-md-12'} >
+            <div className={showDrawer ? "col-md-8" : 'col-md-12'} >
                 <ChatList />
+                <div >
+                    <Chatbar style={{ padding: '20px' }} />
+                </div>
             </div>
-            <Chatbar style={{ padding: '20px' }} />
         </div>
     </Fragment>)
 }

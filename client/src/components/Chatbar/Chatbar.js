@@ -8,7 +8,7 @@ const Chatbar = () => {
     useEffect(() => {
         getAnswer('hello');
     }, [])
-    const { addMessage, getAnswer } = useContext(GlobalContext);
+    const { addMessage, getAnswer , showDrawer} = useContext(GlobalContext);
     const [message, setMessage] = useState('');
 
     const newMessage = () => {
@@ -24,7 +24,7 @@ const Chatbar = () => {
     }
 
     return (
-        <div className="input-bar navbar fixed-bottom">
+        <div className='input-bar'>
             <TextField
                 id="question-field"
                 label="Type a question"
