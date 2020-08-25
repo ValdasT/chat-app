@@ -15,6 +15,7 @@ export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
   const [showDrawer, setshowDrawer] = useState(false);
+  const [showLoadingAnswer, setshowLoadingAnswer] = useState(false);
 
   // Actions
   function deleteMessage(id) {
@@ -36,6 +37,7 @@ export const GlobalProvider = ({ children }) => {
 
   const getAnswer = async (message) => {
     const body = JSON.stringify({ message: message })
+    setshowLoadingAnswer(true);
     try {
       const res = await api.post('/hugo/get-answer', body);
       console.log(res.data);
@@ -43,7 +45,9 @@ export const GlobalProvider = ({ children }) => {
         message: res.data.answer,
         sender: 'hugo',
       });
+      setshowLoadingAnswer(false);
     } catch (err) {
+      setshowLoadingAnswer(false);
       console.log(err);
     }
   };
@@ -54,7 +58,8 @@ export const GlobalProvider = ({ children }) => {
     addMessage,
     getAnswer,
     showDrawer,
-    setshowDrawer
+    setshowDrawer,
+    showLoadingAnswer
   }}>
     {children}
   </GlobalContext.Provider>);

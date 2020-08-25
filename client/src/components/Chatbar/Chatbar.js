@@ -8,7 +8,7 @@ const Chatbar = () => {
     useEffect(() => {
         getAnswer('hello');
     }, [])
-    const { addMessage, getAnswer , showDrawer} = useContext(GlobalContext);
+    const { addMessage, getAnswer } = useContext(GlobalContext);
     const [message, setMessage] = useState('');
 
     const newMessage = () => {
@@ -38,6 +38,7 @@ const Chatbar = () => {
                 onKeyPress={(e) => (e.charCode === 13 ? newMessage() : null)}
                 InputProps={{
                     endAdornment: <InputAdornment position="end"><Button
+                        className ="primary-btn"
                         variant="contained"
                         color="primary"
                         style={{ padding: "8px 30px" }}

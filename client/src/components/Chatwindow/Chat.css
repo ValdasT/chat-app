@@ -2,7 +2,7 @@
     /* overflow-y: scroll; */
     padding-top: 20px !important;
     padding-bottom: 70px !important;
-    padding-left: 40px !important;
+    padding-left: 60px !important;
   }
 
   .bubble{
@@ -45,7 +45,7 @@
     right: 4em;
     border: 0.75rem solid transparent;
     border-top: none;
-    border-bottom-color: #fff;
+    border-bottom-color: #edf5ff;
     transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -ms-transform: rotate(90deg);

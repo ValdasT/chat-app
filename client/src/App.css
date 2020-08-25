@@ -4,3 +4,23 @@
     left: 10px;
     z-index: 1050;
 }
+
+.primary-btn{
+ background-color: #0f62fe !important;
+}
+
+.primary-btn:hover{
+    background-color: #0043ce !important;
+   }
+
+   label.Mui-focused{
+    color: #0f62fe !important;
+   }
+
+  .MuiOutlinedInput-root fieldset{
+    border-color: #0f62fe !important;
+  }
+
+  .blue-10{
+      background-color: #edf5ff;
+  }

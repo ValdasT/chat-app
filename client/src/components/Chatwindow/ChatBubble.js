@@ -13,7 +13,7 @@ const ChatBubble = ({ message }) => {
                             {message.sender === 'hugo' ? <Avatar alt="Hugo bot" src={require("../../img/hugo_logo.svg")} />
                                 : <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />}
                         </div>
-                        <div className={message.sender === 'hugo' ? "bubble bubble-left" : "bubble bubble-right"}>{ReactHtmlParser(message.message)}</div>
+                        <div className={message.sender === 'hugo' ? "bubble bubble-left" : "bubble bubble-right blue-10"}>{ReactHtmlParser(message.message)}</div>
                     </Grid>
                     <Grid item xs={12}>
                         <div className="messageTime" align={message.sender === 'hugo' ? "left" : "right"} >{message.time}</div>

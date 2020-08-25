@@ -6,12 +6,14 @@ import { GlobalContext } from '../../context/GlobalState';
 
 const MainPage = () => {
 
-    const { setshowDrawer, showDrawer } = useContext(GlobalContext)
+    const { showDrawer } = useContext(GlobalContext)
     return (<Fragment>
         <div className="row">
-            {showDrawer ? <div className="col-md-4" >
+            {showDrawer ? <div className=" col-md-4" >
                 <Drawer />
-            </div> : null}
+            </div> : <div>
+                    <Drawer />
+                </div>}
             <div className={showDrawer ? "col-md-8" : 'col-md-12'} >
                 <ChatList />
                 <div >
