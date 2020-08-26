@@ -2,14 +2,16 @@ import React, { useState, useContext, useEffect } from 'react';
 import { TextField, Button } from '@material-ui/core';
 import { InputAdornment } from '@material-ui/core';
 import { GlobalContext } from '../../context/GlobalState';
+import { SendAlt24 } from '@carbon/icons-react';
 import './Chatbar.css';
 
 const Chatbar = () => {
+    const { addMessage, getAnswer } = useContext(GlobalContext);
+    const [message, setMessage] = useState('');
+
     useEffect(() => {
         getAnswer('hello');
     }, [])
-    const { addMessage, getAnswer } = useContext(GlobalContext);
-    const [message, setMessage] = useState('');
 
     const newMessage = () => {
         let lastMessage = message.trim();
@@ -38,13 +40,13 @@ const Chatbar = () => {
                 onKeyPress={(e) => (e.charCode === 13 ? newMessage() : null)}
                 InputProps={{
                     endAdornment: <InputAdornment position="end"><Button
-                        className ="primary-btn"
+                        className="primary-btn"
                         variant="contained"
                         color="primary"
-                        style={{ padding: "8px 30px" }}
+                        style={{ padding: "3px 30px" }}
                         onClick={newMessage}
                     >
-                        <i className="fas fa-paper-plane fa-lg"></i>
+                        <SendAlt24 />
                     </Button>
                     </InputAdornment>,
                 }}

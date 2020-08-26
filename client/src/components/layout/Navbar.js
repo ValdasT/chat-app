@@ -1,13 +1,15 @@
 import React, { Fragment, useContext } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
+import { ArrowLeft32, ArrowRight32 } from '@carbon/icons-react';
 
 const Navbar = () => {
     const { setshowDrawer, showDrawer } = useContext(GlobalContext)
     return (
         <Fragment>
-            <button className="navbar-toggler navbar-light menu-button " type="button"
-                onClick={() => setshowDrawer(!showDrawer)}>
-                <i class="fas fa-chevron-right"></i>
+            <button className={showDrawer ? "navbar-toggler menu-button" :
+                "navbar-toggler menu-button smaller-button"}
+                type="button" onClick={() => setshowDrawer(!showDrawer)}>
+                {showDrawer ? <ArrowLeft32 /> : <ArrowRight32 />}
             </button>
         </Fragment>
     )

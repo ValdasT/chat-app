@@ -21,7 +21,7 @@ const Chat = () => {
                     <List className="messageArea">
                         {chatMessages.map(message => (<ChatBubble key={message.id} message={message} />))}
                         <div ref={messagesEndRef} />
-                        {showLoadingAnswer? <LoadingAnswer/>: null}
+                        {showLoadingAnswer ? <LoadingAnswer /> : null}
                     </List>
                 </Grid>
             </Grid>

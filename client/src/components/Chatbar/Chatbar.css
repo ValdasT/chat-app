@@ -1,11 +1,11 @@
-.input-bar{
-    padding: 20px 10px;
-    background-color: #fff;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    position: fixed;
-    -webkit-box-shadow: 0px -4px 4px -4px rgba(0,0,0,0.36);
-    -moz-box-shadow: 0px -4px 4px -4px rgba(0,0,0,0.36);
-    box-shadow: 0px -4px 4px -4px rgba(0,0,0,0.36);
+.input-bar {
+  padding: 20px 10px;
+  background-color: #fff;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  position: fixed;
+  -webkit-box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
+  -moz-box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
+  box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
 }

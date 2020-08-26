@@ -1,26 +1,35 @@
 .menu-button {
-    position: fixed;
-    top: 20px;
-    left: 10px;
-    z-index: 1050;
+  position: fixed;
+  top: 20px;
+  z-index: 1050;
+  padding-left: 5px;
+  color: #4d5358;
 }
 
-.primary-btn{
- background-color: #0f62fe !important;
+.menu-button:hover {
+  color: #0f62fe;
 }
 
-.primary-btn:hover{
-    background-color: #0043ce !important;
-   }
+.smaller-button {
+  padding-left: 5px;
+}
 
-   label.Mui-focused{
-    color: #0f62fe !important;
-   }
+.primary-btn {
+  background-color: #0f62fe !important;
+}
 
-  .MuiOutlinedInput-root fieldset{
-    border-color: #0f62fe !important;
-  }
+.primary-btn:hover {
+  background-color: #0043ce !important;
+}
 
-  .blue-10{
-      background-color: #edf5ff;
-  }
+label.Mui-focused {
+  color: #0f62fe !important;
+}
+
+.MuiOutlinedInput-root fieldset {
+  border-color: #0f62fe !important;
+}
+
+.blue-10 {
+  background-color: #edf5ff;
+}
