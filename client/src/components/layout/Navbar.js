@@ -8,7 +8,8 @@ const Navbar = () => {
         <Fragment>
             <button className={showDrawer ? "navbar-toggler menu-button" :
                 "navbar-toggler menu-button smaller-button"}
-                type="button" onClick={() => setshowDrawer(!showDrawer)}>
+                type="button" onClick={() => setshowDrawer(!showDrawer)}
+                aria-label="Show/hide drawer" title="Show/hide drawer" >
                 {showDrawer ? <ArrowLeft32 /> : <ArrowRight32 />}
             </button>
         </Fragment>

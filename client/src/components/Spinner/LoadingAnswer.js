@@ -8,6 +8,8 @@ const LoadingAnswer = () => {
             <div className="circle"></div>
             <div className="circle"></div>
             <div className="circle"></div>
+            <div className="circle"></div>
+            <div className="shadow"></div>
             <div className="shadow"></div>
             <div className="shadow"></div>
             <div className="shadow"></div>

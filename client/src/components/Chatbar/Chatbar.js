@@ -40,6 +40,7 @@ const Chatbar = () => {
                 onKeyPress={(e) => (e.charCode === 13 ? newMessage() : null)}
                 InputProps={{
                     endAdornment: <InputAdornment position="end"><Button
+                        aria-label="Send a question"
                         className="primary-btn"
                         variant="contained"
                         color="primary"
