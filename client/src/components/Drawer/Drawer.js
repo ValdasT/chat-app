@@ -2,6 +2,7 @@ import React, { Fragment, useContext, useState } from 'react';
 import { GlobalContext } from '../../context/GlobalState';
 import { Tab, Tabs, Typography, Box } from '@material-ui/core';
 import { UserAvatar32, Information32 } from '@carbon/icons-react';
+import { ToggleSmall } from 'carbon-components-react';
 import './Drawer.css';
 
 const Drawer = () => {
@@ -59,9 +60,15 @@ const Drawer = () => {
                             </Tabs>
                         </div>
 
-                        <div className="tabs-information">
+                        <div>
                             <TabPanel value={tab} index={0}>
-                                KB info askdm askld jasldl asdl;a skdl;k asl;dka ls;dk;la skdl;a skl;daks ;ldkasl; dkasl; dka;ls kdl;as kdl;a skl;dkasl;dka sl;kdl;a skdl;a skdl; askdl;a ksdl;a ksldkasl;dksdkjgkl sfjgkl sjflkg jfslkg jsf
+                                KB info
+                                <ToggleSmall
+                                    defaultToggled
+                                    {...true}
+                                    className="some-class"
+                                    id="toggle-1"
+                                />
                             </TabPanel>
                             <TabPanel value={tab} index={1}>
                                 Profile info

@@ -2,7 +2,7 @@
   position: fixed;
   top: 20px;
   z-index: 1050;
-  padding-left: 5px;
+  padding-left: 15px;
   color: #4d5358;
 }
 
@@ -32,4 +32,8 @@ label.Mui-focused {
 
 .blue-10 {
   background-color: #edf5ff;
+}
+
+.row {
+  margin:0px !important;
 }

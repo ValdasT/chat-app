@@ -39,16 +39,17 @@ const Chatbar = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={(e) => (e.charCode === 13 ? newMessage() : null)}
                 InputProps={{
-                    endAdornment: <InputAdornment position="end"><Button
-                        aria-label="Send a question"
-                        className="primary-btn"
-                        variant="contained"
-                        color="primary"
-                        style={{ padding: "3px 30px" }}
-                        onClick={newMessage}
-                    >
-                        <SendAlt24 />
-                    </Button>
+                    endAdornment: <InputAdornment
+                        position="end">
+                        <Button
+                            aria-label="Send a question"
+                            className=" send-btn primary-btn"
+                            variant="contained"
+                            color="primary"
+                            onClick={newMessage}
+                        >
+                            <SendAlt24 />
+                        </Button>
                     </InputAdornment>,
                 }}
             />

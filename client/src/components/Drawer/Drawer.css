@@ -75,29 +75,12 @@
 }
 
 .tabs-grid {
-  padding: 10px 0px;
-  width: 15%;
-  float: left !important;
-}
-
-@media (max-width: 55em) {
-  .tabs-grid {
-    width: 25%;
-  }
-}
-
-.tabs-information {
-  width: 85%;
-}
-
-@media (max-width: 55em) {
-  .tabs-information {
-    width: 70%;
-  }
+  padding: 10px 20px 0px 0px;
 }
 
 .MuiTab-root {
   min-width: 10px !important;
+  padding-left: 0px !important;
 }
 
 .MuiBox-root {

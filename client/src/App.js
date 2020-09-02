@@ -7,7 +7,8 @@ import NotFound from './components/layout/NotFound'
 import { GlobalProvider } from './context/GlobalState';
 
 // styles
-import './App.css';
+import './styles/App.css';
+import './styles/Carbon.css';
 
 const App = () =>
   <GlobalProvider>

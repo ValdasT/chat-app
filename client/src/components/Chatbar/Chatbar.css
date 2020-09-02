@@ -1,5 +1,5 @@
 .input-bar {
-  padding: 20px 10px;
+  padding: 20px 55px;
   background-color: #fff;
   bottom: 0;
   right: 0;
@@ -8,4 +8,24 @@
   -webkit-box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
   -moz-box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
   box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
+}
+
+@media (max-width: 40em) {
+  .input-bar {
+    padding: 20px 20px;
+  }
+}
+
+.send-btn{
+ padding: 3px 30px !important;
+}
+
+@media (max-width: 40em) {
+  .send-btn {
+    padding: 3px 0px !important;
+  }
+}
+
+.MuiInputBase-adornedEnd{
+  padding-right: 5px !important;
 }

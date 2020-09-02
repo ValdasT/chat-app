@@ -14,7 +14,7 @@
   border-radius: 1rem;
   box-shadow: 0 0.125rem 0.5rem rgba(94, 92, 92, 0.3),
     0 0.0625rem 0.125rem rgba(71, 71, 71, 0.2);
-  animation: slidein 0.45s;
+  animation: slidein 0.49s;
 }
 
 @keyframes slidein {
@@ -41,7 +41,7 @@
 .bubble-right::before {
   content: "";
   position: absolute;
-  right: 4em;
+  right: 65px;
   border: 0.75rem solid transparent;
   border-top: none;
   border-bottom-color: #edf5ff;
@@ -58,7 +58,7 @@
 .bubble-left::before {
   content: "";
   position: absolute;
-  left: 4em;
+  left: 65px;
   border: 0.75rem solid transparent;
   border-top: none;
   border-bottom-color: #fff;

@@ -1,5 +1,5 @@
 import React, { useRef, Fragment, useEffect, useContext } from 'react';
-import { Grid, List } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import ChatBubble from './ChatBubble';
 import LoadingAnswer from '../Spinner/LoadingAnswer';
 import { GlobalContext } from '../../context/GlobalState';
@@ -18,11 +18,11 @@ const Chat = () => {
         <Fragment>
             <Grid container>
                 <Grid item xs={12}>
-                    <List className="messageArea">
+                    <div className="messageArea">
                         {chatMessages.map(message => (<ChatBubble key={message.id} message={message} />))}
                         <div ref={messagesEndRef} />
                         {showLoadingAnswer ? <LoadingAnswer /> : null}
-                    </List>
+                    </div>
                 </Grid>
             </Grid>
         </Fragment>

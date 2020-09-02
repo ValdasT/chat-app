@@ -9,7 +9,7 @@ const MainPage = () => {
     const { showDrawer } = useContext(GlobalContext)
     return (<Fragment>
         <div className="row">
-            {showDrawer ? <div className=" col-md-4" >
+            {showDrawer ? <div className=" col-md-4" style={{ paddingLeft: '0px' }}>
                 <Drawer />
             </div> : <div>
                     <Drawer />
