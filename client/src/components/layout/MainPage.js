@@ -6,8 +6,9 @@ import { GlobalContext } from '../../context/GlobalState';
 
 const MainPage = () => {
 
-    const { showDrawer } = useContext(GlobalContext)
+    const { showDrawer, darkMode } = useContext(GlobalContext)
     return (<Fragment>
+        <style>{darkMode?'body { background-color: #161616;}': 'body { background-color: white;}'}</style>
         <div className="row">
             {showDrawer ? <div className=" col-md-4" style={{ paddingLeft: '0px' }}>
                 <Drawer />

@@ -6,25 +6,21 @@
   padding-bottom: 60px;
   word-break: break-all;
   border-width: 20px !important;
-  border: solid #f4f4f4;
+  border: solid transparent;
   border-left: none;
   border-radius: 0px 30px 30px 0px;
-  -webkit-box-shadow: 10px 2px 5px -8px rgba(0, 0, 0, 0.36);
-  -moz-box-shadow: 10px 2px 5px -8px rgba(0, 0, 0, 0.36);
-  box-shadow: 10px 2px 5px -8px rgba(0, 0, 0, 0.36);
-  background-color: #f4f4f4;
 }
 
 .drawerbody {
-  padding: 30px 20px 10px 0px;
-  animation: fadein 0.3s;
+  padding: 0px 0px 10px 0px;
+  animation: fadein 1s ease-in forwards;
 }
 
 @keyframes fadein {
-  from {
+  0% {
     opacity: 0;
   }
-  to {
+  100% {
     opacity: 1;
   }
 }
@@ -63,11 +59,13 @@
     width: 100% !important;
     height: 100% !important;
     top: 0 !important;
+    border-radius: 0px;
   }
 }
 
 .tabs-nav {
   padding: 0px;
+  padding-top: 30px;
   left: 5px;
   width: 60px;
   min-width: 20px !important;
@@ -75,7 +73,22 @@
 }
 
 .tabs-grid {
-  padding: 10px 20px 0px 0px;
+  padding: 10px 0px 0px 0px;
+}
+
+.tab-header{
+  word-break: break-word;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+  border-bottom: solid 2px #0f62fe;
+}
+
+.element-label{
+  margin-top: 15px;
+  word-break: break-word;
 }
 
 .MuiTab-root {

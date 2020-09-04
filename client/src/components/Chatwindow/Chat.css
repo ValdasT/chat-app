@@ -1,19 +1,24 @@
 .messageArea {
   padding-top: 20px !important;
   padding-bottom: 70px !important;
-  padding-left: 60px !important;
 }
+
+.messageArea-open {
+  padding-left: 30px !important;
+}
+
+.messageArea-closed {
+    padding-left: 60px !important;
+}
+
 
 .bubble {
   max-width: 60em;
-  background-color: #fff;
   word-break: break-word;
   padding: 1.125em 1.5em;
   margin-right: 25px;
   margin-left: 25px;
   border-radius: 1rem;
-  box-shadow: 0 0.125rem 0.5rem rgba(94, 92, 92, 0.3),
-    0 0.0625rem 0.125rem rgba(71, 71, 71, 0.2);
   animation: slidein 0.49s;
 }
 
@@ -44,7 +49,6 @@
   right: 65px;
   border: 0.75rem solid transparent;
   border-top: none;
-  border-bottom-color: #edf5ff;
   transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
@@ -61,7 +65,6 @@
   left: 65px;
   border: 0.75rem solid transparent;
   border-top: none;
-  border-bottom-color: #fff;
   transform: rotate(270deg);
   -moz-transform: rotate(270deg);
   -ms-transform: rotate(270deg);

@@ -16,6 +16,7 @@ export const GlobalProvider = ({ children }) => {
 
   const [showDrawer, setshowDrawer] = useState(false);
   const [showLoadingAnswer, setshowLoadingAnswer] = useState(false);
+  const [darkMode, setdarkMode] = useState(false);
 
   // Actions
   function deleteMessage(id) {
@@ -59,7 +60,9 @@ export const GlobalProvider = ({ children }) => {
     getAnswer,
     showDrawer,
     setshowDrawer,
-    showLoadingAnswer
+    showLoadingAnswer,
+    darkMode,
+    setdarkMode
   }}>
     {children}
   </GlobalContext.Provider>);

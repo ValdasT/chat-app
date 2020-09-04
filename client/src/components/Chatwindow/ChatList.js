@@ -7,7 +7,7 @@ import './Chat.css';
 
 const Chat = () => {
 
-    const { chatMessages, showLoadingAnswer } = useContext(GlobalContext)
+    const { chatMessages, showLoadingAnswer, showDrawer } = useContext(GlobalContext)
     const messagesEndRef = useRef(null)
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
@@ -18,7 +18,7 @@ const Chat = () => {
         <Fragment>
             <Grid container>
                 <Grid item xs={12}>
-                    <div className="messageArea">
+                    <div className={showDrawer? "messageArea messageArea-open": "messageArea messageArea-closed"}>
                         {chatMessages.map(message => (<ChatBubble key={message.id} message={message} />))}
                         <div ref={messagesEndRef} />
                         {showLoadingAnswer ? <LoadingAnswer /> : null}

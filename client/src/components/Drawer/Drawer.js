@@ -1,12 +1,13 @@
 import React, { Fragment, useContext, useState } from 'react';
+import InstanceSelection from './InstanceSelection'
+import ProfileSettings from './ProfileSettings'
 import { GlobalContext } from '../../context/GlobalState';
-import { Tab, Tabs, Typography, Box } from '@material-ui/core';
+import { Tab, Tabs, Box } from '@material-ui/core';
 import { UserAvatar32, Information32 } from '@carbon/icons-react';
-import { ToggleSmall } from 'carbon-components-react';
 import './Drawer.css';
 
 const Drawer = () => {
-    const { showDrawer } = useContext(GlobalContext)
+    const { showDrawer, darkMode, setdarkMode } = useContext(GlobalContext)
     const [tab, setTab] = useState(0);
 
     const TabPanel = props => {
@@ -21,7 +22,7 @@ const Drawer = () => {
             >
                 {value === index && (
                     <Box p={3}>
-                        <Typography>{children}</Typography>
+                        {children}
                     </Box>
                 )}
             </div>
@@ -41,11 +42,13 @@ const Drawer = () => {
 
     return (
         <Fragment>
-            <div className={showDrawer ? 'drawerBox open-drawer' : 'drawerBox close-drawer'}>
+            <div className={showDrawer ? darkMode ? 'drawer-dark drawerBox open-drawer' :
+                'drawer-light drawerBox open-drawer' : darkMode ? 'drawer-dark drawerBox close-drawer' :
+                    'drawer-light drawerBox close-drawer'}>
                 {showDrawer ? <div className='drawerbody'>
 
                     <div className='row'>
-                        <div className="tabs-grid">
+                        <div className="tabs-grid col-2">
                             <Tabs
                                 className="tabs-nav"
                                 orientation="vertical"
@@ -60,18 +63,12 @@ const Drawer = () => {
                             </Tabs>
                         </div>
 
-                        <div>
-                            <TabPanel value={tab} index={0}>
-                                KB info
-                                <ToggleSmall
-                                    defaultToggled
-                                    {...true}
-                                    className="some-class"
-                                    id="toggle-1"
-                                />
+                        <div className="col-10">
+                            <TabPanel value={tab} index={0} >
+                                <InstanceSelection darkMode={darkMode} />
                             </TabPanel>
                             <TabPanel value={tab} index={1}>
-                                Profile info
+                                <ProfileSettings darkMode={darkMode} setdarkMode={setdarkMode} />
                             </TabPanel>
                         </div>
                     </div>

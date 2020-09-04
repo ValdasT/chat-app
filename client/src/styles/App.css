@@ -2,8 +2,15 @@
   position: fixed;
   top: 20px;
   z-index: 1050;
-  padding-left: 15px;
-  color: #4d5358;
+  padding-left: 12px;
+}
+
+.menu-button-light {
+  color: #525252;
+}
+
+.menu-button-dark {
+  color: #c6c6c6;
 }
 
 .menu-button:hover {
@@ -26,8 +33,9 @@ label.Mui-focused {
   color: #0f62fe !important;
 }
 
-.MuiOutlinedInput-root fieldset {
-  border-color: #0f62fe !important;
+.MuiOutlinedInput-root fieldset{
+  /* border-color: #0f62fe !important; */
+  border-color: #a8a8a8 !important;
 }
 
 .blue-10 {
@@ -36,4 +44,93 @@ label.Mui-focused {
 
 .row {
   margin:0px !important;
+}
+
+.light-color{
+ color: grey !important;
+}
+
+.white-color{
+  color: white !important;
+ }
+
+.drawer-light{
+ background-color: #f4f4f4;
+ -webkit-box-shadow: 10px 2px 5px -8px rgba(0, 0, 0, 0.36);
+ -moz-box-shadow: 10px 2px 5px -8px rgba(0, 0, 0, 0.36);
+ box-shadow: 10px 2px 5px -8px rgba(0, 0, 0, 0.36);
+}
+
+.drawer-dark{
+  background-color: #262626;
+  color: #fff;
+  -webkit-box-shadow: 25px 0px 25px -17px rgba(0,0,0,1);
+  -moz-box-shadow: 25px 0px 25px -17px rgba(0,0,0,1);
+  box-shadow: 25px 0px 25px -17px rgba(0,0,0,1);
+ }
+
+ .tab-header-light{
+  color: #0f62fe;
+ }
+
+ .tab-header-dark{
+  color: #3b7ffd;
+   
+}
+
+ .input-bar-dark{
+  background-color: #393939;
+  color: #fff;
+  -webkit-box-shadow: 0px -16px 25px -17px rgba(0,0,0,1);
+  -moz-box-shadow: 0px -16px 25px -17px rgba(0,0,0,1);
+  box-shadow: 0px -16px 25px -17px rgba(0,0,0,1);
+ }
+
+ .input-bar-light{
+  background-color: #fff;
+  color: #fff;
+  -webkit-box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
+  -moz-box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
+  box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
+ }
+
+ .bubble-left-dark{
+  color: #fff;
+  background-color: #393939;
+  box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,1),
+  0 0.0625rem 0.125rem rgba(0,0,0,1);
+ }
+ .bubble-left-dark::before{
+  border-bottom-color: #393939;
+ }
+
+ .bubble-right-dark{
+  color: #fff;
+  background-color: #1b6dfa;
+  box-shadow: 0 0.125rem 0.5rem rgba(0,0,0,1),
+  0 0.0625rem 0.125rem rgba(0,0,0,1);
+ }
+ .bubble-right-dark::before{
+  border-bottom-color: #1b6dfa;
+}
+
+ .bubble-left-light{
+  background-color: #fff;
+  box-shadow: 0 0.125rem 0.5rem rgba(94, 92, 92, 0.3),
+  0 0.0625rem 0.125rem rgba(71, 71, 71, 0.2);
+ }
+
+ .bubble-left-light::before{
+  border-bottom-color: #fff;
+ }
+
+ .bubble-right-light{
+  color: #fff;
+  box-shadow: 0 0.125rem 0.5rem rgba(94, 92, 92, 0.3),
+  0 0.0625rem 0.125rem rgba(71, 71, 71, 0.2);
+  background-color: #1b6dfa;
+}
+
+.bubble-right-light::before{
+  border-bottom-color: #1b6dfa;
 }
