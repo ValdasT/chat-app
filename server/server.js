@@ -10,6 +10,7 @@ const app = express();
 // Connect Database
 const cloudant = Cloudant(process.env.CLOUDANT);
 // Init Middleware
+app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
 app.use(bodyParser.json());
 authentication.init(app);
@@ -31,9 +32,12 @@ app.use('/api/hugo', require('./routes/hugo'));
 //     });
 // }
 
-app.get('*', (req, res) => {
-            res.send('API running');
-        });
+// app.get('*', (req, res) => {
+//             res.send('API running');
+// });
+app.get('/', (req,res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  });
 
 const PORT = process.env.PORT || 5000;
 

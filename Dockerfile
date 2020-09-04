@@ -1,15 +1,13 @@
 FROM node:14 AS ui-build
-WORKDIR /hugo
+WORKDIR /usr/src/app
 COPY client/ ./client/
 RUN cd client && npm install && npm run build
 
 FROM node:14 AS server-build
-WORKDIR /root/
-COPY --from=ui-build /client/build ./client/build
-COPY package*.json ./
-RUN npm install
-COPY api/server.js ./api/
+COPY --from=ui-build /usr/src/app/client/build ./client/build
+COPY server/ .
+RUN  npm install
 
-EXPOSE 3080
+EXPOSE 5000
 
-CMD ["node", "./api/server.js"]
+CMD ["npm","run", "start"]

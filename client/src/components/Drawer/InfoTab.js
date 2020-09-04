@@ -9,7 +9,7 @@ const InfoTab = ({ darkMode }) => {
                 <div className={darkMode ? "tab-header tab-header-dark" : "tab-header tab-header-light"}>Information</div>
                 <div>This is Cognitive Advisor Hugo.
                     If you face any problems while interacting with Hugo, please raise a ticket here.To get more information about the tool, click here.
-                    If you want to request your own Knowledge Base, ask any questions or provide suggestions feel free to email Monika.Supejevaite@ibm.com.
+                    If you want to request your own Knowledge Base, ask any questions or provide suggestions feel free to email.
                 </div>
             </div>
         </Fragment>
