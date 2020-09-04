@@ -4,7 +4,7 @@
   height: 100%;
   overflow-y: scroll;
   padding-bottom: 60px;
-  word-break: break-all;
+  word-break: keep-all;
   border-width: 20px !important;
   border: solid transparent;
   border-left: none;
@@ -65,7 +65,7 @@
 
 .tabs-nav {
   padding: 0px;
-  padding-top: 30px;
+  padding-top: 35px;
   left: 5px;
   width: 60px;
   min-width: 20px !important;
@@ -94,6 +94,10 @@
 .MuiTab-root {
   min-width: 10px !important;
   padding-left: 0px !important;
+}
+
+.MuiTab-root:hover {
+  color: #0f62fe !important;
 }
 
 .MuiBox-root {

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { ToggleSmall } from 'carbon-components-react';
 
-const InstanceSelection = ({ darkMode }) => {
+const KnowledgeSettings = ({ darkMode }) => {
 
     return (
         <Fragment>
@@ -98,4 +98,4 @@ const InstanceSelection = ({ darkMode }) => {
     );
 }
 
-export default InstanceSelection;
+export default KnowledgeSettings;

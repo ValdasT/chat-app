@@ -1,9 +1,10 @@
 import React, { Fragment, useContext, useState } from 'react';
-import InstanceSelection from './InstanceSelection'
+import KnowledgeSettings from './KnowledgeSettings'
 import ProfileSettings from './ProfileSettings'
+import InfoTab from './InfoTab'
 import { GlobalContext } from '../../context/GlobalState';
 import { Tab, Tabs, Box } from '@material-ui/core';
-import { UserAvatar32, Information32 } from '@carbon/icons-react';
+import { UserAvatar32, Information32, Help32 } from '@carbon/icons-react';
 import './Drawer.css';
 
 const Drawer = () => {
@@ -58,17 +59,21 @@ const Drawer = () => {
                                 aria-label="Vertical tabs"
 
                             >
-                                <Tab className="tabs-nav" label={<Information32 />} aria-label="Information" {...initTab(0)} />
+                                <Tab className="tabs-nav" label={<Help32 />} aria-label="Search settings" {...initTab(0)} />
                                 <Tab className="tabs-nav" label={<UserAvatar32 />} aria-label="User profile" {...initTab(1)} />
+                                <Tab className="tabs-nav" label={<Information32 />} aria-label="Information" {...initTab(2)} />
                             </Tabs>
                         </div>
 
                         <div className="col-10">
                             <TabPanel value={tab} index={0} >
-                                <InstanceSelection darkMode={darkMode} />
+                                <KnowledgeSettings darkMode={darkMode} />
                             </TabPanel>
                             <TabPanel value={tab} index={1}>
                                 <ProfileSettings darkMode={darkMode} setdarkMode={setdarkMode} />
+                            </TabPanel>
+                            <TabPanel value={tab} index={2}>
+                                <InfoTab darkMode={darkMode}/>
                             </TabPanel>
                         </div>
                     </div>

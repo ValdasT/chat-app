@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Navbar from './components/layout/Navbar'
 import MainPage from './components/layout/MainPage'
 import Test from './components/mytest/Test'
 import NotFound from './components/layout/NotFound'
@@ -14,7 +13,6 @@ const App = () =>
   <GlobalProvider>
     <Router>
       <Fragment>
-        <Navbar />
         <section>
           <Switch>
             <Route exact path='/' component={MainPage} />

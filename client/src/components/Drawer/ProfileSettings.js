@@ -11,7 +11,7 @@ const ProfileSettings = ({ darkMode, setdarkMode }) => {
             <div >
                 <div className={darkMode? "tab-header tab-header-dark": "tab-header tab-header-light"}>User profile settings</div>
                 {/* <div>Hugo works by taking your question and performing search in multiple places so you don't have to. Currently Hugo has access to following knowledge bases:</div> */}
-                <button onClick={changeColor}>color</button>
+                <button className="btn primary-btn main-btn" onClick={changeColor}>color</button>
                 <div className='row'>
                     <div className='col-2'>
                         

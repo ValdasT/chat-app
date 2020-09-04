@@ -2,13 +2,15 @@ import React, { Fragment, useContext } from 'react';
 import Chatbar from '../Chatbar/Chatbar'
 import ChatList from '../Chatwindow/ChatList'
 import Drawer from '../Drawer/Drawer'
+import Navbar from '../layout/Navbar'
 import { GlobalContext } from '../../context/GlobalState';
 
 const MainPage = () => {
 
     const { showDrawer, darkMode } = useContext(GlobalContext)
     return (<Fragment>
-        <style>{darkMode?'body { background-color: #161616;}': 'body { background-color: white;}'}</style>
+        <style>{darkMode ? 'body { background-color: #161616;}' : 'body { background-color: white;}'}</style>
+        <Navbar />
         <div className="row">
             {showDrawer ? <div className=" col-md-4" style={{ paddingLeft: '0px' }}>
                 <Drawer />

@@ -18,12 +18,29 @@
 }
 
 .smaller-button {
-  padding-left: 5px;
+  transition: 0.5s;
+  transform: rotate(360deg);
+}
+
+.bigger-button{
+  transition: 0.5s;
+  transform: rotate(540deg);
 }
 
 .primary-btn {
   background-color: #0f62fe !important;
 }
+
+.main-btn {
+  color: #fff !important;
+  padding: 3px 20px !important;
+}
+
+ @media (max-width: 40em) {
+  .main-btn {
+     padding: 3px 0px !important;
+   }
+ }
 
 .primary-btn:hover {
   background-color: #0043ce !important;

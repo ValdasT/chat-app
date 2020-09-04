@@ -14,7 +14,7 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  const [showDrawer, setshowDrawer] = useState(false);
+  const [showDrawer, setshowDrawer] = useState(true);
   const [showLoadingAnswer, setshowLoadingAnswer] = useState(false);
   const [darkMode, setdarkMode] = useState(false);
 
