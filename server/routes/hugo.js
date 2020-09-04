@@ -7,8 +7,8 @@ router.post('/get-answer', (req, res, next) => {
     let data = {
         "question": req.body.message,
         "token": 'nGKHwSH89Q4qMjMK',
-        "user": 'Ieva' + " " + 'Merzvinskaite',
-        "email": 'Ieva.Merzvinskaite@lt.ibm.com',
+        "user": 'Valdas' + " " + 'Trakumas',
+        "email": 'valdas.trakumas@ibm.com',
         "channel": 'web_' + 'hugo',
         "system": 'hugo',
         "channelList": [
