@@ -1,9 +1,9 @@
 .wrapper {
-  padding: 40px;
+  padding: 15px;
   width: 100px;
   position: relative;
   left: 50px;
-  top: 55px;
+  top: 15px;
   transform: translate(-50%, -50%);
 }
 

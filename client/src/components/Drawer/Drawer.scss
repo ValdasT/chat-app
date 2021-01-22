@@ -1,0 +1,65 @@
+@import "../../styles/Collors.scss";
+.drawerBox {
+  height: 80vh;
+  padding: 15px;
+  padding-bottom: 60px;
+  width: 30vw;
+  word-break: keep-all;
+  border-radius: 0px 20px 20px 0px;
+  background-color: $base-second-light;
+  box-shadow: 5px 0px 5px -4px rgba(0,0,0,0.36);
+  overflow-y: auto;
+}
+
+@include keyframes(slide-in) {
+  from {
+    width: 40px;
+  }
+  to {
+    width: 20%;
+  }
+}
+
+@include keyframes(slide-out) {
+  from {
+    width: 20%;
+  }
+  to {
+    width: 40px;
+  }
+}
+
+.open-button {
+  @include transform(rotate(180deg));
+  transition-duration: 0.5s;
+  margin-right: 2px;
+}
+
+.close-button {
+  transition-duration: 0.5s;
+}
+
+.open-drawer {
+  @include animation("slide-in 0.3s ease-in forwards");
+}
+
+.close-drawer {
+  @include animation("slide-out 0.2s ease-out forwards");
+}
+
+.expand-button {
+  float: right;
+  font-size: 15px;
+  padding: 2px;
+  text-align: center;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  background-color: $sub-color-light;
+  color: $white-text;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $primary-light;
+  }
+}

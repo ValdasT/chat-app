@@ -4,6 +4,7 @@
   right: 0;
   width: 100%;
   position: fixed;
+  z-index: 1038;
 }
 
 @media (max-width: 40em) {
@@ -12,8 +13,8 @@
   }
 }
 
-.send-btn{
- padding: 3px 30px !important;
+.send-btn {
+  padding: 3px 30px !important;
 }
 
 @media (max-width: 40em) {
@@ -22,6 +23,7 @@
   }
 }
 
-.MuiInputBase-adornedEnd{
+.MuiInputBase-adornedEnd {
   padding-right: 5px !important;
 }
+

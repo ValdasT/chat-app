@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import './LoadingAnswer.css';
 
-const LoadingAnswer = () => {
+const LoadingAnswer = memo(() => {
 
     return (
         <div className="wrapper">
@@ -15,6 +15,6 @@ const LoadingAnswer = () => {
             <div className="shadow"></div>
         </div>
     );
-}
+})
 
 export default LoadingAnswer;

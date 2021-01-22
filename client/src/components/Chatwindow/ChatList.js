@@ -1,32 +1,22 @@
-import React, { useRef, Fragment, useEffect, useContext } from 'react';
-import { Grid } from '@material-ui/core';
+import React, { useRef, useEffect, useContext, memo } from 'react';
 import ChatBubble from './ChatBubble';
-import LoadingAnswer from '../Spinner/LoadingAnswer';
-import { GlobalContext } from '../../context/GlobalState';
-import './Chat.css';
+import { MessageContext } from '../../context/MessageContext';
 
 const Chat = () => {
 
-    const { chatMessages, showLoadingAnswer, showDrawer } = useContext(GlobalContext)
+    const { chatMessages } = useContext(MessageContext)
     const messagesEndRef = useRef(null)
     const scrollToBottom = () => {
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
     }
-
     useEffect(scrollToBottom, [chatMessages]);
     return (
-        <Fragment>
-            <Grid container>
-                <Grid item xs={12}>
-                    <div className={showDrawer? "messageArea messageArea-open": "messageArea messageArea-closed"}>
-                        {chatMessages.map(message => (<ChatBubble key={message.id} message={message} />))}
-                        <div ref={messagesEndRef} />
-                        {showLoadingAnswer ? <LoadingAnswer /> : null}
-                    </div>
-                </Grid>
-            </Grid>
-        </Fragment>
+        <div className="message-area">
+            {console.log(chatMessages)}
+            {chatMessages.map(message => (<ChatBubble key={message.id} message={message} />))}
+            <div ref={messagesEndRef} />
+        </div>
     );
 }
 
-export default Chat;
+export default memo(Chat);

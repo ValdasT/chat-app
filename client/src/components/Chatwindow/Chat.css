@@ -1,6 +1,7 @@
 .messageArea {
   padding-top: 20px !important;
   padding-bottom: 70px !important;
+  padding-right: 10px !important;
 }
 
 .messageArea-open {
@@ -8,18 +9,47 @@
 }
 
 .messageArea-closed {
-    padding-left: 60px !important;
+  padding-left: 60px !important;
 }
 
+.MuiListItem-gutters{
+  padding-right: 12px !important;
+  padding-left: 5px !important;
+}
 
-.bubble {
-  max-width: 60em;
-  word-break: break-word;
-  padding: 1.125em 1.5em;
-  margin-right: 25px;
-  margin-left: 25px;
-  border-radius: 1rem;
-  animation: slidein 0.49s;
+.answer {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: 0.16px;
+}
+
+.recommendations {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: 0.16px;
+  padding: 10px 20px 10px 5px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+.recommendations-light {
+  background-color: #f4f4f4;
+  color: #393939;
+}
+
+.recommendations-dark {
+  background-color: #474747;
+  color: #dde1e6;
+}
+
+.recommendation{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.recommendation:hover{
+  color: #0f62fe;
 }
 
 @keyframes slidein {
@@ -34,7 +64,7 @@
   }
 }
 
-@keyframes fadeIn {
+@keyframes arrowAnimation {
   99% {
     visibility: hidden;
   }
@@ -43,10 +73,30 @@
   }
 }
 
+.bubble-loading {
+  max-width: 60em;
+  word-break: break-word;
+  padding: 1em 0em;
+  margin-right: 12px;
+  margin-left: 12px;
+  border-radius: 1rem;
+  animation: fadeIn 0.5s;
+}
+
+.bubble {
+  max-width: 60em;
+  word-break: break-word;
+  padding: 1.125em 1.5em;
+  margin-right: 12px;
+  margin-left: 12px;
+  border-radius: 1rem;
+  animation: fadeIn 0.5s;
+}
+
 .bubble-right::before {
   content: "";
   position: absolute;
-  right: 65px;
+  right: 48px;
   border: 0.75rem solid transparent;
   border-top: none;
   transform: rotate(90deg);
@@ -55,14 +105,13 @@
   -o-transform: rotate(90deg);
   -webkit-transform: rotate(90deg);
   filter: drop-shadow(0 -0.1025rem 0.0625rem rgba(43, 42, 42, 0.1));
-  visibility: hidden;
-  animation: 0.5s fadeIn forwards;
+  animation: fadeIn 0.4s;
 }
 
 .bubble-left::before {
   content: "";
   position: absolute;
-  left: 65px;
+  left: 41px;
   border: 0.75rem solid transparent;
   border-top: none;
   transform: rotate(270deg);
@@ -71,18 +120,66 @@
   -o-transform: rotate(270deg);
   -webkit-transform: rotate(270deg);
   filter: drop-shadow(0 -0.1025rem 0.0625rem rgba(43, 42, 42, 0.1));
-  visibility: hidden;
-  animation: 0.5s fadeIn forwards;
+  animation: 0.4s fadeIn;
 }
 
-@media (max-width: 40em) {
-  .bubble {
-    max-width: 15em;
-  }
-}
-
-.messageTime {
+.messageTime-light {
   color: #6b6b6b;
   font-size: 12px;
   padding: 5px 70px;
+}
+
+.messageTime-dark {
+  color: #a7a7a7;
+  font-size: 12px;
+  padding: 5px 70px;
+}
+
+.rating-light {
+  margin: 10px 0px 0px 0px;
+  border-top: 1px solid #cccbcb;
+}
+
+.rating-dark {
+  margin: 10px 0px 0px 0px;
+  border-top: 1px solid #929191;
+}
+
+.confidence-light{
+  padding: 10px 0px 2px 5px;
+  font-weight: bold;
+  color: #747272;
+}
+
+.confidence-dark{
+  padding: 10px 0px 2px 5px;
+  font-weight: bold;
+  color: #acacac;
+}
+
+.like,
+.dislike,
+.copy {
+  display: inline-block;
+  cursor: pointer;
+  padding: 3px 5px 2px 0px;
+  color: #929191;
+}
+
+.dislike:hover{
+  color: #b61b1b;
+  transition: all .2s ease-in-out;
+  transform: scale(1.08);
+}
+
+.like:hover {
+  color: #27831b;
+  transition: all .2s ease-in-out;
+  transform: scale(1.08);
+}
+
+.copy:hover{
+  color: #0f62fe;
+  transition: all .2s ease-in-out;
+  transform: scale(1.08);
 }

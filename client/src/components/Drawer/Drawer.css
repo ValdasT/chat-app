@@ -2,7 +2,6 @@
   width: 35%;
   position: fixed;
   height: 100%;
-  overflow-y: scroll;
   padding-bottom: 60px;
   word-break: keep-all;
   border-width: 20px !important;
@@ -46,6 +45,15 @@
   }
 }
 
+@keyframes slide-in-mobile {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
 @keyframes slide-out {
   from {
     width: 35%;
@@ -63,20 +71,53 @@
     height: 100% !important;
     top: 0 !important;
     border-radius: 0px;
+    animation: slide-in-mobile 0.3s ease-in forwards;
   }
 }
 
-.tabs-nav {
-  padding: 0px;
-  padding-top: 35px;
-  left: 5px;
-  width: 60px;
-  min-width: 20px !important;
-  align-items: left;
+.element-label {
+  margin-top: 17px;
+  padding: 0px 0px 0px 10px;
+  word-break: break-word;
 }
 
-.tabs-grid {
-  padding: 10px 0px 0px 0px;
+@media (max-width: 70em) {
+  .element-label {
+    padding: 0px 20px;
+  }
+}
+
+.element-toggle {
+  padding: 0px 0px 0px 3px;
+  height: 15px;
+}
+
+@media (max-width: 70em) {
+  .element-toggle {
+    padding: 0px 0px 3px 3px;
+  }
+}
+
+@media (max-width: 70em) {
+  .tabBody {
+    overflow-y: scroll;
+    height: calc(100vh - 140px) !important;
+  }
+}
+
+.tabBody {
+  /* margin-right:-20px !important; */
+  overflow-y: scroll;
+  height: calc(100vh - 160px);
+}
+
+.regionDropdown {
+  padding-bottom: 13px;
+  width: 150px;
+}
+
+.tabLabel {
+  padding: 10px 10px 13px 0px;
 }
 
 .tab-header {
@@ -89,32 +130,50 @@
   border-bottom: solid 2px #0f62fe;
 }
 
-.element-label {
-  margin-top: 15px;
-  word-break: break-word;
+.tabs-nav {
+  padding-left: 13px !important;
+  min-width: 10% !important;
+  left: 5px;
+  width: 60px;
+  align-items: left;
 }
 
-.MuiTab-root {
-  min-width: 10px !important;
-  padding-left: 0px !important;
+.round{
+  border: 0.1em solid ;
+  border-radius: 25px;
+  padding: 3.5px;
 }
 
-.MuiTab-root:hover {
-  color: #0f62fe !important;
+.tabs-grid {
+  padding: 45px 0px 0px 0px;
+  max-width: 60px !important;
 }
 
-.MuiBox-root {
-  padding: 0px !important;
+.tab {
+  width: 100%;
 }
 
-.MuiTabs-indicator {
-  background-color: #0f62fe !important;
+.tab button {
+  display: block;
+  background-color: inherit;
+  padding: 10px 0px 10px 0px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 17px;
 }
 
-.Mui-selected {
-  color: #0f62fe !important;
+.tab button:hover {
+  color: #0f62fe;
 }
 
-button:focus {
-  outline: 0;
+.tab button.active {
+  color: #0f62fe;
+  border-right: 2px solid #0f62fe;
+}
+
+.tabcontent {
+  padding: 0px 0px 0px 10px;
 }

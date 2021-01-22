@@ -1,87 +1,40 @@
-import React, { Fragment, useContext, useState } from 'react';
-import KnowledgeSettings from './KnowledgeSettings'
-import ProfileSettings from './ProfileSettings'
-import InfoTab from './InfoTab'
-import { GlobalContext } from '../../context/GlobalState';
-import { Tab, Tabs, Box } from '@material-ui/core';
-import { UserAvatar32, Information32, Help32 } from '@carbon/icons-react';
-import './Drawer.css';
+import React, { Fragment, useContext, useState, useEffect, memo } from 'react';
+// import { updateUser } from '../../context/ApiCalls'
+// import { GlobalContext } from '../../context/GlobalState';
+// import { useUserSession } from '../../context/AuthContext';
+// import { MostlyCloudyNight32, MostlyCloudy32, Settings32, Information16 } from '@carbon/icons-react';
+import { IoIosArrowForward } from 'react-icons/io';
 
-const Drawer = () => {
-    const { showDrawer, darkMode, setdarkMode } = useContext(GlobalContext)
-    const [tab, setTab] = useState(0);
+import './Drawer.scss';
 
-    const TabPanel = props => {
-        const { children, value, index, ...other } = props;
-        return (
-            <div
-                role="tabpanel"
-                hidden={value !== index}
-                id={`vertical-tabpanel-${index}`}
-                aria-labelledby={`vertical-tab-${index}`}
-                {...other}
-            >
-                {value === index && (
-                    <Box p={3}>
-                        {children}
-                    </Box>
-                )}
-            </div>
-        );
-    }
-
-    const initTab = index => {
-        return {
-            id: `vertical-tab-${index}`,
-            'aria-controls': `vertical-tabpanel-${index}`,
-        };
-    }
-
-    const handleChange = (event, tabIndex) => {
-        setTab(tabIndex);
+const Drawer = memo(() => {
+    const [openDrawer, setOpendDrawer] = useState(true);
+    // const { darkMode, setDarkMode, setSpinner, showAlert } = useContext(GlobalContext)
+    // const { user, setUser } = useUserSession()
+    // const [tab, setTab] = useState(0);
+    const openCloseDrawer = () => {
+        setOpendDrawer(!openDrawer)
     }
 
     return (
         <Fragment>
-            <div className={showDrawer ? darkMode ? 'drawer-dark drawerBox open-drawer' :
-                'drawer-light drawerBox open-drawer' : darkMode ? 'drawer-dark drawerBox close-drawer' :
-                    'drawer-light drawerBox close-drawer'}>
-                {showDrawer ? <div className='drawerbody'>
-
-                    <div className='row'>
-                        <div className="tabs-grid col-2">
-                            <Tabs
-                                className="tabs-nav"
-                                orientation="vertical"
-                                variant="scrollable"
-                                value={tab}
-                                onChange={handleChange}
-                                aria-label="Vertical tabs"
-
-                            >
-                                <Tab className="tabs-nav" label={<Help32 />} aria-label="Search settings" {...initTab(0)} />
-                                <Tab className="tabs-nav" label={<UserAvatar32 />} aria-label="User profile" {...initTab(1)} />
-                                <Tab className="tabs-nav" label={<Information32 />} aria-label="Information" {...initTab(2)} />
-                            </Tabs>
+            <div className={openDrawer ?
+                'drawerBox open-drawer' :
+                'drawerBox close-drawer'}>
+                <div className='drawerbody'>
+                    <div>
+                        <div  onClick={openCloseDrawer} className='expand-button'>
+                            <IoIosArrowForward className={openDrawer ? 'open-button' : 'close-button'} />
                         </div>
-
-                        <div className="col-10">
-                            <TabPanel value={tab} index={0} >
-                                <KnowledgeSettings darkMode={darkMode} />
-                            </TabPanel>
-                            <TabPanel value={tab} index={1}>
-                                <ProfileSettings darkMode={darkMode} setdarkMode={setdarkMode} />
-                            </TabPanel>
-                            <TabPanel value={tab} index={2}>
-                                <InfoTab darkMode={darkMode}/>
-                            </TabPanel>
+                        <div>
+                            {/* dkmsdklf mskldmf klsdmf klsdmf klsdm flks dmf sdf sdfk smdfklsdmflksd mflkms dlkfmsdkl fmsd klmfksl dmfkls dmfkl smdklfm sdklm fsdkl fmksld mfkl smd */}
                         </div>
                     </div>
-                </div> : null
-                }
+                </div>
             </div>
+
         </Fragment>
     );
-}
+})
 
 export default Drawer;

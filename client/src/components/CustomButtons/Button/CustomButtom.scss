@@ -1,0 +1,37 @@
+@import "../../../styles/Collors.scss";
+
+.custom-button {
+  width: auto;
+  padding: 5px;
+  letter-spacing: 0.5px;
+  font-size: 15px;
+  background-color: $primary-light;
+  color: black;
+  font-family: $main-font;
+  font-weight: bolder;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  outline: none;
+  box-shadow: -1px 1px 4px -1px rgba(0,0,0,0.75);
+
+  &:hover {
+    background-color: $primary-light-darker;
+    box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.75);
+  }
+
+
+  &.inverted {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+
+    &:hover {
+      background-color: black;
+      color: white;
+      border: none;
+    }
+  }
+}

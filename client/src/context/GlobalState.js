@@ -1,69 +1,77 @@
-import React, { createContext, useReducer, useState } from 'react';
-import api from '../utils/api';
+import React, { createContext, useReducer, memo } from 'react';
 import AppReducer from './AppReducer';
-import { v4 as uuidv4 } from 'uuid';
-import moment from 'moment';
+import { store } from 'react-notifications-component'
 
 // Initial state
-const initialState = {chatMessages:[]}
+const initialState = {
+  kbsNames: [],
+  darkMode: false,
+  spinner: false,
+  regions: null
+}
 
 // Create context
 export const GlobalContext = createContext(initialState);
 
 // Provider component
-export const GlobalProvider = ({ children }) => {
+export const GlobalProvider = memo(({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  const [showDrawer, setshowDrawer] = useState(true);
-  const [showLoadingAnswer, setshowLoadingAnswer] = useState(false);
-  const [darkMode, setdarkMode] = useState(false);
-
-  // Actions
-  function deleteMessage(id) {
+  const setRegions = async regions => {
     dispatch({
-      type: 'DELETE_MESSAGE',
-      payload: id
+      type: 'SET_REGIONS',
+      payload: regions
     });
   }
 
-  const addMessage = message => {
-    message.id = uuidv4();
-    message.time = moment().calendar();
-    message.sender = message.sender ? message.sender : 'me';
+  const setKbs = async kbsNames => {
     dispatch({
-      type: 'ADD_MESSAGE',
-      payload: message
+      type: 'SET_KBS',
+      payload: kbsNames
     });
   }
 
-  const getAnswer = async (message) => {
-    const body = JSON.stringify({ message: message })
-    setshowLoadingAnswer(true);
-    try {
-      const res = await api.post('/hugo/get-answer', body);
-      console.log(res.data);
-      addMessage({
-        message: res.data.answer,
-        sender: 'hugo',
-      });
-      setshowLoadingAnswer(false);
-    } catch (err) {
-      setshowLoadingAnswer(false);
-      console.log(err);
-    }
-  };
+  const setDarkMode = async mode => {
+    dispatch({
+      type: 'DARK_MODE',
+      payload: mode
+    });
+  }
+
+  const setSpinner = status => {
+    dispatch({
+      type: 'SPINNER',
+      payload: status
+    });
+  }
+
+  const showAlert = (type, title, message, duration) => {
+    store.addNotification({
+      title: title,
+      message: message,
+      type: type,
+      insert: "top",
+      container: "top-center",
+      showIcon: true,
+      animationIn: ["animated", "fadeIn"],
+      animationOut: ["animated", "fadeOut"],
+      dismiss: {
+        duration: duration ? duration : 3000,
+      },
+    });
+  }
 
   return (<GlobalContext.Provider value={{
-    chatMessages: state.chatMessages,
-    deleteMessage,
-    addMessage,
-    getAnswer,
-    showDrawer,
-    setshowDrawer,
-    showLoadingAnswer,
-    darkMode,
-    setdarkMode
+    darkMode: state.darkMode,
+    setDarkMode,
+    setKbs,
+    kbsNames: state.kbsNames,
+    setSpinner,
+    spinner: state.spinner,
+    showAlert,
+    regions: state.regions,
+    setRegions,
   }}>
     {children}
   </GlobalContext.Provider>);
-}
+})
