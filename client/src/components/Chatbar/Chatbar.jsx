@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback, memo } from 'react';
+import React, { useState, useContext, memo } from 'react';
 import { FiSend } from "react-icons/fi";
 
 import FormInput from '../FormInput/FormInput'
@@ -12,18 +12,18 @@ const Chatbar = () => {
     const [message, setMessage] = useState('');
     const { addMessage } = useContext(MessageContext)
 
-    const FiSendIcon = memo(FiSend)
-    const handleChange = useCallback(event => {
+    const FiSendIcon = FiSend
+    const handleChange = event => {
         const { value } = event.target;
         setMessage(value);
-    }, [message]);
+    };
 
-    const newMessage = useCallback(() => {
+    const newMessage = () => {
         if (message.length) {
             addMessage(message);
             setMessage('')
         }
-    }, [message])
+    }
 
     return (
         <div className='input-footer'>

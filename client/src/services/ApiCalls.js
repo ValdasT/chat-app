@@ -1,8 +1,24 @@
 import api from '../utils/api';
 
-const getUser = async () => {
+const createUser = async (user) => {
+    const body = JSON.stringify({
+        user: user,
+    })
     try {
-        const res = await api.post('/users/get-user');
+        const res = await api.post('/users/create-user', body);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+};
+
+const getUser = async (user) => {
+    const body = JSON.stringify({
+        user: user,
+    })
+    try {
+        const res = await api.post('/users/get-user', body);
         return res.data;
     } catch (err) {
         console.log(err);
@@ -96,6 +112,7 @@ const exampleQuestionsList = async () => {
 };
 
 export {
+    createUser,
     getUser,
     sendAnswer,
     updateUser,

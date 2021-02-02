@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 
 const Test = () => {
     return (
@@ -8,4 +8,4 @@ const Test = () => {
     )
 }
 
-export default Test;
+export default memo(Test);

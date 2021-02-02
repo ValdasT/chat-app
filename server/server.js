@@ -1,14 +1,12 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
-const Cloudant = require('@cloudant/cloudant');
+const mongoose = require('mongoose');
 const authentication = require('./middleware/authentication');
 require('dotenv').config();
 
 const app = express();
 
-// Connect Database
-const cloudant = Cloudant(process.env.CLOUDANT);
 // Init Middleware
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
@@ -17,7 +15,7 @@ authentication.init(app);
 
 // Define Routes
 app.use('/api/users', require('./routes/users'));
-app.use('/api/hugo', require('./routes/hugo'));
+// app.use('/api/hugo', require('./routes/hugo'));
 // app.use('/api/auth', require('./routes/api/auth'));
 // app.use('/api/profile', require('./routes/api/profile'));
 // app.use('/api/posts', require('./routes/api/posts'));
@@ -41,4 +39,12 @@ app.get('/', (req,res) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-qs7yd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+  { useNewUrlParser: true }
+).then(() => {
+  console.log("Connected to db!");
+  app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));
+}).catch(err => {
+  console.log(err);
+});

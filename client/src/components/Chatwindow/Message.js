@@ -1,4 +1,4 @@
-import React, { Fragment, memo, useState, useContext } from 'react';
+import React, { memo} from 'react';
 // import ReactHtmlParser from 'react-html-parser';
 // import { v4 as uuidv4 } from 'uuid';
 // import { ThumbsDown24, ThumbsUp24, Copy24, RequestQuote24 } from '@carbon/icons-react';
@@ -15,18 +15,18 @@ const Message = memo(({ response }) => {
     // const { addMessage, getAnswer } = useContext(MessageContext);
     // const [thumb, setThumb] = useState('');
 
-    const faqText = 'Questions that were most frequently asked in the last 7 days';
+    // const faqText = 'Questions that were most frequently asked in the last 7 days';
     // const TooltipWithStyles = withStyles({
     //     tooltip: {
     //         fontSize: "12px",
     //     }
     // })(Tooltip);
-    const tooltipText = {
-        like: 'I like this',
-        dislike: 'I dislike this',
-        copy: 'Copy answer URL',
-        ticket: 'Submit a new ticket'
-    }
+    // const tooltipText = {
+    //     like: 'I like this',
+    //     dislike: 'I dislike this',
+    //     copy: 'Copy answer URL',
+    //     ticket: 'Submit a new ticket'
+    // }
 
     // const redirecToCAH = link => {
     //     window.open(link, '_blank');

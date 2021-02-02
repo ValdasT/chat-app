@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, memo } from 'react';
 
 const NotFound = () => {
   return (
@@ -11,4 +11,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default memo(NotFound);

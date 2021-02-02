@@ -1,9 +1,9 @@
 import React, {memo} from 'react';
 import './RoundButton.scss';
 
-const RoundButton = ({ icon }) => {
+const RoundButton = ({ icon, ...otherProps }) => {
     return (
-        <div className='round-button'>
+        <div className='round-button' {...otherProps}>
             {icon}
         </div>
 

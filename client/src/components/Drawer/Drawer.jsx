@@ -1,8 +1,7 @@
-import React, { Fragment, useContext, useState, useEffect, memo } from 'react';
+import React, { Fragment, useState, memo } from 'react';
 // import { updateUser } from '../../context/ApiCalls'
 // import { GlobalContext } from '../../context/GlobalState';
 // import { useUserSession } from '../../context/AuthContext';
-// import { MostlyCloudyNight32, MostlyCloudy32, Settings32, Information16 } from '@carbon/icons-react';
 import { IoIosArrowForward } from 'react-icons/io';
 
 import './Drawer.scss';

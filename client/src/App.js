@@ -1,5 +1,6 @@
-import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { Fragment, memo } from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import PrivateRoute from "./components/PrivateRoutes/PrivateRouts"
 import Header from './components/Header/Header'
 import MainPage from './Pages/MainPage'
 import Test from './Pages/Test'
@@ -7,28 +8,35 @@ import Auth from './Pages/Auth'
 import NotFound from './Pages/NotFound'
 
 import { MessageProvider } from './context/MessageContext';
+import { useAuth } from "./context/AuthContext"
 // import { GlobalProvider } from './context/GlobalState';
 
 // styles
 import './styles/App.scss';
 
-const App = () =>
+const App = () => {
+  const { currentUser } = useAuth()
   // <GlobalProvider>
-  <Router>
+  return (
+
     <Fragment>
-      <Header />
-      <MessageProvider>
-        <section>
+
+      <Router>
+        <Header />
+        <MessageProvider>
           <Switch>
-            <Route exact path='/' component={MainPage} />
+            <PrivateRoute exact path='/' component={MainPage} />
+            <PrivateRoute exact path="/test" component={Test} />
+            {currentUser && (<Redirect from="/login" to="/" exact />)}
             <Route exact path="/login" component={Auth} />
-            <Route exact path="/test" component={Test} />
             <Route component={NotFound} />
           </Switch>
-        </section>
-      </MessageProvider>
+        </MessageProvider>
+      </Router>
     </Fragment>
-  </Router>
-// </GlobalProvider>
 
-export default App;
+    // </GlobalProvider>
+  )
+}
+
+export default memo(App);
