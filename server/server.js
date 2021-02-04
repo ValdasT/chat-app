@@ -4,13 +4,12 @@ const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
 const mongoose = require('mongoose');
-const {isAuth, createSession, logOut} = require('./middleware/authentication');
+const { isAuth, createSession, logOut } = require('./middleware/authentication');
 const admin = require("firebase-admin");
 const logger = require('./libs/utils/logger');
 require('dotenv').config();
 
-
-const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_ACC)
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -72,7 +71,7 @@ mongoose.connect(
   { useNewUrlParser: true }
 ).then(() => {
   logger.info(`Connected to db!`);
-  app.listen(PORT, ()=> logger.info(`Server started on port ${PORT}`));
+  app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
 }).catch(err => {
   logger.error('error: ', error);
 });
