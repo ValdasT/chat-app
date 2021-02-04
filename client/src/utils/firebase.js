@@ -13,6 +13,7 @@ const config = {
 };
 
 firebase.initializeApp(config);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 
 // export const createUserProfileDocument = async (userAuth, additionalData) => {
 //   if (!userAuth) return;
@@ -40,7 +41,7 @@ firebase.initializeApp(config);
 // };
 
 export const auth = firebase.auth();
-export const firestore = firebase.firestore();
+// export const firestore = firebase.firestore();
 export const googleProvider = new firebase.auth.GoogleAuthProvider();
 export const facebookProvider = new firebase.auth.FacebookAuthProvider();
 

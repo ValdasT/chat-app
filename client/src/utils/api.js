@@ -1,10 +1,13 @@
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const api = axios.create({
   baseURL: '/api',
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+    'csrf-token': Cookies.get("XSRF-TOKEN"),
+  },
+  withCredentials: true
 });
 /**
  intercept any error responses from the api

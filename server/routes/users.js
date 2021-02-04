@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const admin = require("firebase-admin");
+const logger = require('../libs/utils/logger')
 const { createUser, getUser } = require('../libs/controllers/users.controller')
 
 router.post('/create-user', async (req, res, next) => {
@@ -21,6 +23,36 @@ router.post('/get-user', async (req, res, next) => {
         if (err) return next(err);
     }
 });
+
+router.post('/get-user-for-init', async (req, res, next) => {
+    const sessionCookie = req.cookies.session || "";
+admin
+    .auth()
+    .verifySessionCookie(sessionCookie, true /** checkRevoked */)
+    .then(async (decodedClaims) => {
+        const userEmail = decodedClaims.email
+        try {
+            let user = await getUser(userEmail)
+            if (user !== 'not found') {
+                logger.info(`User was found in db.`, userEmail);
+                res.status(200).send(user)
+            } else {
+                logger.info(`User not found.`, userEmail);
+                user = await createUser(decodedClaims)
+                res.status(200).send(user)
+            };
+        } catch (err) {
+            if (err) return next(err);
+        }
+        return next();
+    })
+    .catch((error) => {
+        logger.error('Get user for init error: ', error);
+        res.redirect("/login");
+    });
+});
+
+
 
 
 module.exports = router;

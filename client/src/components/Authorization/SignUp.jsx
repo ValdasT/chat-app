@@ -1,5 +1,5 @@
 import React, { useState, memo, useRef } from 'react';
-import { useForm, transformToNestObject } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom"
 import CustomButton from '../CustomButtons/Button/CustomButton';
 import RoundButton from '../CustomButtons/RoundButton/Roundbutton'
@@ -9,13 +9,31 @@ import { GrFacebookOption } from 'react-icons/gr'
 import './Authorization.scss';
 
 const SignUp = ({ setForm }) => {
-    const { signUp } = useAuth()
+    const { signUp, signInWithGoogle, signInWithFacebook } = useAuth()
     const { register, handleSubmit, watch, errors, reset } = useForm();
     const [formInputs, setFormInputs] = useState({ email: '', password: '' })
     const history = useHistory()
 
     const password = useRef({});
     password.current = watch("password", "");
+
+    const signInWithGoogleProvider = async () => {
+        try {
+            await signInWithGoogle();
+            history.push("/")
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const signInWithFacebookProvider = async () => {
+        try {
+            await signInWithFacebook();
+            history.push("/")
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const onSubmit = async (data) => {
         try {
@@ -37,8 +55,8 @@ const SignUp = ({ setForm }) => {
         <div className='sign-in'>
             <div className="header-text">Create Account</div>
             <div className="login-options">
-                <RoundButton icon={<AiOutlineGoogle />} />
-                <RoundButton icon={<GrFacebookOption />} />
+                <RoundButton onClick={signInWithGoogleProvider} icon={<AiOutlineGoogle />} />
+                <RoundButton onClick={signInWithFacebookProvider} icon={<GrFacebookOption />} />
             </div>
             <div>or use your email for registration</div>
 

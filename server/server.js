@@ -1,21 +1,49 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require("cookie-parser");
+const csrf = require("csurf");
 const mongoose = require('mongoose');
-const authentication = require('./middleware/authentication');
+const {isAuth, createSession, logOut} = require('./middleware/authentication');
+const admin = require("firebase-admin");
+const logger = require('./libs/utils/logger');
 require('dotenv').config();
+
+
+const serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 const app = express();
 
 // Init Middleware
-app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(express.json());
-app.use(bodyParser.json());
-authentication.init(app);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use((err, req, res, next) => {
+  logger.error('error: ', error);
+  res.status(500).send('Something broke!')
+})
+
+app.use(csrf({
+  cookie: {
+    cookie: true,
+    httpOnly: true
+  }
+}));
+
+app.get("/api/get-token", (req, res, next) => {
+  res.cookie("XSRF-TOKEN", req.csrfToken());
+  res.end(JSON.stringify({ status: "success" }));
+});
+app.post('/api/create-session', createSession);
+app.post('/api/log-out', logOut);
 
 // Define Routes
-app.use('/api/users', require('./routes/users'));
-// app.use('/api/hugo', require('./routes/hugo'));
+app.use('/api/users', isAuth, require('./routes/users'));
 // app.use('/api/auth', require('./routes/api/auth'));
 // app.use('/api/profile', require('./routes/api/profile'));
 // app.use('/api/posts', require('./routes/api/posts'));
@@ -33,9 +61,9 @@ app.use('/api/users', require('./routes/users'));
 // app.get('*', (req, res) => {
 //             res.send('API running');
 // });
-app.get('/', (req,res) => {
-    res.sendFile(path.join(__dirname, '../client/build/index.html'));
-  });
+// app.get('/', (req,res) => {
+//     res.sendFile(path.join(__dirname, '../client/build/index.html'));
+//   });
 
 const PORT = process.env.PORT || 5000;
 
@@ -43,8 +71,8 @@ mongoose.connect(
   `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-qs7yd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
   { useNewUrlParser: true }
 ).then(() => {
-  console.log("Connected to db!");
-  app.listen(PORT, ()=> console.log(`Server started on port ${PORT}`));
+  logger.info(`Connected to db!`);
+  app.listen(PORT, ()=> logger.info(`Server started on port ${PORT}`));
 }).catch(err => {
-  console.log(err);
+  logger.error('error: ', error);
 });

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
 import { auth, googleProvider, facebookProvider } from "../utils/firebase"
-import { createUser, getUser } from '../services/ApiCalls'
+import { createUser, createSession, getToken, getUserForInint, logOutUser } from '../services/ApiCalls'
 
 const AuthContext = React.createContext()
 
@@ -8,18 +8,18 @@ export function useAuth() {
     return useContext(AuthContext)
 }
 
-export const  AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
-    const [currentUserProfile, setCurrentUserProfile] = useState()
     const [loading, setLoading] = useState(true)
 
     const signUp = async (email, password, displayName) => {
         try {
-            console.log('start');
-            let user = await auth.createUserWithEmailAndPassword(email, password)
-            console.log(user);
+            let { user } = await auth.createUserWithEmailAndPassword(email, password)
+            let idToken = await user.getIdToken();
+            await createSession(idToken);
             user.profile = await createUser({ name: displayName, email: email });
-            setCurrentUserProfile(user.profile)
+            setCurrentUser( user.profile)
+            await auth.signOut();
             return user;
         } catch (err) {
             console.log(err);
@@ -27,17 +27,27 @@ export const  AuthProvider = ({ children }) => {
         }
     }
 
-    const getUserProfile = async (email) => {
-        let userProfile = await getUser(email);
-        return userProfile;
+    const logIn = async (email, password) => {
+        try {
+            let { user } = await auth.signInWithEmailAndPassword(email, password)
+            let idToken = await user.getIdToken();
+            await createSession(idToken);
+            let userProfile = await getUserForInint()
+            setCurrentUser(userProfile);
+        } catch (err) {
+            console.log(err);
+            throw err
+        }
     }
 
-    const logIn = (email, password) => {
-        return auth.signInWithEmailAndPassword(email, password)
-    }
-
-    const logOut = () => {
-        return auth.signOut()
+    const logOut = async () => {
+        try {
+            await logOutUser();
+            setCurrentUser(null)
+        } catch (err) {
+            console.log(err);
+            throw err
+        }
     }
 
     const resetPassword = (email) => {
@@ -53,37 +63,48 @@ export const  AuthProvider = ({ children }) => {
     }
 
 
-    const signInWithGoogle = () => {
-        return auth.signInWithPopup(googleProvider.setCustomParameters({
-            prompt: 'select_account'
-        }));
+    const signInWithGoogle = async () => {
+        try {
+            let { user } = await auth.signInWithPopup(googleProvider.setCustomParameters({
+                prompt: 'select_account'
+            }));
+            let idToken = await user.getIdToken();
+            await createSession(idToken);
+            let userProfile = await getUserForInint()
+            setCurrentUser(userProfile);
+        } catch (err) {
+            console.log(err);
+            throw err
+        }
     }
 
-    const signInWithFacebook = () => {
-        return auth.signInWithPopup(facebookProvider.setCustomParameters({
-            'display': 'popup'
-        }));
+    const signInWithFacebook = async () => {
+        try {
+            let { user } = await auth.signInWithPopup(facebookProvider.setCustomParameters({
+                'display': 'popup'
+            }));
+            let idToken = await user.getIdToken();
+            await createSession(idToken);
+            let userProfile = await getUserForInint()
+            setCurrentUser(userProfile);
+        } catch (err) {
+            console.log(err);
+            throw err
+        }
     }
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(async (user) => {
-            console.log(user);
-            if (!currentUserProfile && user) {
-                let userProfile = await getUserProfile(user.email)
-                setCurrentUserProfile(userProfile)
-                console.log(userProfile);
+        (async () => {
+            try {
+                await getToken()
+                let user = await getUserForInint()
+                setCurrentUser(user);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+                setLoading(false)
             }
-            if (!user) {
-                setCurrentUserProfile(user)
-            }
-            setCurrentUser(user)
-            console.log(user);
-            setLoading(false)
-        })
-
-        return unsubscribe
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        })()
     }, [])
 
     const value = {

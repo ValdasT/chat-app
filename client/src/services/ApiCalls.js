@@ -13,12 +13,42 @@ const createUser = async (user) => {
     }
 };
 
-const getUser = async (user) => {
-    const body = JSON.stringify({
-        user: user,
-    })
+const createSession = async (idToken) => {
+    const body = JSON.stringify({idToken})
     try {
-        const res = await api.post('/users/get-user', body);
+        const res = await api.post('/create-session', body);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+};
+
+const logOutUser = async () => {
+    try {
+        const res = await api.post('/log-out');
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+};
+
+const getToken = async () => {
+    try {
+        console.log('get token');
+        const res = await api.get('/get-token');
+        console.log(res);
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+};
+
+const getUserForInint = async () => {
+    try {
+        const res = await api.post('/users/get-user-for-init');
         return res.data;
     } catch (err) {
         console.log(err);
@@ -112,8 +142,11 @@ const exampleQuestionsList = async () => {
 };
 
 export {
+    getToken,
     createUser,
-    getUser,
+    logOutUser,
+    createSession,
+    getUserForInint,
     sendAnswer,
     updateUser,
     getRegions,
