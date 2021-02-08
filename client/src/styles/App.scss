@@ -117,6 +117,17 @@ body.dark-mode {
     }
   }
 
+  .modal-content {
+    background-color: $base-second-dark;
+    box-shadow: 0 0 50px rgba(black, 0.5);
+
+    .modal-icon-box {
+      .modal-icon {
+        background-color: $base-second-dark;
+      }
+    }
+  }
+
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,

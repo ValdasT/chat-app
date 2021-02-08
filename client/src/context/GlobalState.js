@@ -1,42 +1,18 @@
-import React, { createContext, useReducer, memo } from 'react';
+import React, { createContext, useReducer } from 'react';
 import AppReducer from './AppReducer';
-import { store } from 'react-notifications-component'
+import { v4 as uuidv4 } from 'uuid';
 
 // Initial state
 const initialState = {
-  kbsNames: [],
-  darkMode: false,
-  spinner: false,
-  regions: null
+  modalsArray: [],
 }
 
 // Create context
 export const GlobalContext = createContext(initialState);
 
 // Provider component
-export const GlobalProvider = memo(({ children }) => {
+export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
-
-  const setRegions = async regions => {
-    dispatch({
-      type: 'SET_REGIONS',
-      payload: regions
-    });
-  }
-
-  const setKbs = async kbsNames => {
-    dispatch({
-      type: 'SET_KBS',
-      payload: kbsNames
-    });
-  }
-
-  const setDarkMode = async mode => {
-    dispatch({
-      type: 'DARK_MODE',
-      payload: mode
-    });
-  }
 
   const setSpinner = status => {
     dispatch({
@@ -45,33 +21,37 @@ export const GlobalProvider = memo(({ children }) => {
     });
   }
 
-  const showAlert = (type, title, message, duration) => {
-    store.addNotification({
-      title: title,
-      message: message,
-      type: type,
-      insert: "top",
-      container: "top-center",
-      showIcon: true,
-      animationIn: ["animated", "fadeIn"],
-      animationOut: ["animated", "fadeOut"],
-      dismiss: {
-        duration: duration ? duration : 3000,
-      },
+  const showModal = modalSettings => {
+    let modal = {
+      id: uuidv4(),
+      type: modalSettings.type,
+      name: modalSettings.name,
+      body: modalSettings.body,
+      onClose: modalSettings.onClose,
+      onCloseBtn: modalSettings.onCloseBtn,
+      onConfirm: modalSettings.onConfirm,
+      onConfirmBtn: modalSettings.onConfirmBtn,
+    }
+    dispatch({
+      type: 'ADD_MODAL',
+      payload: modal
+    });
+  }
+
+  const removeModal = modalId => {
+    dispatch({
+      type: 'REMOVE_MODAL',
+      payload: modalId
     });
   }
 
   return (<GlobalContext.Provider value={{
-    darkMode: state.darkMode,
-    setDarkMode,
-    setKbs,
-    kbsNames: state.kbsNames,
+    modalsArray: state.modalsArray,
     setSpinner,
     spinner: state.spinner,
-    showAlert,
-    regions: state.regions,
-    setRegions,
+    showModal,
+    removeModal
   }}>
     {children}
   </GlobalContext.Provider>);
-})
+}

@@ -9,33 +9,34 @@ import NotFound from './Pages/NotFound'
 
 import { MessageProvider } from './context/MessageContext';
 import { useAuth } from "./context/AuthContext"
-// import { GlobalProvider } from './context/GlobalState';
+import Spinner from './components/Spinner/Spinner'
+import ModalList from './components/Modal/ModalList'
+import { GlobalProvider } from './context/GlobalState';
 
 // styles
 import './styles/App.scss';
 
 const App = () => {
-  const { currentUser } = useAuth()
-  // <GlobalProvider>
+  const { currentUser, loading } = useAuth()
   return (
-
     <Fragment>
-
-      <Router>
-        <Header />
-        <MessageProvider>
-          <Switch>
-            <PrivateRoute exact path='/' component={MainPage} />
-            <PrivateRoute exact path="/test" component={Test} />
-            {currentUser && (<Redirect from="/login" to="/" exact />)}
-            <Route exact path="/login" component={Auth} />
-            <Route component={NotFound} />
-          </Switch>
-        </MessageProvider>
-      </Router>
+      <GlobalProvider>
+        <ModalList />
+        {loading ? <Spinner /> :
+          <Router>
+            <Header />
+            <MessageProvider>
+              <Switch>
+                <PrivateRoute exact path='/' component={MainPage} />
+                <PrivateRoute exact path="/test" component={Test} />
+                {currentUser && (<Redirect from="/login" to="/" exact />)}
+                <Route exact path="/login" component={Auth} />
+                <Route component={NotFound} />
+              </Switch>
+            </MessageProvider>
+          </Router>}
+      </GlobalProvider>
     </Fragment>
-
-    // </GlobalProvider>
   )
 }
 

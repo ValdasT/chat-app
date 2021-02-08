@@ -30,7 +30,9 @@ app.use((err, req, res, next) => {
 app.use(csrf({
   cookie: {
     cookie: true,
-    httpOnly: true
+    httpOnly: true,
+    secure:false,
+    sameSite: true
   }
 }));
 

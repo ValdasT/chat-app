@@ -1,0 +1,98 @@
+@import "../../styles/Collors.scss";
+
+$base-duration: 500ms;
+
+.modal-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 110;
+  background-color: black;
+  opacity: 0.7;
+}
+
+.modal-content {
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  width: 30%;
+  height: auto;
+  padding: 20px;
+  background-color: $base-white;
+  border-radius: 5px;
+  box-shadow: 0 0 50px rgba(black, 0.5);
+  z-index: 111;
+
+  .modal-icon-box {
+    display: flex;
+    justify-content: center;
+
+    .modal-icon {
+      background-color: #fff;
+      height: 100px;
+      width: 100px;
+      border-radius: 50%;
+      position: absolute;
+      top: -30px;
+      font-size: 50px;
+      text-align: center;
+    }
+  }
+
+  header {
+    position: relative;
+    display: block;
+    border-bottom: 1px solid $sub-color-light;
+
+    h2 {
+      text-align: center;
+      margin: 0 0 10px;
+      padding: 0;
+      font-size: 28px;
+    }
+  }
+
+  article {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  footer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    margin: 0;
+    padding: 10px 0 0;
+  }
+}
+
+.roll-appear {
+  opacity: 0;
+}
+.roll-enter {
+  // opacity:0;
+}
+
+.roll-enter-done {
+  transition: transform $base-duration/2 ease;
+  opacity: 1;
+  transition: transform 500ms, opacity 500ms;
+}
+
+.roll-exit {
+  transition: transform 500ms, opacity 500ms;
+  opacity: 0;
+}
+
+.roll-exit-active {
+  // opacity: 0;
+  transition: transform 500ms, opacity 500ms;
+}

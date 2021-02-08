@@ -1,31 +1,18 @@
-export default (state, action) => {
+const AppReducer = (state, action) => {
   switch (action.type) {
-    case 'DARK_MODE':
+    case 'ADD_MODAL':
       return {
         ...state,
-        darkMode: action.payload
+        modalsArray: [...state.modalsArray, action.payload]
       }
-    case 'SPINNER':
+    case 'REMOVE_MODAL':
       return {
         ...state,
-        spinner: action.payload
+        modalsArray: state.modalsArray.filter(modal => modal.id !== action.payload)
       }
-    case 'SET_USER':
-      return {
-        ...state,
-        user: { ...action.payload }
-      }
-    case 'SET_REGIONS':
-      return {
-        ...state,
-        regions: action.payload
-      }
-      case 'SET_KBS':
-        return {
-          ...state,
-          kbsNames: action.payload
-          }
     default:
       throw new Error(`unknown action type: ${action.type}`);;
   }
 }
+
+export default AppReducer

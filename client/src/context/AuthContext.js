@@ -11,6 +11,7 @@ export function useAuth() {
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
+    const [test2, setTest] = useState([])
 
     const signUp = async (email, password, displayName) => {
         try {
@@ -25,6 +26,10 @@ export const AuthProvider = ({ children }) => {
             console.log(err);
             throw err
         }
+    }
+
+    const addToArray = (value) => {
+        setTest(...test2, value)
     }
 
     const logIn = async (email, password) => {
@@ -96,6 +101,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         (async () => {
             try {
+                setLoading(true);
                 await getToken()
                 let user = await getUserForInint()
                 setCurrentUser(user);
@@ -116,12 +122,15 @@ export const AuthProvider = ({ children }) => {
         signInWithFacebook,
         resetPassword,
         updateEmail,
-        updatePassword
+        updatePassword,
+        loading,
+        addToArray,
+        test2
     }
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     )
 }
