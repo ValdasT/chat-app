@@ -22,7 +22,8 @@ const App = () => {
     <Fragment>
       <GlobalProvider>
         <ModalList />
-        {loading ? <Spinner /> :
+        <Spinner/>
+        {loading ? <Spinner show={true}/> :
           <Router>
             <Header />
             <MessageProvider>

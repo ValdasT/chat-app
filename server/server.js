@@ -4,9 +4,10 @@ const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
 const mongoose = require('mongoose');
+const logger = require('./libs/utils/logger');
+const moduleName = module.filename.split('/').slice(-1);
 const { isAuth, createSession, logOut } = require('./middleware/authentication');
 const admin = require("firebase-admin");
-const logger = require('./libs/utils/logger');
 require('dotenv').config();
 
 const serviceAccount = JSON.parse(process.env.FIREBASE_ACC)
@@ -23,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use((err, req, res, next) => {
-  logger.error('error: ', error);
+  logger.error(`[${moduleName}] error: `, error);
   res.status(500).send('Something broke!')
 })
 
@@ -72,8 +73,8 @@ mongoose.connect(
   `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-qs7yd.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
   { useNewUrlParser: true }
 ).then(() => {
-  logger.info(`Connected to db!`);
-  app.listen(PORT, () => logger.info(`Server started on port ${PORT}`));
+  logger.info(`[${moduleName}] Connected to db!`);
+  app.listen(PORT, () => logger.info(`[${moduleName}] Server started on port ${PORT}`));
 }).catch(err => {
-  logger.error('error: ', error);
+  logger.error(`[${moduleName}] error: `, error);
 });

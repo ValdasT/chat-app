@@ -12,36 +12,45 @@ import './Authorization.scss';
 
 const LogIn = ({ setForm }) => {
     const { logIn, signInWithGoogle, signInWithFacebook } = useAuth()
-    const { showModal } = useContext(GlobalContext);
+    const { showModal, showSpinner } = useContext(GlobalContext);
     const { register, handleSubmit, errors, reset } = useForm();
     const [formInputs, setFormInputs] = useState({ email: '', password: '' })
     const history = useHistory()
 
     const onSubmit = async (data) => {
+        showSpinner(true);
         const { email, password } = data;
         try {
             await logIn(email, password);
+            showSpinner(false);
             history.push("/")
             reset();
         } catch (error) {
+            showSpinner(false);
             showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
     const signInWithGoogleProvider = async () => {
         try {
+            showSpinner(true);
             await signInWithGoogle();
+            showSpinner(false);
             history.push("/")
         } catch (error) {
+            showSpinner(false);
             showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
     const signInWithFacebookProvider = async () => {
         try {
+            showSpinner(true);
             await signInWithFacebook();
+            showSpinner(false);
             history.push("/")
         } catch (error) {
+            showSpinner(false);
             showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };

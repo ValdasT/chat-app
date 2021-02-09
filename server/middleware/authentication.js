@@ -1,18 +1,19 @@
 const admin = require("firebase-admin");
-var logger = require('../libs/utils/logger');
+const logger = require('../libs/utils/logger');
+const moduleName = module.filename.split('/').slice(-1);
 
 const isAuth = (req, res, next) => {
-    logger.info(` ${module.filename.split('/').slice(-1)} Checking authorization...`);
+    logger.info(`[${moduleName}] Checking authorization...`);
     const sessionCookie = req.cookies.session || "";
     admin
         .auth()
         .verifySessionCookie(sessionCookie, true /** checkRevoked */)
         .then(() => {
-            logger.info(`Checking authorization... Done`);
+            logger.info(`[${moduleName}] Checking authorization... Done`);
             return next();
         })
         .catch((error) => {
-            logger.error('Checking authorization error: ', error);
+            logger.error(`[${moduleName}] Checking authorization error: `, error);
             res.status(401).send("UNAUTHORIZED REQUEST!");
         });
 };
@@ -30,20 +31,20 @@ const createSession = (req, res) => {
             (sessionCookie) => {
                 const options = { maxAge: expiresIn, httpOnly: true };
                 res.cookie("session", sessionCookie, options);
-                logger.info(`Creating session... Done`);
+                logger.info(`[${moduleName}] Creating session... Done`);
                 res.end(JSON.stringify({ status: "success" }));
             },
             (error) => {
-                logger.error('Creating session error: ', error);
+                logger.error(`[${moduleName}] Creating session error: `, error);
                 res.status(401).send("UNAUTHORIZED REQUEST!");
             }
         );
 }
 
 const logOut = (req, res) => {
-    logger.info(`Loging out...`);
+    logger.info(`[${moduleName}] Loging out...`);
     res.clearCookie('session');
-    logger.info(`Loging out... Done`);
+    logger.info(`[${moduleName}] Loging out... Done`);
     res.end(JSON.stringify({ status: "success" }));
 }
 

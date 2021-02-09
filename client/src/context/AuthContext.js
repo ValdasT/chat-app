@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
             let idToken = await user.getIdToken();
             await createSession(idToken);
             user.profile = await createUser({ name: displayName, email: email });
-            setCurrentUser( user.profile)
+            setCurrentUser(user.profile)
             await auth.signOut();
             return user;
         } catch (err) {

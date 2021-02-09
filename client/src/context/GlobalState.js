@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 // Initial state
 const initialState = {
   modalsArray: [],
+  spinner: false
 }
 
 // Create context
@@ -14,7 +15,7 @@ export const GlobalContext = createContext(initialState);
 export const GlobalProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  const setSpinner = status => {
+  const showSpinner = status => {
     dispatch({
       type: 'SPINNER',
       payload: status
@@ -47,10 +48,10 @@ export const GlobalProvider = ({ children }) => {
 
   return (<GlobalContext.Provider value={{
     modalsArray: state.modalsArray,
-    setSpinner,
-    spinner: state.spinner,
     showModal,
-    removeModal
+    removeModal,
+    spinner: state.spinner,
+    showSpinner
   }}>
     {children}
   </GlobalContext.Provider>);

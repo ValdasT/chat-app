@@ -11,7 +11,7 @@ import './Authorization.scss';
 
 const SignUp = ({ setForm }) => {
     const { signUp, signInWithGoogle, signInWithFacebook } = useAuth()
-    const { showModal } = useContext(GlobalContext);
+    const { showModal,  showSpinner } = useContext(GlobalContext);
     const { register, handleSubmit, watch, errors, reset } = useForm();
     const [formInputs, setFormInputs] = useState({ email: '', password: '' })
     const history = useHistory()
@@ -21,24 +21,31 @@ const SignUp = ({ setForm }) => {
 
     const signInWithGoogleProvider = async () => {
         try {
+            showSpinner(true);
             await signInWithGoogle();
+            showSpinner(false);
             history.push("/")
         } catch (error) {
+            showSpinner(false);
             showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
     const signInWithFacebookProvider = async () => {
         try {
+            showSpinner(true);
             await signInWithFacebook();
+            showSpinner(false);
             history.push("/")
         } catch (error) {
+            showSpinner(false);
             showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
     const onSubmit = async (data) => {
         try {
+            showSpinner(true);
             const { email, password, displayName } = data;
             const user = await signUp(
                 email,
@@ -46,9 +53,11 @@ const SignUp = ({ setForm }) => {
                 displayName
             );
             console.log(user);
+            showSpinner(false);
             history.push("/")
             reset()
         } catch (error) {
+            showSpinner(false);
             showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
