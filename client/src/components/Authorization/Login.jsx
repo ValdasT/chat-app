@@ -11,7 +11,7 @@ import { GrFacebookOption } from 'react-icons/gr'
 import './Authorization.scss';
 
 const LogIn = ({ setForm }) => {
-    const { logIn, signInWithGoogle, signInWithFacebook, addToArray } = useAuth()
+    const { logIn, signInWithGoogle, signInWithFacebook } = useAuth()
     const { showModal } = useContext(GlobalContext);
     const { register, handleSubmit, errors, reset } = useForm();
     const [formInputs, setFormInputs] = useState({ email: '', password: '' })
@@ -25,7 +25,6 @@ const LogIn = ({ setForm }) => {
             reset();
         } catch (error) {
             showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
-            console.log(error);
         }
     };
 
@@ -34,7 +33,7 @@ const LogIn = ({ setForm }) => {
             await signInWithGoogle();
             history.push("/")
         } catch (error) {
-            console.log(error);
+            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
@@ -43,7 +42,7 @@ const LogIn = ({ setForm }) => {
             await signInWithFacebook();
             history.push("/")
         } catch (error) {
-            console.log(error);
+            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 

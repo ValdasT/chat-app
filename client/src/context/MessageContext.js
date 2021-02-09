@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext, memo, useState } from 'react';
+import React, { createContext, useReducer, memo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 // import { sendAnswer } from './ApiCalls';
 // import { GlobalContext } from './GlobalState';

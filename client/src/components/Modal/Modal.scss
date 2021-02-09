@@ -1,7 +1,5 @@
 @import "../../styles/Collors.scss";
 
-$base-duration: 500ms;
-
 .modal-bg {
   position: absolute;
   top: 0;
@@ -15,7 +13,7 @@ $base-duration: 500ms;
 
 .modal-content {
   position: absolute;
-  top: 20%;
+  top: 100px;
   left: 35%;
   width: 30%;
   height: auto;
@@ -44,11 +42,11 @@ $base-duration: 500ms;
   header {
     position: relative;
     display: block;
-    border-bottom: 1px solid $sub-color-light;
+    border-bottom: 1px solid $primary-light-darker;
 
     h2 {
       text-align: center;
-      margin: 0 0 10px;
+      margin: 0;
       padding: 0;
       font-size: 28px;
     }
@@ -60,6 +58,7 @@ $base-duration: 500ms;
     margin: 0;
     padding: 0;
     font-size: 16px;
+    padding: 10px 0 0;
     line-height: 1.75;
   }
 
@@ -74,25 +73,63 @@ $base-duration: 500ms;
   }
 }
 
+@media (max-width: 40em) {
+  .modal-content {
+    left: 10%;
+    width: 70%;
+  }
+}
+
 .roll-appear {
-  opacity: 0;
 }
 .roll-enter {
-  // opacity:0;
 }
 
 .roll-enter-done {
-  transition: transform $base-duration/2 ease;
-  opacity: 1;
-  transition: transform 500ms, opacity 500ms;
 }
 
 .roll-exit {
-  transition: transform 500ms, opacity 500ms;
   opacity: 0;
 }
 
 .roll-exit-active {
-  // opacity: 0;
-  transition: transform 500ms, opacity 500ms;
+  animation: slide-in-top 0.2s reverse;
+}
+
+.modal-enter-error {
+  animation: show 0.4s ease-in-out;
+}
+
+.modal-enter {
+  animation: slide-in-top 0.3s;
+}
+
+@keyframes slide-in-top {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+@keyframes show {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+  80% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

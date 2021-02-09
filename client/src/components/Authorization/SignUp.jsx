@@ -1,15 +1,17 @@
-import React, { useState, memo, useRef } from 'react';
+import React, { useState, memo, useRef, useContext } from 'react';
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom"
 import CustomButton from '../CustomButtons/Button/CustomButton';
 import RoundButton from '../CustomButtons/RoundButton/Roundbutton'
 import { useAuth } from "../../context/AuthContext"
+import { GlobalContext } from '../../context/GlobalState';
 import { AiOutlineGoogle } from 'react-icons/ai'
 import { GrFacebookOption } from 'react-icons/gr'
 import './Authorization.scss';
 
 const SignUp = ({ setForm }) => {
     const { signUp, signInWithGoogle, signInWithFacebook } = useAuth()
+    const { showModal } = useContext(GlobalContext);
     const { register, handleSubmit, watch, errors, reset } = useForm();
     const [formInputs, setFormInputs] = useState({ email: '', password: '' })
     const history = useHistory()
@@ -22,7 +24,7 @@ const SignUp = ({ setForm }) => {
             await signInWithGoogle();
             history.push("/")
         } catch (error) {
-            console.log(error);
+            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
@@ -31,7 +33,7 @@ const SignUp = ({ setForm }) => {
             await signInWithFacebook();
             history.push("/")
         } catch (error) {
-            console.log(error);
+            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
@@ -46,8 +48,8 @@ const SignUp = ({ setForm }) => {
             console.log(user);
             history.push("/")
             reset()
-        } catch (err) {
-            console.log(err);
+        } catch (error) {
+            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
         }
     };
 
@@ -74,12 +76,19 @@ const SignUp = ({ setForm }) => {
                 <div className="form-group" >
                     <input style={{ borderColor: errors.email ? '#b40000' : null }}
                         className="form-field" defaultValue={formInputs.email}
-                        ref={register({ required: true })}
+                        ref={register({
+                            required: true,
+                            pattern: {
+                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                message: "Invalid email address"
+                            }
+                        })}
                         type="input" spellCheck="false" placeholder="Email"
                         name="email" id='email' autoComplete="email" />
                     <label style={{ color: errors.email ? '#b40000' : null }}
                         htmlFor="email" className="form-label">Email</label>
-                    {errors.email && <span className='danger-text'>Email is required</span>}
+                    {errors.email && <span className='danger-text'>{errors.email.message ? errors.email.message :
+                        'Email is required'}</span>}
                 </div>
                 <div className="form-group">
                     <input style={{ borderColor: errors.password ? '#b40000' : null }}
