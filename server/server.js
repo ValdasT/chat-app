@@ -1,9 +1,11 @@
 const express = require('express');
+const http = require('http');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const csrf = require("csurf");
 const mongoose = require('mongoose');
+const sockets = require('./middleware/sockets');
 const logger = require('./libs/utils/logger');
 const moduleName = module.filename.split('/').slice(-1);
 const { isAuth, createSession, logOut } = require('./middleware/authentication');
@@ -17,6 +19,7 @@ admin.initializeApp({
 });
 
 const app = express();
+const server = http.createServer(app);
 
 // Init Middleware
 app.use(express.json());
@@ -36,6 +39,9 @@ app.use(csrf({
     sameSite: true
   }
 }));
+
+// app initialization
+sockets.init(server);
 
 app.get("/api/get-token", (req, res, next) => {
   res.cookie("XSRF-TOKEN", req.csrfToken());
@@ -74,7 +80,8 @@ mongoose.connect(
   { useNewUrlParser: true }
 ).then(() => {
   logger.info(`[${moduleName}] Connected to db!`);
-  app.listen(PORT, () => logger.info(`[${moduleName}] Server started on port ${PORT}`));
+  server.listen(PORT, () => logger.info(`[${moduleName}] Server started on port ${PORT}`));
 }).catch(err => {
   logger.error(`[${moduleName}] error: `, error);
 });
+ 

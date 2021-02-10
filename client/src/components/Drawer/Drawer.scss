@@ -1,9 +1,8 @@
 @import "../../styles/Collors.scss";
+
 .drawerBox {
   height: 80vh;
-  padding: 15px;
   padding-bottom: 60px;
-  width: 30vw;
   word-break: keep-all;
   border-radius: 0px 20px 20px 0px;
   background-color: $base-second-light;
@@ -13,7 +12,7 @@
 
 @include keyframes(slide-in) {
   from {
-    width: 40px;
+    width: 35px;
   }
   to {
     width: 20%;
@@ -25,7 +24,25 @@
     width: 20%;
   }
   to {
-    width: 40px;
+    width: 35px;
+  }
+}
+
+@include keyframes(slide-in-mobile) {
+  from {
+    width: 20px;
+  }
+  to {
+    width: 100vw;
+  }
+}
+
+@include keyframes(slide-out-mobile) {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 20px;
   }
 }
 
@@ -44,13 +61,20 @@
 }
 
 .close-drawer {
-  @include animation("slide-out 0.2s ease-out forwards");
+  @include animation("slide-out 0.3s ease-out forwards");
+}
+
+@media (max-width: 40em) {
+  .open-drawer {
+    @include animation("slide-in-mobile 0.3s ease-in forwards");
+  }
 }
 
 .expand-button {
   float: right;
   font-size: 15px;
-  padding: 2px;
+  padding: 3px;
+  margin: 3px;
   text-align: center;
   border-radius: 50%;
   width: 20px;

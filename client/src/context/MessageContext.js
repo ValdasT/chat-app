@@ -1,5 +1,7 @@
 import React, { createContext, useReducer, memo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import socketIOClient from "socket.io-client";
+const socket = socketIOClient();
 // import { sendAnswer } from './ApiCalls';
 // import { GlobalContext } from './GlobalState';
 // import { useUserSession } from './AuthContext';
@@ -66,6 +68,9 @@ export const MessageProvider = memo(({ children }) => {
             sender: message.sender ? message.sender : 'me',
             message: message
         }
+        // socket.on("FromAPI", data => {
+        //     console.log(data);
+        //   });
         dispatch({
             type: 'ADD_MESSAGE',
             payload: chatMessage
