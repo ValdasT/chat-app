@@ -93,6 +93,22 @@ body.dark-mode {
       background-color: $sub-color;
     }
   }
+
+  .group-small {
+    .form-input-small {
+      background-color: $base-second-dark;
+      color: $white-text;
+    }
+    .form-input-small-label {
+      color: $white-text;
+    }
+    .search-button {
+      color: $white-text;
+      &:hover {
+        background-color: $dark-grey-transperant;
+      }
+    }
+  }
   .message {
     .message-block {
       .bubble {

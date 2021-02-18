@@ -7,7 +7,7 @@
   border-radius: 0px 20px 20px 0px;
   background-color: $base-second-light;
   box-shadow: 5px 0px 5px -4px rgba(0,0,0,0.36);
-  overflow-y: auto;
+  // overflow-y: auto;
 }
 
 @include keyframes(slide-in) {

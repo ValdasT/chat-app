@@ -1,0 +1,74 @@
+@import "../../styles/Collors.scss";
+
+@mixin shrinkLabel {
+  top: -14px;
+  font-size: 12px;
+}
+
+.group-small {
+  position: relative;
+  margin: 15px 5px;
+  display: flex;
+
+  .form-input-small {
+    background: none;
+    background-color: $base-white;
+    color: $sub-color;
+    font-size: 12px;
+    padding: 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0px 0.5px 2px 0px rgba(0, 0, 0, 0.75);
+    margin: 2px 0;
+    font-family: $main-font;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:focus ~ .form-input-small-label {
+      @include shrinkLabel();
+    }
+  }
+
+  input[type="password"] {
+    letter-spacing: 0.3em;
+  }
+
+  .form-input-small-label {
+    color: $base-second-dark;
+    font-size: 12px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 7px;
+    top: 6px;
+    transition: 300ms ease all;
+    font-family: $main-font;
+
+    &.shrink {
+      @include shrinkLabel();
+    }
+  }
+
+  .search-button {
+    position: absolute;
+    float: right;
+    right: 0px;
+    font-size: 14px;
+    padding: 3px;
+    margin: 2px 0px 1px 0;
+    text-align: center;
+    border-radius: 50%;
+    width: 21px;
+    height: 21px;
+    color: $grey-text-light;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $light-grey-transperant;
+    }
+  }
+}
