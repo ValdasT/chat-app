@@ -2,6 +2,7 @@ import React, { memo, Fragment } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import ThemeMode from '../layout/ThemeChanger'
 import RoundButton from '../CustomButtons/RoundButton/Roundbutton'
+import SearchInput from '../FormInput/SearchInput/SearchInput'
 import { useAuth } from "../../context/AuthContext"
 import { GiExitDoor } from 'react-icons/gi'
 import { IoSettingsOutline, IoLogInOutline } from 'react-icons/io5';
@@ -22,6 +23,7 @@ const Header = () => {
 
     return (
         <div className="header">
+            {currentUser ? <SearchInput /> : null}
             <div className="navigation">
                 <ThemeMode />
                 {currentUser ? null : <Link to='/login'>

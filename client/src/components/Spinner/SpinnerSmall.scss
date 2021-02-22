@@ -1,0 +1,48 @@
+@import "../../styles/Collors.scss";
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  margin: 10px auto;
+  position: relative;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.spinner-small:before,
+.spinner-small:after {
+  opacity: 0;
+  box-sizing: border-box;
+  content: "\0020";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 40px;
+  border: 2px solid $primary-light-darker;
+  // box-shadow: 0 0 1px rgb(0,0,0), inset 0 0 1px rgb(0,0,0);
+}
+
+.spinner-small:after {
+  z-index: 1;
+  animation: fade-cicrle 1s infinite 0.5s;
+}
+
+.spinner-small:before {
+  z-index: 2;
+  animation: fade-cicrle 1s infinite;
+}
+
+@keyframes fade-cicrle {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}

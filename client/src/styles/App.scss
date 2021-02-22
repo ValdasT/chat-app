@@ -109,6 +109,18 @@ body.dark-mode {
       }
     }
   }
+
+  .results {
+    background-color: $base-second-dark;
+    box-shadow: 0px 4px 10px -4px rgba(0, 0, 0, 0.75);
+
+    .results-element {
+      &:hover {
+        background-color: $light-grey-transperant;
+      }
+    }
+  }
+
   .message {
     .message-block {
       .bubble {

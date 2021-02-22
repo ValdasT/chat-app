@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react"
+import { handleError } from '../services/ErrorHandler'
 import { auth, googleProvider, facebookProvider } from "../utils/firebase"
 import { createUser, createSession, getToken, getUserForInint, logOutUser } from '../services/ApiCalls'
 
@@ -24,7 +25,7 @@ export const AuthProvider = ({ children }) => {
             return user;
         } catch (err) {
             console.log(err);
-            throw err
+            throw handleError(err)
         }
     }
 
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
             setCurrentUser(userProfile);
         } catch (err) {
             console.log(err);
-            throw err
+            throw handleError(err)
         }
     }
 
@@ -51,7 +52,7 @@ export const AuthProvider = ({ children }) => {
             setCurrentUser(null)
         } catch (err) {
             console.log(err);
-            throw err
+            throw handleError(err)
         }
     }
 
@@ -79,7 +80,7 @@ export const AuthProvider = ({ children }) => {
             setCurrentUser(userProfile);
         } catch (err) {
             console.log(err);
-            throw err
+            throw handleError(err)
         }
     }
 
@@ -94,7 +95,7 @@ export const AuthProvider = ({ children }) => {
             setCurrentUser(userProfile);
         } catch (err) {
             console.log(err);
-            throw err
+            throw handleError(err)
         }
     }
 

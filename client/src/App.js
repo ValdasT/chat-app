@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-d
 import PrivateRoute from "./components/PrivateRoutes/PrivateRouts"
 import Header from './components/Header/Header'
 import MainPage from './Pages/MainPage'
+import UserPage from './Pages/UserPage'
 import Test from './Pages/Test'
 import Auth from './Pages/Auth'
 import NotFound from './Pages/NotFound'
@@ -29,7 +30,8 @@ const App = () => {
             <MessageProvider>
               <Switch>
                 <PrivateRoute exact path='/' component={MainPage} />
-                <PrivateRoute exact path="/test" component={Test} />
+                <PrivateRoute exact path='/test' component={Test} />
+                <PrivateRoute exact path='/users/:userId' component={UserPage} />
                 {currentUser && (<Redirect from="/login" to="/" exact />)}
                 <Route exact path="/login" component={Auth} />
                 <Route component={NotFound} />

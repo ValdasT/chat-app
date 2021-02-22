@@ -27,7 +27,7 @@ const LogIn = ({ setForm }) => {
             reset();
         } catch (error) {
             showSpinner(false);
-            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
+            showModal({ type: 'error', body: error.message, name: error.response.name })
         }
     };
 
@@ -39,7 +39,7 @@ const LogIn = ({ setForm }) => {
             history.push("/")
         } catch (error) {
             showSpinner(false);
-            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
+            showModal({ type: 'error', body: error.message, name: error.response.name })
         }
     };
 
@@ -51,7 +51,7 @@ const LogIn = ({ setForm }) => {
             history.push("/")
         } catch (error) {
             showSpinner(false);
-            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
+            showModal({ type: 'error', body: error.message, name: error.response.name })
         }
     };
 

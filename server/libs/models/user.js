@@ -15,6 +15,10 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
+    gender: {
+        type: String,
+        required: false
+    },
     createdAt: {
         type: String,
         required: true
@@ -35,11 +39,19 @@ const userSchema = new Schema({
             ref: 'Friend'
         }
     ],
-    settings: 
+    invites: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Settings'
+            ref: 'Invite'
         }
+    ],
+    settings:
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'Settings'
+    }
 });
+
+userSchema.index({ name: 'text', surname: 'text' });
 
 module.exports = mongoose.model('User', userSchema);

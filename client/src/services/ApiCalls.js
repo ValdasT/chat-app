@@ -1,4 +1,5 @@
 import api from '../utils/api';
+import { handleError } from './ErrorHandler'
 
 const createUser = async (user) => {
     const body = JSON.stringify({
@@ -9,18 +10,18 @@ const createUser = async (user) => {
         return res.data;
     } catch (err) {
         console.log(err);
-        throw err;
+        throw handleError(err);
     }
 };
 
 const createSession = async (idToken) => {
-    const body = JSON.stringify({idToken})
+    const body = JSON.stringify({ idToken })
     try {
         const res = await api.post('/create-session', body);
         return res.data;
     } catch (err) {
         console.log(err);
-        throw err;
+        throw handleError(err);
     }
 };
 
@@ -30,7 +31,7 @@ const logOutUser = async () => {
         return res.data;
     } catch (err) {
         console.log(err);
-        throw err;
+        throw handleError(err);
     }
 };
 
@@ -42,7 +43,7 @@ const getToken = async () => {
         return res.data;
     } catch (err) {
         console.log(err);
-        throw err;
+        throw handleError(err);
     }
 };
 
@@ -52,7 +53,7 @@ const getUserForInint = async () => {
         return res.data;
     } catch (err) {
         console.log(err);
-        throw err;
+        throw handleError(err);
     }
 };
 
@@ -65,79 +66,19 @@ const updateUser = async (user) => {
         return res.data;
     } catch (err) {
         console.log(err);
-        throw err;
+        throw handleError(err);
     }
 };
 
-const getRegions = async () => {
-    try {
-        const res = await api.post('/system/get-regions');
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-};
-
-const getKbs = async () => {
-    try {
-        const res = await api.post('/system/get-kbs');
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-};
-
-const sendAnswer = async (message, token, currentUser, recommendation) => {
+const searchUsers = async (user) => {
     const body = JSON.stringify({
-        question: message.question,
-        token: token ? token : null,
-        user: `${currentUser['first-name']} ${currentUser['last-name']}`,
-        email: currentUser.email,
-        channel: 'web_hugo',
-        system: 'hugo',
-        channelList: currentUser.kbs,
-        region: currentUser.region,
-        recommendation: recommendation? recommendation: null
-    });
+        user: user,
+    })
     try {
-        const res = await api.post('/', body);
-        console.log(res.data);
-        res.data.id = message.id;
+        const res = await api.post('/users/search-users', body);
         return res.data;
     } catch (err) {
-        console.log(err);
-        throw err;
-    }
-};
-
-const voteAnswer = async (answer, vote) => {
-    const body = JSON.stringify({
-        userQuestionId: answer.message.userQuestionId,
-        evaluation: vote,
-        answerId: answer.message.answerId,
-        topClass: answer.message.top_class,
-    });
-    try {
-        const res = await api.post('/voting', body);
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-};
-
-const exampleQuestionsList = async () => {
-    const body = JSON.stringify({
-        channel: 'web_hugo',
-    });
-    try {
-        const res = await api.post('/exampleQuestionsList', body);
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw err;
+        throw handleError(err);
     }
 };
 
@@ -147,11 +88,7 @@ export {
     logOutUser,
     createSession,
     getUserForInint,
-    sendAnswer,
     updateUser,
-    getRegions,
-    getKbs,
-    voteAnswer,
-    exampleQuestionsList
+    searchUsers
 }
 

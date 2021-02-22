@@ -1,0 +1,46 @@
+@import "../../../styles/Collors.scss";
+
+.search-element {
+  position: absolute;
+  min-width: 300px;
+}
+
+@media (max-width: 40em) {
+  .search-element {
+    min-width: 0;
+    left: 0;
+  }
+}
+
+.results {
+  min-width: 280px;
+  margin-top: 20px;
+  top: 15px;
+  font-size: 12px;
+  z-index: 111;
+  position: absolute;
+  border-bottom: none;
+  background-color: $base-white;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 0px 0px 5px 5px;
+  box-shadow: 0px 4px 10px -4px rgba(0, 0, 0, 0.75);
+
+  .results-element {
+    overflow-x: none;
+    display: flex;
+    flex-direction: row;
+    padding: 5px 10px;
+
+    &:hover {
+      background-color: $light-grey-transperant;
+    }
+  }
+}
+
+@media (max-width: 40em) {
+  .results {
+    min-width: 120px;
+    left: 5px;
+  }
+}

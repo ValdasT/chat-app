@@ -54,7 +54,7 @@ const updateUser = async (args, req) => {
                 updatedAt: args.updatedAt
             },
             { new: true });
-            logger.info(`[${moduleName}] Update user profile in db... Done. `, user.id);
+        logger.info(`[${moduleName}] Update user profile in db... Done. `, user.id);
         return {
             ...user._doc,
             _id: user.id
@@ -65,8 +65,27 @@ const updateUser = async (args, req) => {
     }
 }
 
+const searchUsers = async (args, req) => {
+    logger.info(`[${moduleName}] Search users profile in db... `, args.userId);
+    try {
+        console.log(args);
+        const userProfiles = await User.find({ $text: { $search: args } }).limit(10).select({
+            "name": 1, "email": 1, "surname": 1, "_id": 1
+        });
+        console.log(userProfiles);
+        logger.info(`[${moduleName}]  Search users profile in db... Done. `, userProfiles.length);
+        return {
+            userProfiles
+        }
+    } catch (err) {
+        logger.error(`[${moduleName}] Update user profile in db error: `, err);
+        throw err;
+    }
+}
+
 module.exports = {
     createUser,
     getUser,
-    updateUser
+    updateUser,
+    searchUsers
 }

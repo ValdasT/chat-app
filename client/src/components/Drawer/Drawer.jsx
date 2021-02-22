@@ -36,7 +36,6 @@ const Drawer = memo(() => {
                         </div>
                         {openDrawer ?
                             <div>
-
                                 <FormInputSmall
                                     style={{ paddingRight: '30px' }}
                                     type='text'

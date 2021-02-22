@@ -3,8 +3,8 @@ $sub-color-light: #807f7f;
 $main-color: black;
 
 $white-text: #fff;
-$grey-text-light:#707070;
-$grey-text-dark:#9c9c9c;
+$grey-text-light: #707070;
+$grey-text-dark: #9c9c9c;
 $danger-text: #b40000;
 
 $base-white: #fff;
@@ -23,44 +23,44 @@ $action-dark: #137497;
 $primary-dark: #137497;
 $primary-dark-darker: #116685;
 
-$light-grey-transperant:#80808038;
-$dark-grey-transperant:#0f0f0f38;
+$light-grey-transperant: #80808038;
+$dark-grey-transperant: #0f0f0f38;
 
-$main-font: 'Open Sans Condensed';
+$main-font: "Rubik";
 
 @mixin keyframes($animation-name) {
-    @-webkit-keyframes #{$animation-name} {
-      @content;
-    }
-    @-moz-keyframes #{$animation-name} {
-      @content;
-    }  
-    @-ms-keyframes #{$animation-name} {
-      @content;
-    }
-    @-o-keyframes #{$animation-name} {
-      @content;
-    }  
-    @keyframes #{$animation-name} {
-      @content;
-    }
+  @-webkit-keyframes #{$animation-name} {
+    @content;
   }
-  @mixin animation($str) {
-    -webkit-animation: #{$str};
-    -moz-animation: #{$str};
-    -ms-animation: #{$str};
-    -o-animation: #{$str};
-    animation: #{$str};      
+  @-moz-keyframes #{$animation-name} {
+    @content;
   }
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};
+}
 
-  @mixin transform($property) {
-    -webkit-transform: $property;
-    -ms-transform: $property;
-    transform: $property;
-  }
+@mixin transform($property) {
+  -webkit-transform: $property;
+  -ms-transform: $property;
+  transform: $property;
+}
 
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
@@ -68,8 +68,6 @@ textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
-  -webkit-text-fill-color:$main-color;
+  -webkit-text-fill-color: $main-color;
   transition: background-color 5000s ease-in-out 0s;
 }
-
-

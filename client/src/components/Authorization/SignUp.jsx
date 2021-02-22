@@ -11,7 +11,7 @@ import './Authorization.scss';
 
 const SignUp = ({ setForm }) => {
     const { signUp, signInWithGoogle, signInWithFacebook } = useAuth()
-    const { showModal,  showSpinner } = useContext(GlobalContext);
+    const { showModal, showSpinner } = useContext(GlobalContext);
     const { register, handleSubmit, watch, errors, reset } = useForm();
     const [formInputs, setFormInputs] = useState({ email: '', password: '' })
     const history = useHistory()
@@ -27,7 +27,7 @@ const SignUp = ({ setForm }) => {
             history.push("/")
         } catch (error) {
             showSpinner(false);
-            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
+            showModal({ type: 'error', body: error.message, name: error.response.name })
         }
     };
 
@@ -39,7 +39,7 @@ const SignUp = ({ setForm }) => {
             history.push("/")
         } catch (error) {
             showSpinner(false);
-            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
+            showModal({ type: 'error', body: error.message, name: error.response.name })
         }
     };
 
@@ -58,7 +58,7 @@ const SignUp = ({ setForm }) => {
             reset()
         } catch (error) {
             showSpinner(false);
-            showModal({ type: 'error', body: error.message, name: 'Oh snap!' })
+            showModal({ type: 'error', body: error.message, name: error.response.name })
         }
     };
 
