@@ -37,9 +37,7 @@ const logOutUser = async () => {
 
 const getToken = async () => {
     try {
-        console.log('get token');
         const res = await api.get('/get-token');
-        console.log(res);
         return res.data;
     } catch (err) {
         console.log(err);
@@ -50,6 +48,19 @@ const getToken = async () => {
 const getUserForInint = async () => {
     try {
         const res = await api.post('/users/get-user-for-init');
+        return res.data;
+    } catch (err) {
+        console.log(err);
+        throw handleError(err);
+    }
+};
+
+const getUser = async (user) => {
+    const body = JSON.stringify({
+        user: user,
+    })
+    try {
+        const res = await api.post('/users/get-user', body);
         return res.data;
     } catch (err) {
         console.log(err);
@@ -89,6 +100,7 @@ export {
     createSession,
     getUserForInint,
     updateUser,
+    getUser,
     searchUsers
 }
 

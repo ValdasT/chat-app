@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const logger = require('../utils/logger');
 const moduleName = module.filename.split('/').slice(-1);
+const { getRandomCollor } = require('../utils/utils')
 
 const createUser = async userData => {
     logger.info(`[${moduleName}] Creating user profile in db... `, userData);
@@ -15,6 +16,7 @@ const createUser = async userData => {
             name: userData.name,
             createdAt: new Date().getTime(),
             updatedAt: new Date().getTime(),
+            picColor: getRandomCollor()
         });
 
         const result = await user.save();
@@ -39,6 +41,23 @@ const getUser = async userEmail => {
         }
     } catch (err) {
         logger.error(`[${moduleName}] Get user profile from db error: `, err);
+        throw err;
+    }
+}
+
+const getUserById = async userId => {
+    try {
+        logger.info(`[${moduleName}] Get user profile from db by ID...`, userId);
+        const userProfile = await User.findOne({ _id: userId });
+        if (userProfile) {
+            logger.info(`[${moduleName}] Get user profile from db by ID... Done.`, userProfile._doc);
+            return { ...userProfile._doc }
+        } else {
+            logger.info(`[${moduleName}] Get user profile from db by ID... Done.`);
+            return 'not found';
+        }
+    } catch (err) {
+        logger.error(`[${moduleName}] Get user profile from db by ID error: `, err);
         throw err;
     }
 }
@@ -70,7 +89,7 @@ const searchUsers = async (args, req) => {
     try {
         console.log(args);
         const userProfiles = await User.find({ $text: { $search: args } }).limit(10).select({
-            "name": 1, "email": 1, "surname": 1, "_id": 1
+            "name": 1, "email": 1, "surname": 1, "_id": 1, "picColor": 1
         });
         console.log(userProfiles);
         logger.info(`[${moduleName}]  Search users profile in db... Done. `, userProfiles.length);
@@ -86,6 +105,7 @@ const searchUsers = async (args, req) => {
 module.exports = {
     createUser,
     getUser,
+    getUserById,
     updateUser,
     searchUsers
 }
