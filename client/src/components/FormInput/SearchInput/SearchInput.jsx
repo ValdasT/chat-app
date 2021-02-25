@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from 'react';
+import React, { Fragment, useState, useContext, memo } from 'react';
 import { searchUsers } from '../../../services/ApiCalls'
 import FormInputSmall from '../../FormInput/FormInputSmall'
 import SpinnerSmall from '../../Spinner/SpinnerSmall'
@@ -17,7 +17,6 @@ const SearchInput = () => {
     const [searchResults, setSearchResults] = useState([])
     const [showResults, setShowResults] = useState(false);
     const location = useLocation();
-
 
     const handleChange = event => {
         const { value } = event.target;
@@ -106,4 +105,4 @@ const SearchInput = () => {
     )
 };
 
-export default SearchInput;
+export default memo(SearchInput);

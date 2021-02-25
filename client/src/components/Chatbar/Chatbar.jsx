@@ -3,8 +3,6 @@ import { FiSend } from "react-icons/fi";
 
 import FormInput from '../FormInput/FormInput'
 import CustomButton from '../CustomButtons/Button/CustomButton'
-// import { GlobalContext } from '../../context/GlobalState';
-// import { useUserSession } from '../../context/AuthContext';
 import { MessageContext } from '../../context/MessageContext';
 import './Chatbar.scss';
 
@@ -38,7 +36,7 @@ const Chatbar = () => {
                     onKeyPress={(e) => (e.charCode === 13 ? newMessage() : null)}
                     button={
                         <CustomButton
-                            style={{ marginTop: '12px', position: 'absolute', right: '5px', width: '40px' }}
+                            style={{ marginTop: '11px', position: 'absolute', right: '5px', width: '40px' }}
                             onClick={() => newMessage()}>
                             <FiSendIcon size="20px" style={{ color: "#fff" }} />
                         </CustomButton>}

@@ -1,12 +1,14 @@
-import React, {memo} from 'react';
+import React, { memo } from 'react';
 import './RoundButton.scss';
 
-const RoundButton = ({ icon, ...otherProps }) => {
+const RoundButton = ({ icon, text, ...otherProps }) => {
     return (
-        <div className='round-button' {...otherProps}>
-            {icon}
+        <div className={text ? 'button-box' : null}>
+            <div className='round-button' {...otherProps}>
+                {icon}
+            </div>
+            {text ? <div className='button-lable'>{text}</div> : null}
         </div>
-
     )
 }
 
