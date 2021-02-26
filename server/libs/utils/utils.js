@@ -46,7 +46,7 @@ const decodeSession = (session) => {
         admin
             .auth()
             .verifySessionCookie(session, true /** checkRevoked */)
-            .then(async (decodedClaims) => {
+            .then((decodedClaims) => {
                 logger.info(`[${moduleName}] Decoding session... Done.`);
                 resolve(decodedClaims)
             }).catch((err) => {

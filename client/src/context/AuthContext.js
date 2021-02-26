@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
 import { handleError } from '../services/ErrorHandler'
 import { auth, googleProvider, facebookProvider } from "../utils/firebase"
-import { createUser, createSession, getToken, getUserForInint, logOutUser } from '../services/ApiCalls'
+import { createUser, createSession, getToken, getUserForInint, logOutUser, getAllInvites } from '../services/ApiCalls'
 
 const AuthContext = React.createContext()
 
@@ -11,8 +11,8 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
+    const [userInvites, setUserInvites] = useState()
     const [loading, setLoading] = useState(true)
-    const [test2, setTest] = useState([])
 
     const signUp = async (email, password, displayName) => {
         try {
@@ -29,17 +29,12 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
-    const addToArray = (value) => {
-        setTest(...test2, value)
-    }
-
     const logIn = async (email, password) => {
         try {
             let { user } = await auth.signInWithEmailAndPassword(email, password)
             let idToken = await user.getIdToken();
             await createSession(idToken);
-            let userProfile = await getUserForInint()
-            setCurrentUser(userProfile);
+            await getUserInfoFromDb()
         } catch (err) {
             console.log(err);
             throw handleError(err)
@@ -76,8 +71,7 @@ export const AuthProvider = ({ children }) => {
             }));
             let idToken = await user.getIdToken();
             await createSession(idToken);
-            let userProfile = await getUserForInint()
-            setCurrentUser(userProfile);
+            await getUserInfoFromDb()
         } catch (err) {
             console.log(err);
             throw handleError(err)
@@ -91,8 +85,7 @@ export const AuthProvider = ({ children }) => {
             }));
             let idToken = await user.getIdToken();
             await createSession(idToken);
-            let userProfile = await getUserForInint()
-            setCurrentUser(userProfile);
+            await getUserInfoFromDb()
         } catch (err) {
             console.log(err);
             throw handleError(err)
@@ -104,8 +97,7 @@ export const AuthProvider = ({ children }) => {
             try {
                 setLoading(true);
                 await getToken()
-                let user = await getUserForInint()
-                setCurrentUser(user);
+                await getUserInfoFromDb()
                 setLoading(false);
             } catch (err) {
                 console.log(err);
@@ -113,6 +105,13 @@ export const AuthProvider = ({ children }) => {
             }
         })()
     }, [])
+
+    const getUserInfoFromDb = async () => {
+        let userProfile = await getUserForInint()
+        setCurrentUser(userProfile);
+        let invites = await getAllInvites(userProfile._id)
+        setUserInvites(invites)
+    }
 
     const value = {
         currentUser,
@@ -125,8 +124,8 @@ export const AuthProvider = ({ children }) => {
         updateEmail,
         updatePassword,
         loading,
-        addToArray,
-        test2
+        userInvites,
+        setUserInvites
     }
 
     return (

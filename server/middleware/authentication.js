@@ -8,7 +8,8 @@ const isAuth = (req, res, next) => {
     admin
         .auth()
         .verifySessionCookie(sessionCookie, true /** checkRevoked */)
-        .then(() => {
+        .then((decodedClaims) => {
+            req.userEmail = decodedClaims.email
             logger.info(`[${moduleName}] Checking authorization... Done`);
             return next();
         })

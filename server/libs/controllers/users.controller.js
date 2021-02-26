@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Invite = require('../models/invite')
 const logger = require('../utils/logger');
 const moduleName = module.filename.split('/').slice(-1);
 const { getRandomCollor } = require('../utils/utils')
@@ -47,10 +48,10 @@ const getUser = async userEmail => {
 
 const getUserById = async userId => {
     try {
-        logger.info(`[${moduleName}] Get user profile from db by ID...`, userId);
+        logger.info(`[${moduleName}] Get user profile from db by ID... ${userId}`);
         const userProfile = await User.findOne({ _id: userId });
         if (userProfile) {
-            logger.info(`[${moduleName}] Get user profile from db by ID... Done.`, userProfile._doc);
+            logger.info(`[${moduleName}] Get user profile from db by ID... Done. ${userProfile._doc}`);
             return { ...userProfile._doc }
         } else {
             logger.info(`[${moduleName}] Get user profile from db by ID... Done.`);
@@ -62,7 +63,22 @@ const getUserById = async userId => {
     }
 }
 
-const updateUser = async (args, req) => {
+const getAllInvites = async (invites) => {
+    try {
+        logger.info(`[${moduleName}] Get all invites...`);
+        let invitesDocs = []
+        if (invites.length) {
+            invitesDocs = await Invite.find().where('_id').in(invites).exec();
+            logger.info(`[${moduleName}] Get all invites...Done. Found:${invitesDocs.length}`);
+        }
+        return invitesDocs
+    } catch (err) {
+        logger.error(`[${moduleName}] Get all invites error: `, err);
+        throw err;
+    }
+}
+
+const updateUser = async (args) => {
     logger.info(`[${moduleName}] Update user profile in db... `, args.userId);
     try {
         const user = await User.findByIdAndUpdate(args.userId,
@@ -84,18 +100,47 @@ const updateUser = async (args, req) => {
     }
 }
 
-const searchUsers = async (args, req) => {
-    logger.info(`[${moduleName}] Search users profile in db... `, args.userId);
+const searchUsers = async (args) => {
+    logger.info(`[${moduleName}] Search users profile in db... ${args}`);
     try {
-        console.log(args);
         const userProfiles = await User.find({ $text: { $search: args } }).limit(10).select({
             "name": 1, "email": 1, "surname": 1, "_id": 1, "picColor": 1
         });
-        console.log(userProfiles);
-        logger.info(`[${moduleName}]  Search users profile in db... Done. `, userProfiles.length);
+        logger.info(`[${moduleName}]  Search users profile in db... Done. ${userProfiles.length}`);
         return {
             userProfiles
         }
+    } catch (err) {
+        logger.error(`[${moduleName}] Update user profile in db error: `, err);
+        throw err;
+    }
+}
+
+const createRequest = async args => {
+    const { userData, currentUser, type, invitedTo } = args
+    logger.info(`[${moduleName}] Create invite in db... ${type}`);
+    const invite = new Invite({
+        invitor: currentUser._id,
+        invitee: userData._id,
+        invitedTo: invitedTo,
+        createdAt: new Date().getTime(),
+        type: type
+    });
+    try {
+        await invite.save();
+        logger.info(`[${moduleName}] Create invite in db... Done. ${type}`);
+        const creator = await User.findById(currentUser._id);
+        const user = await User.findById(userData._id);
+
+        if (!creator || !user) {
+            throw new Error('User not found.');
+        }
+        creator.invites.push(invite);
+        user.invites.push(invite);
+        await creator.save();
+        await user.save();
+
+        return user;
     } catch (err) {
         logger.error(`[${moduleName}] Update user profile in db error: `, err);
         throw err;
@@ -107,5 +152,7 @@ module.exports = {
     getUser,
     getUserById,
     updateUser,
-    searchUsers
+    searchUsers,
+    createRequest,
+    getAllInvites
 }

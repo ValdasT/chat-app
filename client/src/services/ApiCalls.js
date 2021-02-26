@@ -93,6 +93,33 @@ const searchUsers = async (user) => {
     }
 };
 
+const getAllInvites = async (user) => {
+    const body = JSON.stringify({
+        user: user,
+    })
+    try {
+        const res = await api.post('/users/get-all-invites', body);
+        return res.data;
+    } catch (err) {
+        throw handleError(err);
+    }
+};
+
+const sendRequest = async (friend, user, type, invitedTo) => {
+    const body = JSON.stringify({
+        friend: friend,
+        user: user,
+        type: type,
+        invitedTo: invitedTo
+    })
+    try {
+        const res = await api.post('/users/send-friend-request', body);
+        return res.data;
+    } catch (err) {
+        throw handleError(err);
+    }
+};
+
 export {
     getToken,
     createUser,
@@ -101,6 +128,8 @@ export {
     getUserForInint,
     updateUser,
     getUser,
-    searchUsers
+    searchUsers,
+    sendRequest,
+    getAllInvites
 }
 

@@ -3,12 +3,14 @@ import { useParams } from 'react-router-dom';
 import UserProfile from '../components/UserProfile/UserProfile'
 import { getUser } from '../services/ApiCalls'
 import { GlobalContext } from '../context/GlobalState';
+import { useAuth } from "../context/AuthContext"
 
 const UserPage = () => {
 
     let { userId } = useParams();
     const [userInfo, setUserInfo] = useState()
     const { showModal, showSpinner } = useContext(GlobalContext);
+    const { currentUser, userInvites } = useAuth()
 
     useEffect(() => {
         (async () => {
@@ -27,7 +29,10 @@ const UserPage = () => {
 
     return (
         <Fragment>
-            {userInfo ? <UserProfile userInfo={userInfo} /> : null}
+            {userInfo ?
+                <UserProfile
+                    userInfo={userInfo} setUserInfo={setUserInfo} currentUser={currentUser} showModal={showModal}
+                    userInvites={userInvites} /> : null}
         </Fragment>
     )
 }

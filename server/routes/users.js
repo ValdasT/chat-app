@@ -3,7 +3,8 @@ const router = express.Router();
 const logger = require('../libs/utils/logger')
 const moduleName = module.filename.split('/').slice(-1);
 const { decodeSession } = require('../libs/utils/utils')
-const { createUser, getUser, searchUsers, getUserById } = require('../libs/controllers/users.controller')
+const { createUser, getUser, searchUsers, getUserById, createRequest,
+    getAllInvites } = require('../libs/controllers/users.controller')
 
 router.post('/create-user', async (req, res, next) => {
     const userData = req.body.user;
@@ -18,10 +19,8 @@ router.post('/create-user', async (req, res, next) => {
 
 router.post('/get-user', async (req, res, next) => {
     const userData = req.body.user;
-    const sessionCookie = req.cookies.session || "";
     try {
-        let decodedClaims = await decodeSession(sessionCookie)
-        const userEmail = decodedClaims.email
+        const userEmail = req.userEmail
         logger.info(`[${moduleName}] Get user info ${userEmail}...`);
         let userById = await getUserById(userData)
         let userFromSession = {}
@@ -74,6 +73,38 @@ router.post('/search-users', async (req, res, next) => {
         if (user) res.status(200).send(user);
     } catch (err) {
         logger.error(`[${moduleName}] Search user error: `, err);
+        return next(err);
+    }
+});
+
+router.post('/get-all-invites', async (req, res, next) => {
+    const userData = req.body.user;
+    try {
+        logger.info(`[${moduleName}] Get all invite docs... ${userData}`);
+        let user = await getUserById(userData)
+        let invites = await getAllInvites(user.invites)
+        logger.info(`[${moduleName}] Get all invite docs... Done.`);
+        if (invites) res.status(200).send(invites);
+    } catch (err) {
+        logger.error(`[${moduleName}] Get all invite docs error: `, err);
+        return next(err);
+    }
+});
+
+router.post('/send-friend-request', async (req, res, next) => {
+    const args = {
+        userData: req.body.friend,
+        currentUser: req.body.user,
+        type: req.body.type,
+        invitedTo: req.body.invitedTo ? req.body.invitedTo : req.body.user
+    }
+    try {
+        logger.info(`[${moduleName}] Create request friend...`);
+        let user = await createRequest(args)
+        logger.info(`[${moduleName}] Create request... Done.`);
+        if (user) res.status(200).send(user);
+    } catch (err) {
+        logger.error(`[${moduleName}] Create request Error: `, err);
         return next(err);
     }
 });

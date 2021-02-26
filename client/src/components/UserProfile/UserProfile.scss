@@ -29,6 +29,20 @@
       margin: 5px 5px;
     }
   }
+
+  .profile-info {
+    .profile-Name{
+      align-items: center;
+      display: flex;
+      height: 100%;
+      font-size: 30px;
+      font-weight: bold;
+    }
+    .friend-actions{
+      position: absolute;
+      bottom: 10px;
+    }
+  }
 }
 
 @media (max-width: 40em) {
@@ -41,6 +55,12 @@
         height: 90px;
         width: 90px;
         font-size: 30px;
+      }
+    }
+    .profile-info {
+      .profile-Name{
+      font-size: 15px;
+      font-weight: bold;
       }
     }
   }
