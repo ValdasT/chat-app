@@ -137,10 +137,13 @@ const createRequest = async args => {
         }
         creator.invites.push(invite);
         user.invites.push(invite);
-        await creator.save();
-        await user.save();
-
-        return user;
+        await creator.save()
+        await user.save()
+        let response = {
+            user: await User.findById(userData._id),
+            newInvite: invite
+        }
+        return response;
     } catch (err) {
         logger.error(`[${moduleName}] Update user profile in db error: `, err);
         throw err;

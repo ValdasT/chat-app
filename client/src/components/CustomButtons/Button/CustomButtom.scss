@@ -15,14 +15,14 @@
   display: flex;
   justify-content: center;
   outline: none;
-  box-shadow: -1px 1px 4px -1px rgba(0,0,0,0.75);
+  box-shadow: -1px 1px 4px -1px rgba(0, 0, 0, 0.75);
 
   &:hover {
     background-color: $primary-light-darker;
-    box-shadow: inset 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
   }
 
-  .button-icon{
+  .button-icon {
     margin: 1px 5px 0 0;
   }
 
@@ -36,5 +36,11 @@
       color: white;
       border: none;
     }
+  }
+  &:disabled {
+    background-color: #adadad;
+    color: #505050;
+    border: 1px solid grey;
+    cursor: not-allowed;
   }
 }

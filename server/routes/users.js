@@ -100,9 +100,9 @@ router.post('/send-friend-request', async (req, res, next) => {
     }
     try {
         logger.info(`[${moduleName}] Create request friend...`);
-        let user = await createRequest(args)
+        let users = await createRequest(args)
         logger.info(`[${moduleName}] Create request... Done.`);
-        if (user) res.status(200).send(user);
+        if (users) res.status(200).send(users);
     } catch (err) {
         logger.error(`[${moduleName}] Create request Error: `, err);
         return next(err);

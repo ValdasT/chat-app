@@ -42,7 +42,7 @@ const SearchInput = () => {
         }
     }
 
-    const onselect = (element) => {
+    const onSelect = (element) => {
         setSearch('')
         if (location.pathname.includes(`/users/`)) {
             if (location.pathname.substr(location.pathname.length - 1) === '/') {
@@ -86,12 +86,13 @@ const SearchInput = () => {
             </div>
             {showResults ?
                 <div className="results" >
-                    {showSpinnerSmall ? <SpinnerSmall /> :
+                    {showSpinnerSmall ? <SpinnerSmall style={{ margin: '15px auto' }} /> :
                         <div>
                             {searchResults.length ?
                                 <div>
                                     {searchResults.map(option =>
-                                        <div className='results-element' onClick={() => onselect(option)} key={option._id} >
+                                        <div className='results-element' onClick={() => onSelect(option)} key={option._id} >
+                                            {/* TODO create search element */}
                                             <div>
                                                 <div>  {option.name}</div>
                                                 <div>  {option.surname}</div>

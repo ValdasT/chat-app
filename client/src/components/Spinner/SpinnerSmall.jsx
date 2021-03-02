@@ -1,9 +1,9 @@
 import React from 'react';
 import './SpinnerSmall.scss';
 
-const SpinnerSmall = () => {
+const SpinnerSmall = ({ ...otherProps }) => {
     return (
-        <div className="spinner-small"></div>
+        <div className="spinner-small" {...otherProps} ></div>
     );
 }
 

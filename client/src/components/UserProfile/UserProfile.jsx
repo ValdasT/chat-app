@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, memo } from 'react';
 import './UserProfile.scss'
 import CustomButton from '../CustomButtons/Button/CustomButton'
 import { sendRequest } from '../../services/ApiCalls'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
 
-const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvites }) => {
+const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvites, setUserInvites }) => {
+
+    const [loadingButton, setLoadingButton] = useState(false)
 
     const firstLetters = (userInfo) => {
         let credentials = userInfo.name.charAt(0).toUpperCase();
@@ -14,21 +16,67 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvite
 
     const sendFriendRequest = async () => {
         try {
-            let user = await sendRequest(userInfo, currentUser, 'friend')
-            setUserInfo(user)
+            setLoadingButton(true)
+            let users = await sendRequest(userInfo, currentUser, 'friend')
+            setUserInvites([...userInvites, users.newInvite])
+            setUserInfo(users.user)
+            setLoadingButton(false)
         } catch (err) {
+            setLoadingButton(false)
             showModal({ type: 'error', body: err.message, name: err.response.name })
         }
     }
 
-    useEffect(() => {
-        if (userInvites.length && currentUser.invites.length) {
-            currentUser.invites.forEach(e => {
-                let invite = userInvites.find(invite => invite._id === e)
-                console.log(invite)
+    const showButton = (invites) => {
+        let status = 'none'
+        if (invites && invites.length) {
+            let currentInvite = userInvites.find(invite => {
+                return invites.some((inviteId) => {
+                    return inviteId === invite._id;
+                });
             })
+            console.log(currentInvite)
+            if (currentInvite && currentInvite.invitor === currentUser._id) {
+                status = 'cancel'
+            } else if (currentInvite && currentInvite.invitee === currentUser._id) {
+                status = 'confirm'
+            }
+
+            // status = 'confirm'
         }
-    }, [userInfo, currentUser, userInvites])
+
+        switch (status) {
+            case 'none':
+                return (
+                    <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
+                        onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
+                        Add friend
+                    </CustomButton>
+                );
+            case 'confirm':
+                return (
+                    <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
+                        onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
+                        Accept Invite
+                        </CustomButton>
+                );
+            case 'cancel':
+                return (
+                    <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
+                        onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
+                        Cancel Invite
+                        </CustomButton>
+                );
+            case 'unfriend':
+                return (
+                    <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
+                        onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
+                        Unfriend
+                        </CustomButton>
+                );
+            default: return null
+        }
+    }
 
     return (
         <div>
@@ -39,7 +87,7 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvite
                 <div className='profile-info'>
                     <div className='profile-Name'>{userInfo.name} {userInfo.surname}</div>
                     {userInfo.ownProfile ? null : <div className='friend-actions'>
-                        <CustomButton onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>Add friend </CustomButton>
+                        {showButton(userInfo.invites)}
                     </div>}
 
                 </div>
@@ -48,4 +96,4 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvite
     );
 }
 
-export default UserProfile;
+export default memo(UserProfile);
