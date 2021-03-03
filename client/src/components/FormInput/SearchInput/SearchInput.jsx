@@ -2,6 +2,7 @@ import React, { Fragment, useState, useContext, memo } from 'react';
 import { searchUsers } from '../../../services/ApiCalls'
 import FormInputSmall from '../../FormInput/FormInputSmall'
 import SpinnerSmall from '../../Spinner/SpinnerSmall'
+import { firstLetters } from '../../../utils/utils'
 import { GlobalContext } from '../../../context/GlobalState';
 import { BiSearchAlt } from 'react-icons/bi'
 import { VscClose } from 'react-icons/vsc'
@@ -92,11 +93,11 @@ const SearchInput = () => {
                                 <div>
                                     {searchResults.map(option =>
                                         <div className='results-element' onClick={() => onSelect(option)} key={option._id} >
-                                            {/* TODO create search element */}
-                                            <div>
-                                                <div>  {option.name}</div>
-                                                <div>  {option.surname}</div>
-                                                <div>  {option.email}</div>
+                                            <div style={{ background: option.picColor }} className="roud-image">
+                                                {firstLetters(option)}
+                                            </div>
+                                            <div className='result-name'>
+                                                <div>{`${option.name} ${option.surname ? option.surname : ''}`}</div>
                                             </div>
                                         </div>)}
                                 </div> : <div style={{ padding: '10px' }}>We didn't find any results</div>}

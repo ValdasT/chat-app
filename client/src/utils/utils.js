@@ -1,6 +1,6 @@
 
 
-const showTimeFromMS = (ms)=>{
+const showTimeFromMS = (ms) => {
     let messageTime = new Date(ms);
     let today = new Date();
     if (messageTime.getDate() === today.getDate() && messageTime.getMonth() === today.getMonth() && messageTime.getFullYear() === today.getFullYear()) {
@@ -23,6 +23,13 @@ const showTimeFromMS = (ms)=>{
     }
 }
 
+const firstLetters = userInfo => {
+    let credentials = userInfo.name.charAt(0).toUpperCase();
+    credentials += userInfo.surname ? userInfo.surname.charAt(0).toUpperCase() : ''
+    return credentials
+}
+
 module.exports = {
-    showTimeFromMS
+    showTimeFromMS,
+    firstLetters
 }

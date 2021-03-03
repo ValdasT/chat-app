@@ -1,18 +1,14 @@
 import React, { useState, memo } from 'react';
-import './UserProfile.scss'
 import CustomButton from '../CustomButtons/Button/CustomButton'
+import { firstLetters } from '../../utils/utils'
 import { sendRequest } from '../../services/ApiCalls'
 import { AiOutlineUsergroupAdd } from 'react-icons/ai'
+
+import './UserProfile.scss'
 
 const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvites, setUserInvites }) => {
 
     const [loadingButton, setLoadingButton] = useState(false)
-
-    const firstLetters = (userInfo) => {
-        let credentials = userInfo.name.charAt(0).toUpperCase();
-        credentials += userInfo.surname ? userInfo.surname.charAt(0).toUpperCase() : ''
-        return credentials
-    }
 
     const sendFriendRequest = async () => {
         try {

@@ -30,18 +30,37 @@
     overflow-x: none;
     display: flex;
     flex-direction: row;
-    padding: 5px 10px;
+    padding: 5px;
+    border-bottom: 1px solid #eeeeee;
 
     &:hover {
       background-color: $light-grey-transperant;
       cursor: pointer;
+    }
+    .roud-image {
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      font-size: 14px;
+      color: $white-text;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      margin: 2px;
+    }
+    .result-name {
+      padding-left: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
     }
   }
 }
 
 @media (max-width: 40em) {
   .results {
-    min-width: 150px;
+    min-width: 100px;
     left: 10px;
   }
 }
