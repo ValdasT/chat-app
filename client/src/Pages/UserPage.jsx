@@ -10,7 +10,7 @@ const UserPage = () => {
     let { userId } = useParams();
     const [userInfo, setUserInfo] = useState()
     const { showModal, showSpinner } = useContext(GlobalContext);
-    const { currentUser, userInvites, setUserInvites } = useAuth()
+    const { currentUser } = useAuth()
 
     useEffect(() => {
         (async () => {
@@ -31,8 +31,7 @@ const UserPage = () => {
         <Fragment>
             {userInfo ?
                 <UserProfile
-                    userInfo={userInfo} setUserInfo={setUserInfo} currentUser={currentUser} showModal={showModal}
-                    userInvites={userInvites} setUserInvites={setUserInvites}/> : null}
+                    userInfo={userInfo} setUserInfo={setUserInfo} currentUser={currentUser} showModal={showModal} /> : null}
         </Fragment>
     )
 }

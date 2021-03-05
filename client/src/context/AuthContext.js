@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
 import { handleError } from '../services/ErrorHandler'
 import { auth, googleProvider, facebookProvider } from "../utils/firebase"
-import { createUser, createSession, getToken, getUserForInint, logOutUser, getAllInvites } from '../services/ApiCalls'
+import { createUser, createSession, getToken, getUserForInint, logOutUser } from '../services/ApiCalls'
 
 const AuthContext = React.createContext()
 
@@ -11,7 +11,6 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
-    const [userInvites, setUserInvites] = useState()
     const [loading, setLoading] = useState(true)
 
     const signUp = async (email, password, displayName) => {
@@ -109,8 +108,6 @@ export const AuthProvider = ({ children }) => {
     const getUserInfoFromDb = async () => {
         let userProfile = await getUserForInint()
         setCurrentUser(userProfile);
-        let invites = await getAllInvites(userProfile._id)
-        setUserInvites(invites)
     }
 
     const value = {
@@ -123,9 +120,7 @@ export const AuthProvider = ({ children }) => {
         resetPassword,
         updateEmail,
         updatePassword,
-        loading,
-        userInvites,
-        setUserInvites
+        loading
     }
 
     return (

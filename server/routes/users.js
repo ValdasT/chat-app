@@ -3,8 +3,8 @@ const router = express.Router();
 const logger = require('../libs/utils/logger')
 const moduleName = module.filename.split('/').slice(-1);
 const { decodeSession } = require('../libs/utils/utils')
-const { createUser, getUser, searchUsers, getUserById, createRequest,
-    getAllInvites } = require('../libs/controllers/users.controller')
+const { createUser, getUser, searchUsers, getUserById, createRequest,acceptRequest,
+    getAllInvites, getButtonStatus } = require('../libs/controllers/users.controller')
 
 router.post('/create-user', async (req, res, next) => {
     const userData = req.body.user;
@@ -105,6 +105,36 @@ router.post('/send-friend-request', async (req, res, next) => {
         if (users) res.status(200).send(users);
     } catch (err) {
         logger.error(`[${moduleName}] Create request Error: `, err);
+        return next(err);
+    }
+});
+
+router.post('/accept-friend-request', async (req, res, next) => {
+    const args = {
+        friendDoc: req.body.friend,
+        currentUser: req.body.user,
+    }
+    try {
+        logger.info(`[${moduleName}] Accept request...`);
+        let users = await acceptRequest(args)
+        logger.info(`[${moduleName}] Accept request... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Accept request Error: `, err);
+        return next(err);
+    }
+});
+
+router.post('/get-button-status', async (req, res, next) => {
+        const friendDoc = req.body.friend
+        const currentUser = req.body.user
+    try {
+        logger.info(`[${moduleName}] Get button status...`);
+        let users = await getButtonStatus(friendDoc, currentUser)
+        logger.info(`[${moduleName}] Get button status... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Get button status Error: `, err);
         return next(err);
     }
 });

@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Invite = require('../models/invite')
+const Friend = require('../models/friend')
 const logger = require('../utils/logger');
 const moduleName = module.filename.split('/').slice(-1);
 const { getRandomCollor } = require('../utils/utils')
@@ -78,6 +79,21 @@ const getAllInvites = async (invites) => {
     }
 }
 
+const getAllFriends = async (friends) => {
+    try {
+        logger.info(`[${moduleName}] Get all friends...`);
+        let friendsDocs = []
+        if (friends.length) {
+            friendsDocs = await Friend.find().where('_id').in(friends).exec();
+            logger.info(`[${moduleName}] Get all friends...Done. Found:${friendsDocs.length}`);
+        }
+        return friendsDocs
+    } catch (err) {
+        logger.error(`[${moduleName}] Get all friends error: `, err);
+        throw err;
+    }
+}
+
 const updateUser = async (args) => {
     logger.info(`[${moduleName}] Update user profile in db... `, args.userId);
     try {
@@ -130,7 +146,7 @@ const createRequest = async args => {
         await invite.save();
         logger.info(`[${moduleName}] Create invite in db... Done. ${type}`);
         const creator = await User.findById(currentUser._id);
-        const user = await User.findById(userData._id);
+        let user = await User.findById(userData._id);
 
         if (!creator || !user) {
             throw new Error('User not found.');
@@ -138,14 +154,111 @@ const createRequest = async args => {
         creator.invites.push(invite);
         user.invites.push(invite);
         await creator.save()
-        await user.save()
+        user = await user.save()
         let response = {
-            user: await User.findById(userData._id),
-            newInvite: invite
+            user: user,
+            buttonStatus: await getButtonStatus(userData, currentUser)
         }
         return response;
     } catch (err) {
         logger.error(`[${moduleName}] Update user profile in db error: `, err);
+        throw err;
+    }
+}
+
+const acceptRequest = async args => {
+    const { friendDoc, currentUser } = args
+    logger.info(`[${moduleName}] Create new friend in db... `);
+    const friend = new Friend({
+        friend: friendDoc._id,
+        creator: currentUser._id,
+        type: 'actyve',
+        connectedAt: new Date().getTime(),
+    });
+
+    try {
+        await friend.save();
+        let creator = await User.findById(currentUser._id);
+        let user = await User.findById(friendDoc._id);
+        if (!creator || !user) {
+            throw new Error('User not found.');
+        }
+        let currentInvite
+        user.invites.forEach(e => {
+            creator.invites.forEach(el => {
+                if (e.toString() === el.toString()) {
+                    currentInvite = e
+                }
+            })
+        })
+        await Invite.deleteOne({ _id: currentInvite._id });
+        creator.friends.push(friend);
+        user.friends.push(friend);
+        creator.invites.pull(currentInvite._id);
+        user.invites.pull(currentInvite._id);
+        await creator.save()
+        user = await user.save()
+        let response = {
+            user: user,
+            buttonStatus: await getButtonStatus(friendDoc, currentUser)
+        }
+        return response;
+    } catch (err) {
+        logger.error(`[${moduleName}] Update user profile in db error: `, err);
+        throw err;
+    }
+}
+
+const getButtonStatus = async (friendDoc, currentUser) => {
+    logger.info(`[${moduleName}] Calculate status... `);
+
+    try {
+        let creator = await User.findById(currentUser._id);
+        let user = await User.findById(friendDoc._id);
+        if (!creator || !user) {
+            throw new Error('User not found.');
+        }
+
+        //Find friend in friends list
+        if (creator.friends && user.friends) {
+            let exists = false;
+            creator.friends.forEach(e => {
+                let check = user.friends.includes(e)
+                if (check) {
+                    exists = true
+                }
+            })
+            if (exists) {
+                logger.info(`[${moduleName}] Calculate status 'UNFRIEND'... Done `);
+                return 'unfriend'
+            }
+        }
+
+        //Find invite in invites list
+        if (creator.invites && user.invites) {
+            let currentInvite
+            user.invites.forEach(e => {
+                creator.invites.forEach(el => {
+                    if (e.toString() === el.toString()) {
+                        currentInvite = e
+                    }
+                })
+            })
+            if (currentInvite) {
+                const invite = await Invite.findById(currentInvite);
+                if (invite.invitedTo.toString() === creator._id.toString()) {
+                    logger.info(`[${moduleName}] Calculate status 'CANCEL'... Done `);
+                    return 'cancel'
+                } else if (invite.invitee.toString() === creator._id.toString()) {
+                    logger.info(`[${moduleName}] Calculate status 'CONFIRM'... Done `);
+                    return 'confirm'
+                }
+            }
+        }
+        logger.info(`[${moduleName}] Calculate status 'NONE' ... Done `);
+        return 'none';
+    } catch (err) {
+        logger.error(`[${moduleName}] Calculate status error: `, err);
         throw err;
     }
 }
@@ -157,5 +270,7 @@ module.exports = {
     updateUser,
     searchUsers,
     createRequest,
-    getAllInvites
+    acceptRequest,
+    getAllInvites,
+    getButtonStatus
 }

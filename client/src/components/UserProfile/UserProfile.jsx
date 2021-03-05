@@ -1,21 +1,20 @@
-import React, { useState, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import CustomButton from '../CustomButtons/Button/CustomButton'
 import { firstLetters } from '../../utils/utils'
-import { sendRequest } from '../../services/ApiCalls'
-import { AiOutlineUsergroupAdd } from 'react-icons/ai'
+import { sendRequest, acceptRequest, getButtonStatus } from '../../services/ApiCalls'
+import { AiOutlineUsergroupAdd, AiOutlineUsergroupDelete, AiOutlineUserAdd } from 'react-icons/ai'
 
 import './UserProfile.scss'
 
-const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvites, setUserInvites }) => {
-
+const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal }) => {
     const [loadingButton, setLoadingButton] = useState(false)
+    const [buttonStatus, setButtonStatus] = useState('none')
 
     const sendFriendRequest = async () => {
         try {
             setLoadingButton(true)
-            let users = await sendRequest(userInfo, currentUser, 'friend')
-            setUserInvites([...userInvites, users.newInvite])
-            setUserInfo(users.user)
+            let res = await sendRequest(userInfo, currentUser, 'friend')
+            setButtonStatus(res.buttonStatus)
             setLoadingButton(false)
         } catch (err) {
             setLoadingButton(false)
@@ -23,56 +22,93 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvite
         }
     }
 
-    const showButton = (invites) => {
-        let status = 'none'
-        if (invites && invites.length) {
-            let currentInvite = userInvites.find(invite => {
-                return invites.some((inviteId) => {
-                    return inviteId === invite._id;
-                });
-            })
-            console.log(currentInvite)
-            if (currentInvite && currentInvite.invitor === currentUser._id) {
-                status = 'cancel'
-            } else if (currentInvite && currentInvite.invitee === currentUser._id) {
-                status = 'confirm'
-            }
-
-            // status = 'confirm'
+    const acceptFriendRequest = async () => {
+        try {
+            setLoadingButton(true)
+            let res = await acceptRequest(userInfo, currentUser)
+            setButtonStatus(res.buttonStatus)
+            setLoadingButton(false)
+        } catch (err) {
+            setLoadingButton(false)
+            showModal({ type: 'error', body: err.message, name: err.response.name })
         }
+    }
 
-        switch (status) {
+
+    const cancelFriendRequest = async () => {
+        try {
+            // setLoadingButton(true)
+            // let res = await acceptRequest(userInfo, currentUser)
+            // setButtonStatus(res.buttonStatus)
+            // setLoadingButton(false)
+        } catch (err) {
+            // setLoadingButton(false)
+            // showModal({ type: 'error', body: err.message, name: err.response.name })
+        }
+    }
+
+    const unfriendFriend = async () => {
+        try {
+            // setLoadingButton(true)
+            // let res = await acceptRequest(userInfo, currentUser)
+            // setButtonStatus(res.buttonStatus)
+            // setLoadingButton(false)
+        } catch (err) {
+            // setLoadingButton(false)
+            // showModal({ type: 'error', body: err.message, name: err.response.name })
+        }
+    }
+
+
+    const showButton = () => {
+        switch (buttonStatus) {
             case 'none':
                 return (
                     <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
                         onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
                         Add friend
-                    </CustomButton>
+                        </CustomButton>
                 );
             case 'confirm':
                 return (
                     <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
-                        onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
+                        onClick={() => acceptFriendRequest()} icon={<AiOutlineUserAdd />}>
                         Accept Invite
-                        </CustomButton>
+                            </CustomButton>
                 );
             case 'cancel':
                 return (
                     <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
-                        onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
+                        onClick={() => cancelFriendRequest()} icon={<AiOutlineUsergroupDelete />}>
                         Cancel Invite
-                        </CustomButton>
+                            </CustomButton>
                 );
             case 'unfriend':
                 return (
                     <CustomButton disabled={loadingButton} buttonSpinner={loadingButton}
-                        onClick={() => sendFriendRequest()} icon={<AiOutlineUsergroupAdd />}>
+                        onClick={() => unfriendFriend()} icon={<AiOutlineUsergroupDelete />}>
                         Unfriend
-                        </CustomButton>
+                            </CustomButton>
                 );
             default: return null
         }
     }
+
+
+    useEffect(() => {
+        (async () => {
+            try {
+                setLoadingButton(true)
+                let buttonStatus = await getButtonStatus(userInfo, currentUser)
+                setButtonStatus(buttonStatus)
+                setLoadingButton(false)
+            } catch (error) {
+                setLoadingButton(false)
+                showModal({ type: 'error', body: error.message, name: error.response.name })
+            }
+        })()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userInfo])
 
     return (
         <div>
@@ -83,9 +119,8 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal, userInvite
                 <div className='profile-info'>
                     <div className='profile-Name'>{userInfo.name} {userInfo.surname}</div>
                     {userInfo.ownProfile ? null : <div className='friend-actions'>
-                        {showButton(userInfo.invites)}
+                        {showButton()}
                     </div>}
-
                 </div>
             </div>
         </div>
