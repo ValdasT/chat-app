@@ -133,6 +133,19 @@ const acceptRequest = async (friend, user) => {
     }
 };
 
+const cancelRequest = async (friend, user) => {
+    const body = JSON.stringify({
+        friend: friend,
+        user: user
+    })
+    try {
+        const res = await api.post('/users/cancel-friend-request', body);
+        return res.data;
+    } catch (err) {
+        throw handleError(err);
+    }
+};
+
 const getButtonStatus = async (friend, user) => {
     const body = JSON.stringify({
         friend: friend,
@@ -140,6 +153,19 @@ const getButtonStatus = async (friend, user) => {
     })
     try {
         const res = await api.post('/users/get-button-status', body);
+        return res.data;
+    } catch (err) {
+        throw handleError(err);
+    }
+};
+
+const unfriend = async (friend, user) => {
+    const body = JSON.stringify({
+        friend: friend,
+        user: user
+    })
+    try {
+        const res = await api.post('/users/unfriend', body);
         return res.data;
     } catch (err) {
         throw handleError(err);
@@ -157,7 +183,9 @@ export {
     searchUsers,
     sendRequest,
     acceptRequest,
+    cancelRequest,
     getAllInvites,
-    getButtonStatus
+    getButtonStatus,
+    unfriend
 }
 

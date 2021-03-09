@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import CustomButton from '../CustomButtons/Button/CustomButton'
 import { firstLetters } from '../../utils/utils'
-import { sendRequest, acceptRequest, getButtonStatus } from '../../services/ApiCalls'
+import { sendRequest, acceptRequest, cancelRequest, unfriend, getButtonStatus } from '../../services/ApiCalls'
 import { AiOutlineUsergroupAdd, AiOutlineUsergroupDelete, AiOutlineUserAdd } from 'react-icons/ai'
 
 import './UserProfile.scss'
@@ -34,31 +34,29 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal }) => {
         }
     }
 
-
     const cancelFriendRequest = async () => {
         try {
-            // setLoadingButton(true)
-            // let res = await acceptRequest(userInfo, currentUser)
-            // setButtonStatus(res.buttonStatus)
-            // setLoadingButton(false)
+            setLoadingButton(true)
+            let res = await cancelRequest(userInfo, currentUser)
+            setButtonStatus(res.buttonStatus)
+            setLoadingButton(false)
         } catch (err) {
-            // setLoadingButton(false)
-            // showModal({ type: 'error', body: err.message, name: err.response.name })
+            setLoadingButton(false)
+            showModal({ type: 'error', body: err.message, name: err.response.name })
         }
     }
 
     const unfriendFriend = async () => {
         try {
-            // setLoadingButton(true)
-            // let res = await acceptRequest(userInfo, currentUser)
-            // setButtonStatus(res.buttonStatus)
-            // setLoadingButton(false)
+            setLoadingButton(true)
+            let res = await unfriend(userInfo, currentUser)
+            setButtonStatus(res.buttonStatus)
+            setLoadingButton(false)
         } catch (err) {
-            // setLoadingButton(false)
-            // showModal({ type: 'error', body: err.message, name: err.response.name })
+            setLoadingButton(false)
+            showModal({ type: 'error', body: err.message, name: err.response.name })
         }
     }
-
 
     const showButton = () => {
         switch (buttonStatus) {

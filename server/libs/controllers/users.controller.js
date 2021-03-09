@@ -157,7 +157,7 @@ const createRequest = async args => {
         user = await user.save()
         let response = {
             user: user,
-            buttonStatus: await getButtonStatus(userData, currentUser)
+            buttonStatus: await getButtonStatus({ friendDoc: userData, currentUser: currentUser })
         }
         return response;
     } catch (err) {
@@ -166,8 +166,8 @@ const createRequest = async args => {
     }
 }
 
-const acceptRequest = async args => {
-    const { friendDoc, currentUser } = args
+const acceptRequest = async data => {
+    const { friendDoc, currentUser } = data
     logger.info(`[${moduleName}] Create new friend in db... `);
     const friend = new Friend({
         friend: friendDoc._id,
@@ -200,7 +200,7 @@ const acceptRequest = async args => {
         user = await user.save()
         let response = {
             user: user,
-            buttonStatus: await getButtonStatus(friendDoc, currentUser)
+            buttonStatus: await getButtonStatus({ friendDoc: friendDoc, currentUser: currentUser })
         }
         return response;
     } catch (err) {
@@ -209,7 +209,74 @@ const acceptRequest = async args => {
     }
 }
 
-const getButtonStatus = async (friendDoc, currentUser) => {
+const cancelRequest = async data => {
+    const { friendDoc, currentUser } = data
+    logger.info(`[${moduleName}] Cancel invite... `);
+    try {
+        let creator = await User.findById(currentUser._id);
+        let user = await User.findById(friendDoc._id);
+        if (!creator || !user) {
+            throw new Error('User not found.');
+        }
+        let currentInvite
+        user.invites.forEach(e => {
+            creator.invites.forEach(el => {
+                if (e.toString() === el.toString()) {
+                    currentInvite = e
+                }
+            })
+        })
+        await Invite.deleteOne({ _id: currentInvite._id });
+        creator.invites.pull(currentInvite._id);
+        user.invites.pull(currentInvite._id);
+        await creator.save()
+        user = await user.save()
+        let response = {
+            user: user,
+            buttonStatus: await getButtonStatus({ friendDoc: friendDoc, currentUser: currentUser })
+        }
+        return response;
+    } catch (err) {
+        logger.error(`[${moduleName}] Cancel invite error: `, err);
+        throw err;
+    }
+}
+
+const unfriendFriend = async data => {
+    const { friendDoc, currentUser } = data
+    logger.info(`[${moduleName}] Unfriend friend ... `);
+    try {
+        let creator = await User.findById(currentUser._id);
+        let user = await User.findById(friendDoc._id);
+        if (!creator || !user) {
+            throw new Error('User not found.');
+        }
+        let currentFriend
+        user.friends.forEach(e => {
+            creator.friends.forEach(el => {
+                if (e.toString() === el.toString()) {
+                    currentFriend = e
+                }
+            })
+        })
+        await Friend.deleteOne({ _id: currentFriend._id });
+        creator.friends.pull(currentFriend._id);
+        user.friends.pull(currentFriend._id);
+        await creator.save()
+        user = await user.save()
+        let response = {
+            user: user,
+            buttonStatus: await getButtonStatus({ friendDoc: friendDoc, currentUser: currentUser })
+        }
+        return response;
+    } catch (err) {
+        logger.error(`[${moduleName}] Unfriend error: `, err);
+        throw err;
+    }
+}
+
+const getButtonStatus = async data => {
+    const { friendDoc, currentUser } = data
     logger.info(`[${moduleName}] Calculate status... `);
 
     try {
@@ -271,6 +338,8 @@ module.exports = {
     searchUsers,
     createRequest,
     acceptRequest,
+    cancelRequest,
     getAllInvites,
-    getButtonStatus
+    getButtonStatus,
+    unfriendFriend
 }

@@ -3,13 +3,12 @@ const router = express.Router();
 const logger = require('../libs/utils/logger')
 const moduleName = module.filename.split('/').slice(-1);
 const { decodeSession } = require('../libs/utils/utils')
-const { createUser, getUser, searchUsers, getUserById, createRequest,acceptRequest,
-    getAllInvites, getButtonStatus } = require('../libs/controllers/users.controller')
+const userController = require('../libs/controllers/users.controller')
 
 router.post('/create-user', async (req, res, next) => {
-    const userData = req.body.user;
+    const data = req.body.user;
     try {
-        let user = await createUser(userData)
+        let user = await userController.createUser(data)
         if (user) res.status(200).send(user);
     } catch (err) {
         logger.error(`[${moduleName}] Create user error: `, err);
@@ -18,23 +17,23 @@ router.post('/create-user', async (req, res, next) => {
 });
 
 router.post('/get-user', async (req, res, next) => {
-    const userData = req.body.user;
+    const data = req.body.user;
     try {
         const userEmail = req.userEmail
         logger.info(`[${moduleName}] Get user info ${userEmail}...`);
-        let userById = await getUserById(userData)
+        let userById = await userController.getUserById(data)
         let userFromSession = {}
-        if (userData !== userEmail) {
-            userFromSession = await getUser(userEmail)
+        if (data !== userEmail) {
+            userFromSession = await userController.getUser(userEmail)
         }
         if (userById !== 'not found' && userFromSession !== 'not found') {
             if (userById._id.toString() === userFromSession._id.toString()) {
                 userById.ownProfile = true
             }
-            logger.info(`[${moduleName}] User was found in db. ${userData}`);
+            logger.info(`[${moduleName}] User was found in db. ${data}`);
             res.status(200).send(userById)
         } else {
-            logger.info(`[${moduleName}] User not found. ${userData}`);
+            logger.info(`[${moduleName}] User not found. ${data}`);
             return next(new Error('User not found.'))
         };
     } catch (err) {
@@ -49,13 +48,13 @@ router.post('/get-user-for-init', async (req, res, next) => {
     const userEmail = decodedClaims.email
     logger.info(`[${moduleName}] Get user info... ${userEmail}`);
     try {
-        let user = await getUser(userEmail)
+        let user = await userController.getUser(userEmail)
         if (user !== 'not found') {
             logger.info(`[${moduleName}] User was found in db. ${userEmail}`);
             res.status(200).send(user)
         } else {
             logger.info(`[${moduleName}] User not found. ${userEmail}`);
-            user = await createUser(decodedClaims)
+            user = await userController.createUser(decodedClaims)
             res.status(200).send(user)
         };
     } catch (err) {
@@ -65,10 +64,10 @@ router.post('/get-user-for-init', async (req, res, next) => {
 });
 
 router.post('/search-users', async (req, res, next) => {
-    const userData = req.body.user;
+    const data = req.body.user;
     try {
-        logger.info(`[${moduleName}] Search user... ${userData}`);
-        let user = await searchUsers(userData)
+        logger.info(`[${moduleName}] Search user... ${data}`);
+        let user = await userController.searchUsers(data)
         logger.info(`[${moduleName}] Search user... Done.`);
         if (user) res.status(200).send(user);
     } catch (err) {
@@ -78,11 +77,11 @@ router.post('/search-users', async (req, res, next) => {
 });
 
 router.post('/get-all-invites', async (req, res, next) => {
-    const userData = req.body.user;
+    const data = req.body.user;
     try {
-        logger.info(`[${moduleName}] Get all invite docs... ${userData}`);
-        let user = await getUserById(userData)
-        let invites = await getAllInvites(user.invites)
+        logger.info(`[${moduleName}] Get all invite docs... ${data}`);
+        let user = await userController.getUserById(data)
+        let invites = await userController.getAllInvites(user.invites)
         logger.info(`[${moduleName}] Get all invite docs... Done.`);
         if (invites) res.status(200).send(invites);
     } catch (err) {
@@ -92,7 +91,7 @@ router.post('/get-all-invites', async (req, res, next) => {
 });
 
 router.post('/send-friend-request', async (req, res, next) => {
-    const args = {
+    const data = {
         userData: req.body.friend,
         currentUser: req.body.user,
         type: req.body.type,
@@ -100,7 +99,7 @@ router.post('/send-friend-request', async (req, res, next) => {
     }
     try {
         logger.info(`[${moduleName}] Create request friend...`);
-        let users = await createRequest(args)
+        let users = await userController.createRequest(data)
         logger.info(`[${moduleName}] Create request... Done.`);
         if (users) res.status(200).send(users);
     } catch (err) {
@@ -110,13 +109,13 @@ router.post('/send-friend-request', async (req, res, next) => {
 });
 
 router.post('/accept-friend-request', async (req, res, next) => {
-    const args = {
+    const data = {
         friendDoc: req.body.friend,
         currentUser: req.body.user,
     }
     try {
         logger.info(`[${moduleName}] Accept request...`);
-        let users = await acceptRequest(args)
+        let users = await userController.acceptRequest(data)
         logger.info(`[${moduleName}] Accept request... Done.`);
         if (users) res.status(200).send(users);
     } catch (err) {
@@ -125,12 +124,46 @@ router.post('/accept-friend-request', async (req, res, next) => {
     }
 });
 
+router.post('/cancel-friend-request', async (req, res, next) => {
+    const data = {
+        friendDoc: req.body.friend,
+        currentUser: req.body.user,
+    }
+    try {
+        logger.info(`[${moduleName}] Cancel request...`);
+        let users = await userController.cancelRequest(data)
+        logger.info(`[${moduleName}] Cancel request... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Cancel request Error: `, err);
+        return next(err);
+    }
+});
+
+router.post('/unfriend', async (req, res, next) => {
+    const data = {
+        friendDoc: req.body.friend,
+        currentUser: req.body.user,
+    }
+    try {
+        logger.info(`[${moduleName}] Unfriend...`);
+        let users = await userController.unfriendFriend(data)
+        logger.info(`[${moduleName}] Unfriend... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Unfriend Error: `, err);
+        return next(err);
+    }
+});
+
 router.post('/get-button-status', async (req, res, next) => {
-        const friendDoc = req.body.friend
-        const currentUser = req.body.user
+    const data = {
+        friendDoc: req.body.friend,
+        currentUser: req.body.user,
+    }
     try {
         logger.info(`[${moduleName}] Get button status...`);
-        let users = await getButtonStatus(friendDoc, currentUser)
+        let users = await userController.getButtonStatus(data)
         logger.info(`[${moduleName}] Get button status... Done.`);
         if (users) res.status(200).send(users);
     } catch (err) {
