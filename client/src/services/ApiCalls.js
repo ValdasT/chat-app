@@ -1,108 +1,71 @@
 import api from '../utils/api';
 import { handleError } from './ErrorHandler'
 
+const performCall = async (method, url, body) => {
+    try {
+        if (method === 'GET') {
+            const res = await api.get(url);
+            return res.data;
+        } else {
+            const res = await api.post(url, body);
+            return res.data;
+        }
+    } catch (err) {
+        console.log(err);
+        throw handleError(err);
+    }
+}
+
 const createUser = async (user) => {
     const body = JSON.stringify({
         user: user,
     })
-    try {
-        const res = await api.post('/users/create-user', body);
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/create-user', body)
 };
 
 const createSession = async (idToken) => {
     const body = JSON.stringify({ idToken })
-    try {
-        const res = await api.post('/create-session', body);
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw handleError(err);
-    }
+    return await performCall('POST', '/create-session', body)
 };
 
 const logOutUser = async () => {
-    try {
-        const res = await api.post('/log-out');
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw handleError(err);
-    }
+    return await performCall('GET', '/log-out')
 };
 
 const getToken = async () => {
-    try {
-        const res = await api.get('/get-token');
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw handleError(err);
-    }
+    return await performCall('GET', '/get-token')
 };
 
 const getUserForInint = async () => {
-    try {
-        const res = await api.post('/users/get-user-for-init');
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw handleError(err);
-    }
+    return await performCall('GET', '/users/get-user-for-init')
 };
 
 const getUser = async (user) => {
     const body = JSON.stringify({
         user: user,
     })
-    try {
-        const res = await api.post('/users/get-user', body);
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/get-user', body)
 };
 
 const updateUser = async (user) => {
     const body = JSON.stringify({
         user: user,
     })
-    try {
-        const res = await api.post('/users/update-user', body);
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/update-user', body)
 };
 
 const searchUsers = async (user) => {
     const body = JSON.stringify({
         user: user,
     })
-    try {
-        const res = await api.post('/users/search-users', body);
-        return res.data;
-    } catch (err) {
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/search-users', body)
 };
 
 const getAllInvites = async (user) => {
     const body = JSON.stringify({
         user: user,
     })
-    try {
-        const res = await api.post('/users/get-all-invites', body);
-        return res.data;
-    } catch (err) {
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/get-all-invites', body)
 };
 
 const sendRequest = async (friend, user, type, invitedTo) => {
@@ -112,12 +75,7 @@ const sendRequest = async (friend, user, type, invitedTo) => {
         type: type,
         invitedTo: invitedTo
     })
-    try {
-        const res = await api.post('/users/send-friend-request', body);
-        return res.data;
-    } catch (err) {
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/send-friend-request', body)
 };
 
 const acceptRequest = async (friend, user) => {
@@ -125,12 +83,7 @@ const acceptRequest = async (friend, user) => {
         friend: friend,
         user: user
     })
-    try {
-        const res = await api.post('/users/accept-friend-request', body);
-        return res.data;
-    } catch (err) {
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/accept-friend-request', body)
 };
 
 const cancelRequest = async (friend, user) => {
@@ -138,12 +91,7 @@ const cancelRequest = async (friend, user) => {
         friend: friend,
         user: user
     })
-    try {
-        const res = await api.post('/users/cancel-friend-request', body);
-        return res.data;
-    } catch (err) {
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/cancel-friend-request', body)
 };
 
 const getButtonStatus = async (friend, user) => {
@@ -151,12 +99,7 @@ const getButtonStatus = async (friend, user) => {
         friend: friend,
         user: user
     })
-    try {
-        const res = await api.post('/users/get-button-status', body);
-        return res.data;
-    } catch (err) {
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/get-button-status', body)
 };
 
 const unfriend = async (friend, user) => {
@@ -164,12 +107,7 @@ const unfriend = async (friend, user) => {
         friend: friend,
         user: user
     })
-    try {
-        const res = await api.post('/users/unfriend', body);
-        return res.data;
-    } catch (err) {
-        throw handleError(err);
-    }
+    return await performCall('POST', '/users/unfriend', body)
 };
 
 export {

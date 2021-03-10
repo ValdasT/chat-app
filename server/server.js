@@ -48,7 +48,7 @@ app.get("/api/get-token", (req, res, next) => {
   res.end(JSON.stringify({ status: "success" }));
 });
 app.post('/api/create-session', createSession);
-app.post('/api/log-out', logOut);
+app.get('/api/log-out', logOut);
 
 // Define Routes
 app.use('/api/users', isAuth, require('./routes/users'));

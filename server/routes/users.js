@@ -42,7 +42,7 @@ router.post('/get-user', async (req, res, next) => {
     }
 });
 
-router.post('/get-user-for-init', async (req, res, next) => {
+router.get('/get-user-for-init', async (req, res, next) => {
     const sessionCookie = req.cookies.session || "";
     let decodedClaims = await decodeSession(sessionCookie)
     const userEmail = decodedClaims.email
