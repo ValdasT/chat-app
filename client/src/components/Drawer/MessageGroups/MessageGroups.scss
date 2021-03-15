@@ -1,4 +1,31 @@
 @import "../../../styles/Collors.scss";
+
+@keyframes scale-in-picture {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  10% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes text-focus-in {
+  0% {
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
 .all-friends {
   .one-message {
     display: flex;
@@ -25,32 +52,6 @@
     &:hover {
       cursor: pointer;
       background-color: $light-grey-transperant;
-    }
-  }
-
-  @keyframes scale-in-picture {
-    0% {
-      transform: scale(0);
-      opacity: 0;
-    }
-    20% {
-      transform: scale(0);
-      opacity: 0;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-
-  @keyframes text-focus-in {
-    0% {
-      filter: blur(12px);
-      opacity: 0;
-    }
-    100% {
-      filter: blur(0px);
-      opacity: 1;
     }
   }
 
