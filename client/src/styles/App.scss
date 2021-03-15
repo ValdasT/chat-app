@@ -208,8 +208,8 @@ body.dark-mode {
   border: 0;
   border-bottom: 1px solid $sub-color;
   outline: 0;
-  font-size: 1.1rem;
-  padding: 7px 0;
+  font-size: 14px;
+  padding: 10px 0 2px;
   background: transparent;
   transition: border-color 1s;
 
@@ -218,10 +218,13 @@ body.dark-mode {
   }
 
   &:placeholder-shown ~ .form-label {
-    font-size: 1.1rem;
+    font-size: 1rem;
     cursor: text;
-    top: 20px;
+    top: 15px;
   }
+}
+input[type="password"] {
+  letter-spacing: 0.1em;
 }
 
 .form-label {

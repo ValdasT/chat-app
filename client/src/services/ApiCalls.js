@@ -47,6 +47,14 @@ const getUser = async (user) => {
     return await performCall('POST', '/users/get-user', body)
 };
 
+const getFriends = async (friends, user) => {
+    const body = JSON.stringify({
+        friends: friends,
+        user: user
+    })
+    return await performCall('POST', '/users/get-friends', body)
+};
+
 const updateUser = async (user) => {
     const body = JSON.stringify({
         user: user,
@@ -118,6 +126,7 @@ export {
     getUserForInint,
     updateUser,
     getUser,
+    getFriends,
     searchUsers,
     sendRequest,
     acceptRequest,

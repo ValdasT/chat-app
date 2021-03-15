@@ -1,4 +1,5 @@
 import React, { Fragment, useState, memo } from 'react';
+import MessageGroups from './MessageGroups/MessageGroups'
 import { IoIosArrowForward } from 'react-icons/io';
 import { BiSearchAlt } from 'react-icons/bi'
 import FormInputSmall from '../FormInput/FormInputSmall';
@@ -52,7 +53,9 @@ const Drawer = memo(() => {
                                 />
                             </div> : null}
                         <div>
-                            {/* dkmsdklf mskldmf klsdmf klsdmf klsdm flks dmf sdf sdfk smdfklsdmflksd mflkms dlkfmsdkl fmsd klmfksl dmfkls dmfkl smdklfm sdklm fsdkl fmksld mfkl smd */}
+                            <div className='message-groups'>
+                                <MessageGroups openDrawer={openDrawer} />
+                            </div>
                         </div>
                     </div>
                 </div>

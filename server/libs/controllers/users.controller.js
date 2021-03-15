@@ -79,15 +79,26 @@ const getAllInvites = async (invites) => {
     }
 }
 
-const getAllFriends = async (friends) => {
+const getAllFriends = async (args) => {
+    const { friends, user } = args
     try {
         logger.info(`[${moduleName}] Get all friends...`);
-        let friendsDocs = []
+        let res = []
         if (friends.length) {
-            friendsDocs = await Friend.find().where('_id').in(friends).exec();
+            let friendsDocs = await Friend.find().where('_id').in(friends).exec()
             logger.info(`[${moduleName}] Get all friends...Done. Found:${friendsDocs.length}`);
+            let userProfileIds = friendsDocs.map(e => {
+                if (e.friend.toString() === user) {
+                    return e.creator
+                } else {
+                    return e.friend
+                }
+            })
+            res = await User.find().where('_id').in(userProfileIds).select({
+                "name": 1, "email": 1, "surname": 1, "_id": 1, "picColor": 1
+            });
         }
-        return friendsDocs
+        return res
     } catch (err) {
         logger.error(`[${moduleName}] Get all friends error: `, err);
         throw err;
@@ -335,6 +346,7 @@ module.exports = {
     getUser,
     getUserById,
     updateUser,
+    getAllFriends,
     searchUsers,
     createRequest,
     acceptRequest,

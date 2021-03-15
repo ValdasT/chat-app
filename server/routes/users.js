@@ -76,6 +76,22 @@ router.post('/search-users', async (req, res, next) => {
     }
 });
 
+router.post('/get-friends', async (req, res, next) => {
+    const data = {
+        friends: req.body.friends,
+        user: req.body.user
+    }
+    try {
+        logger.info(`[${moduleName}] Get all friends...`);
+        let users = await userController.getAllFriends(data)
+        logger.info(`[${moduleName}] Get all friends... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Get all friends Error: `, err);
+        return next(err);
+    }
+});
+
 router.post('/get-all-invites', async (req, res, next) => {
     const data = req.body.user;
     try {

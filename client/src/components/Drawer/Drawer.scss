@@ -5,8 +5,8 @@
   // padding-bottom: 60px;
   word-break: keep-all;
   border-radius: 0px 20px 20px 0px;
-  background-color: $base-second-light;
-  box-shadow: 5px 0px 5px -4px rgba(0, 0, 0, 0.36);
+  background-color: $base-white;
+  box-shadow: 5px 0px 5px -4px rgba(0, 0, 0, 0.25);
   // overflow-y: auto;
 }
 
@@ -33,13 +33,13 @@
     width: 20px;
   }
   to {
-    width: 100vw;
+    width: 70%;
   }
 }
 
 @include keyframes(slide-out-mobile) {
   from {
-    width: 100%;
+    width: 70%;
   }
   to {
     width: 20px;
@@ -86,4 +86,10 @@
   &:hover {
     background-color: $primary-light;
   }
+}
+
+.message-groups {
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
 }
