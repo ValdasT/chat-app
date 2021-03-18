@@ -1,6 +1,7 @@
 
 
 const showTimeFromMS = (ms) => {
+    ms = parseInt(ms)
     let messageTime = new Date(ms);
     let today = new Date();
     if (messageTime.getDate() === today.getDate() && messageTime.getMonth() === today.getMonth() && messageTime.getFullYear() === today.getFullYear()) {

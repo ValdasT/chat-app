@@ -1,29 +1,28 @@
 import React, { createContext, useReducer, memo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import socketIOClient from "socket.io-client";
+import { saveMessage } from '../services/ApiCalls'
 const socket = socketIOClient();
-// import { sendAnswer } from './ApiCalls';
-// import { GlobalContext } from './GlobalState';
-// import { useUserSession } from './AuthContext';
 
 // Initial state
 const initialState = {
     chatMessages: [
         {
-            id : uuidv4(),
-            time: Date.now(),
-            sender: 'Johan Super',
+            id: uuidv4(),
+            createdAt: Date.now(),
+            creator: 'Johan Super',
             message: `Hello dear friend!`
-            
+
         },
-       {
-            id : uuidv4(),
-            time: Date.now(),
-            sender: 'me',
+        {
+            id: uuidv4(),
+            createdAt: Date.now(),
+            creator: 'me',
             message: ` whoooop whooop!!!`
-            
+
         },
-    ]
+    ],
+    chatDoc: {}
 }
 
 // Reducer
@@ -38,6 +37,13 @@ const messageReducer = (state, action) => {
             return {
                 ...state,
                 chatMessages: [...state.chatMessages, action.payload]
+            }
+        case 'SET_MESSAGES':
+            return {
+                ...state,
+                chatMessages: [...action.payload.messages],
+                chatDoc: { ...action.payload }
+
             }
         case 'EDIT_MESSAGE':
             return {
@@ -61,13 +67,18 @@ export const MessageProvider = memo(({ children }) => {
     const [exampleQuestions, setExampleQuestions] = useState();
 
     // Actions
-    const addMessage = message => {
+    const addMessage = async (message, user) => {
+        console.log(user)
+        console.log(state.chatDoc)
+        console.log('sdkjsdjskdskjdksjd')
         let chatMessage = {
             id: uuidv4(),
-            time: Date.now(),
-            sender: message.sender ? message.sender : 'me',
+            createdAt: Date.now(),
+            creator: user._id,
             message: message
         }
+
+        await saveMessage(chatMessage, state.chatDoc)
         // socket.on("FromAPI", data => {
         //     console.log(data);
         //   });
@@ -83,6 +94,13 @@ export const MessageProvider = memo(({ children }) => {
         dispatch({
             type: 'EDIT_MESSAGE',
             payload: message
+        });
+    }
+
+    const setMessages = (messages) => {
+        dispatch({
+            type: 'SET_MESSAGES',
+            payload: messages
         });
     }
 
@@ -120,6 +138,7 @@ export const MessageProvider = memo(({ children }) => {
     return (<MessageContext.Provider value={{
         chatMessages: state.chatMessages,
         addMessage,
+        setMessages,
         getAnswer,
         exampleQuestions,
         setExampleQuestions

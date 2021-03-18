@@ -17,7 +17,6 @@ function MessageGroups({ openDrawer }) {
             try {
                 let users = await getFriends(currentUser.friends, currentUser._id)
                 setFriendMessages(users)
-                console.log(users)
             } catch (error) {
                 showModal({ type: 'error', body: error.message, name: error.response.name })
             }
@@ -27,7 +26,8 @@ function MessageGroups({ openDrawer }) {
 
     return (
         <div className='all-friends'>
-            {friendsMessages.length ? friendsMessages.map(friend => (<OneMessage openDrawer={openDrawer} key={friend._id} friend={friend} />)) :
+            {friendsMessages.length ? friendsMessages.map(friend => (
+                <OneMessage openDrawer={openDrawer} key={friend._id} friend={friend} currentUser={currentUser} />)) :
                 <SpinnerSmall style={{ width: '50px ', height: '50px ' }} />}
             {currentUser.fiends}
         </div>

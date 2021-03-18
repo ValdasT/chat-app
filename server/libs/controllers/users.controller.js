@@ -1,6 +1,8 @@
 const User = require('../models/user');
 const Invite = require('../models/invite')
 const Friend = require('../models/friend')
+const Chat = require('../models/chat')
+const Message = require('../models/message')
 const logger = require('../utils/logger');
 const moduleName = module.filename.split('/').slice(-1);
 const { getRandomCollor } = require('../utils/utils')
@@ -101,6 +103,77 @@ const getAllFriends = async (args) => {
         return res
     } catch (err) {
         logger.error(`[${moduleName}] Get all friends error: `, err);
+        throw err;
+    }
+}
+
+const getAllMessages = async (args) => {
+    const { friend, user } = args
+    try {
+        logger.info(`[${moduleName}] Get messages...`);
+        const friendDoc = await User.findById(friend._id);
+        const userDoc = await User.findById(user._id);
+
+        if (!friendDoc || !userDoc) {
+            throw new Error('User not found.');
+        }
+        let currentChat;
+        if (userDoc.messages.length && friendDoc.messages.length) {
+            userDoc.messages.forEach(e => {
+                friendDoc.messages.forEach(el => {
+                    if (el.toString() === e.toString()) {
+                        currentChat = e
+                    }
+                })
+            })
+        }
+        if (!currentChat) {
+            logger.info(`[${moduleName}] Create and return new chat doc`);
+            const chat = new Chat({
+                createdAt: new Date().getTime(),
+            });
+
+            await chat.save();
+            friendDoc.messages.push(chat);
+            userDoc.messages.push(chat);
+            await friendDoc.save()
+            await userDoc.save()
+            return { messages: [] }
+        } else {
+            logger.info(`[${moduleName}] Return old chat doc`);
+            const chatMessages = await Chat.findById(currentChat).populate('messages');
+            return chatMessages
+        }
+    } catch (err) {
+        logger.error(`[${moduleName}] Get all messages error: `, err);
+        throw err;
+    }
+}
+
+const saveMessage = async (args) => {
+    const { message, messageDoc } = args
+    try {
+        logger.info(`[${moduleName}] Saving message...`);
+        const newMessage = new Message({
+            message: message.message,
+            creator: message.creator,
+            createdAt: message.createdAt,
+        });
+
+        const chatDoc = await Chat.findById(messageDoc._id);
+
+        if (!chatDoc) {
+            throw new Error('Chat doc not found.');
+        }
+
+        chatDoc.messages.push(newMessage)
+        await newMessage.save();
+        await chatDoc.save();
+        logger.info(`[${moduleName}] Saving message... Done`);
+        return chatDoc
+
+    } catch (err) {
+        logger.error(`[${moduleName}] Saving message error: `, err);
         throw err;
     }
 }
@@ -352,6 +425,8 @@ module.exports = {
     acceptRequest,
     cancelRequest,
     getAllInvites,
+    getAllMessages,
+    saveMessage,
     getButtonStatus,
     unfriendFriend
 }

@@ -55,6 +55,22 @@ const getFriends = async (friends, user) => {
     return await performCall('POST', '/users/get-friends', body)
 };
 
+const getMessages = async (friend, user) => {
+    const body = JSON.stringify({
+        friend: friend,
+        user: user
+    })
+    return await performCall('POST', '/users/get-messages', body)
+};
+
+const saveMessage = async (message, messageDoc) => {
+    const body = JSON.stringify({
+        message: message,
+        messageDoc: messageDoc
+    })
+    return await performCall('POST', '/users/save-message', body)
+};
+
 const updateUser = async (user) => {
     const body = JSON.stringify({
         user: user,
@@ -124,6 +140,8 @@ export {
     logOutUser,
     createSession,
     getUserForInint,
+    getMessages,
+    saveMessage,
     updateUser,
     getUser,
     getFriends,

@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use((err, req, res, next) => {
-  logger.error(`[${moduleName}] error: `, error);
+  logger.error(`[${moduleName}] error: `, err);
   res.status(500).send('Something broke!')
 })
 

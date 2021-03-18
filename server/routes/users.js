@@ -92,6 +92,38 @@ router.post('/get-friends', async (req, res, next) => {
     }
 });
 
+router.post('/get-messages', async (req, res, next) => {
+    const data = {
+        friend: req.body.friend,
+        user: req.body.user
+    }
+    try {
+        logger.info(`[${moduleName}] Get messages...`);
+        let users = await userController.getAllMessages(data)
+        logger.info(`[${moduleName}] Get messages... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Get messages Error: `, err);
+        return next(err);
+    }
+});
+
+router.post('/save-message', async (req, res, next) => {
+    const data = {
+        message: req.body.message,
+        messageDoc: req.body.messageDoc
+    }
+    try {
+        logger.info(`[${moduleName}] Save messages...`);
+        let users = await userController.saveMessage(data)
+        logger.info(`[${moduleName}] Save messages... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Save messages Error: `, err);
+        return next(err);
+    }
+});
+
 router.post('/get-all-invites', async (req, res, next) => {
     const data = req.body.user;
     try {
