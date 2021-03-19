@@ -47,9 +47,8 @@ const getUser = async (user) => {
     return await performCall('POST', '/users/get-user', body)
 };
 
-const getFriends = async (friends, user) => {
+const getFriends = async (user) => {
     const body = JSON.stringify({
-        friends: friends,
         user: user
     })
     return await performCall('POST', '/users/get-friends', body)

@@ -1,17 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { firstLetters } from '../../../utils/utils'
-import { getMessages } from '../../../services/ApiCalls'
-import { MessageContext } from '../../../context/MessageContext';
 
-
-function OneMessage({ friend, openDrawer, currentUser }) {
-
-    const { setMessages } = useContext(MessageContext)
-
-    const openMessage = async user => {
-        let messages = await getMessages(user, currentUser)
-        setMessages(messages)
-    }
+const OneMessage = ({ friend, openDrawer, openMessage }) => {
 
     return (
         <div className={openDrawer ? 'one-message' : 'one-message-small'} onClick={() => openMessage(friend)}>

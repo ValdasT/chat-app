@@ -82,12 +82,13 @@ const getAllInvites = async (invites) => {
 }
 
 const getAllFriends = async (args) => {
-    const { friends, user } = args
+    const { user } = args
     try {
         logger.info(`[${moduleName}] Get all friends...`);
         let res = []
-        if (friends.length) {
-            let friendsDocs = await Friend.find().where('_id').in(friends).exec()
+        const userDoc = await User.findById(user);
+        if (userDoc.friends.length) {
+            let friendsDocs = await Friend.find().where('_id').in(userDoc.friends).exec()
             logger.info(`[${moduleName}] Get all friends...Done. Found:${friendsDocs.length}`);
             let userProfileIds = friendsDocs.map(e => {
                 if (e.friend.toString() === user) {

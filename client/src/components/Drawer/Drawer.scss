@@ -66,7 +66,7 @@
 
 @media (max-width: 40em) {
   .open-drawer {
-    @include animation("slide-in-mobile 0.3s ease-in forwards");
+    @include animation("slide-in-mobile 0.2s ease-in forwards");
   }
 }
 

@@ -7,20 +7,20 @@ const socket = socketIOClient();
 // Initial state
 const initialState = {
     chatMessages: [
-        {
-            id: uuidv4(),
-            createdAt: Date.now(),
-            creator: 'Johan Super',
-            message: `Hello dear friend!`
+        // {
+        //     id: uuidv4(),
+        //     createdAt: Date.now(),
+        //     creator: 'Johan Super',
+        //     message: `Hello dear friend!`
 
-        },
-        {
-            id: uuidv4(),
-            createdAt: Date.now(),
-            creator: 'me',
-            message: ` whoooop whooop!!!`
+        // },
+        // {
+        //     id: uuidv4(),
+        //     createdAt: Date.now(),
+        //     creator: 'me',
+        //     message: ` whoooop whooop!!!`
 
-        },
+        // },
     ],
     chatDoc: {}
 }
@@ -64,13 +64,10 @@ export const MessageProvider = memo(({ children }) => {
     // const { showAlert } = useContext(GlobalContext);
     // const { user } = useUserSession();
     const [state, dispatch] = useReducer(messageReducer, initialState);
-    const [exampleQuestions, setExampleQuestions] = useState();
+    const [loadingMessages, setLoadingMessages] = useState(false);
 
     // Actions
     const addMessage = async (message, user) => {
-        console.log(user)
-        console.log(state.chatDoc)
-        console.log('sdkjsdjskdskjdksjd')
         let chatMessage = {
             id: uuidv4(),
             createdAt: Date.now(),
@@ -140,8 +137,8 @@ export const MessageProvider = memo(({ children }) => {
         addMessage,
         setMessages,
         getAnswer,
-        exampleQuestions,
-        setExampleQuestions
+        loadingMessages,
+        setLoadingMessages
     }}>
         {children}
     </MessageContext.Provider>);

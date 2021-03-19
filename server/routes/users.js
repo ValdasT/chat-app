@@ -78,7 +78,6 @@ router.post('/search-users', async (req, res, next) => {
 
 router.post('/get-friends', async (req, res, next) => {
     const data = {
-        friends: req.body.friends,
         user: req.body.user
     }
     try {

@@ -3,33 +3,59 @@ import { GlobalContext } from '../../../context/GlobalState';
 import OneMessage from './OneMessage'
 import SpinnerSmall from '../../Spinner/SpinnerSmall'
 import { useAuth } from "../../../context/AuthContext"
-import { getFriends } from '../../../services/ApiCalls'
+import { MessageContext } from '../../../context/MessageContext';
+import { getFriends, getMessages } from '../../../services/ApiCalls'
+import { RiEmotionSadLine } from 'react-icons/ri'
 
 import './MessageGroups.scss'
 
-function MessageGroups({ openDrawer }) {
+const MessageGroups = ({ openDrawer }) => {
     const { showModal } = useContext(GlobalContext);
     const { currentUser } = useAuth()
+    const { setMessages, loadingMessages, setLoadingMessages } = useContext(MessageContext)
     const [friendsMessages, setFriendMessages] = useState([])
 
     useEffect(() => {
         (async () => {
             try {
-                let users = await getFriends(currentUser.friends, currentUser._id)
+                setLoadingMessages(true)
+                let users = await getFriends(currentUser._id)
                 setFriendMessages(users)
+                if (users.length) {
+                    await openMessage(users[0])
+                } else {
+                    setMessages({ messages: [] })
+                }
+                setLoadingMessages(false)
             } catch (error) {
+                setLoadingMessages(false)
                 showModal({ type: 'error', body: error.message, name: error.response.name })
             }
         })()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser])
 
+    const openMessage = async user => {
+        let messages = await getMessages(user, currentUser)
+        setMessages(messages)
+    }
+
     return (
         <div className='all-friends'>
-            {friendsMessages.length ? friendsMessages.map(friend => (
-                <OneMessage openDrawer={openDrawer} key={friend._id} friend={friend} currentUser={currentUser} />)) :
-                <SpinnerSmall style={{ width: '50px ', height: '50px ' }} />}
-            {currentUser.fiends}
+            {!loadingMessages ? friendsMessages.length ? friendsMessages.map(friend => (
+                <OneMessage
+                    openDrawer={openDrawer}
+                    key={friend._id}
+                    friend={friend}
+                    openMessage={openMessage} />)) :
+                openDrawer ?
+                    <div className='no-friends'>
+                        <div>
+                            <RiEmotionSadLine className='message-icon' />
+                        </div>
+                        <div>Friends list is empty.</div>
+                    </div> : null
+                : <SpinnerSmall style={{ width: '50px ', height: '50px ' }} />}
         </div>
     );
 }
