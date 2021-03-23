@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, memo } from 'react';
 import { GlobalContext } from '../../../context/GlobalState';
 import OneMessage from './OneMessage'
 import SpinnerSmall from '../../Spinner/SpinnerSmall'
@@ -12,13 +12,15 @@ import './MessageGroups.scss'
 const MessageGroups = ({ openDrawer }) => {
     const { showModal } = useContext(GlobalContext);
     const { currentUser } = useAuth()
-    const { setMessages, loadingMessages, setLoadingMessages } = useContext(MessageContext)
+    const { setMessages, loadingMessages, setLoadingMessages, setLoadingFriends } = useContext(MessageContext)
     const [friendsMessages, setFriendMessages] = useState([])
+    const [userMessages, setUserMessages] = useState('')
 
     useEffect(() => {
         (async () => {
             try {
                 setLoadingMessages(true)
+                setLoadingFriends(true)
                 let users = await getFriends(currentUser._id)
                 setFriendMessages(users)
                 if (users.length) {
@@ -27,8 +29,10 @@ const MessageGroups = ({ openDrawer }) => {
                     setMessages({ messages: [] })
                 }
                 setLoadingMessages(false)
+                setLoadingFriends(false)
             } catch (error) {
                 setLoadingMessages(false)
+                setLoadingFriends(false)
                 showModal({ type: 'error', body: error.message, name: error.response.name })
             }
         })()
@@ -36,8 +40,20 @@ const MessageGroups = ({ openDrawer }) => {
     }, [currentUser])
 
     const openMessage = async user => {
-        let messages = await getMessages(user, currentUser)
-        setMessages(messages)
+        if (user._id !== userMessages) {
+            setUserMessages(user._id)
+            try {
+                setLoadingFriends(true)
+                let messages = await getMessages(user, currentUser)
+                setTimeout(() => {
+                    setLoadingFriends(false)
+                    setMessages(messages)
+                }, 100)
+            } catch (err) {
+                setLoadingFriends(false)
+                showModal({ type: 'error', body: err.message, name: err.response.name })
+            }
+        }
     }
 
     return (
@@ -60,4 +76,4 @@ const MessageGroups = ({ openDrawer }) => {
     );
 }
 
-export default MessageGroups;
+export default memo(MessageGroups);

@@ -65,6 +65,7 @@ export const MessageProvider = memo(({ children }) => {
     // const { user } = useUserSession();
     const [state, dispatch] = useReducer(messageReducer, initialState);
     const [loadingMessages, setLoadingMessages] = useState(false);
+    const [loadingFriends, setLoadingFriends] = useState(false);
 
     // Actions
     const addMessage = async (message, user) => {
@@ -138,7 +139,9 @@ export const MessageProvider = memo(({ children }) => {
         setMessages,
         getAnswer,
         loadingMessages,
-        setLoadingMessages
+        setLoadingMessages,
+        loadingFriends,
+        setLoadingFriends
     }}>
         {children}
     </MessageContext.Provider>);

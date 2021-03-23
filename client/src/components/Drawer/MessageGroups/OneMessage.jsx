@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo} from 'react';
 import { firstLetters } from '../../../utils/utils'
 
 const OneMessage = ({ friend, openDrawer, openMessage }) => {
@@ -11,4 +11,4 @@ const OneMessage = ({ friend, openDrawer, openMessage }) => {
     );
 }
 
-export default OneMessage;
+export default memo(OneMessage);

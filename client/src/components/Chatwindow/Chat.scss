@@ -14,6 +14,29 @@
   overflow-y: auto;
 }
 
+.loading-messages {
+  text-align: center;
+  padding-top: 15%;
+}
+
+@media (max-width: 40em) {
+  .loading-messages {
+    padding-top: 80%;
+  }
+}
+
+.no-messages {
+  animation: scale-in-picture 0.8s both;
+  text-align: center;
+  padding-top: 15%;
+}
+
+@media (max-width: 40em) {
+  .no-messages {
+    padding-top: 80%;
+  }
+}
+
 .message {
   padding-bottom: 10px;
   @include animation("slide-up 0.3s");
