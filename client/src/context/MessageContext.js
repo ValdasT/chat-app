@@ -1,8 +1,7 @@
 import React, { createContext, useReducer, memo, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import socketIOClient from "socket.io-client";
 import { saveMessage } from '../services/ApiCalls'
-const socket = socketIOClient();
+import {enterChat, sendMessage} from '../services/SocketsFront'
 
 // Initial state
 const initialState = {
@@ -69,21 +68,21 @@ export const MessageProvider = memo(({ children }) => {
 
     // Actions
     const addMessage = async (message, user) => {
-        let chatMessage = {
-            id: uuidv4(),
-            createdAt: Date.now(),
-            creator: user._id,
-            message: message
-        }
+        console.log('addd message')
+        sendMessage(message)
+        // let chatMessage = {
+        //     id: uuidv4(),
+        //     createdAt: Date.now(),
+        //     creator: user._id,
+        //     message: message
+        // }
 
-        await saveMessage(chatMessage, state.chatDoc)
-        // socket.on("FromAPI", data => {
-        //     console.log(data);
-        //   });
-        dispatch({
-            type: 'ADD_MESSAGE',
-            payload: chatMessage
-        });
+        // await saveMessage(chatMessage, state.chatDoc)
+
+        // dispatch({
+        //     type: 'ADD_MESSAGE',
+        //     payload: chatMessage
+        // });
     }
 
     const editMessage = (message, id) => {
@@ -95,7 +94,8 @@ export const MessageProvider = memo(({ children }) => {
         });
     }
 
-    const setMessages = (messages) => {
+    const setMessages = (user, messages) => {
+        enterChat(user, messages )
         dispatch({
             type: 'SET_MESSAGES',
             payload: messages

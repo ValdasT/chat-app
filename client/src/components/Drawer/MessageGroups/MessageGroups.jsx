@@ -26,7 +26,7 @@ const MessageGroups = ({ openDrawer }) => {
                 if (users.length) {
                     await openMessage(users[0])
                 } else {
-                    setMessages({ messages: [] })
+                    setMessages(currentUser, { messages: [] })
                 }
                 setLoadingMessages(false)
                 setLoadingFriends(false)
@@ -47,7 +47,7 @@ const MessageGroups = ({ openDrawer }) => {
                 let messages = await getMessages(user, currentUser)
                 setTimeout(() => {
                     setLoadingFriends(false)
-                    setMessages(messages)
+                    setMessages(currentUser, messages)
                 }, 100)
             } catch (err) {
                 setLoadingFriends(false)
