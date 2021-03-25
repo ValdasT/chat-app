@@ -29,7 +29,7 @@ const Chatbar = () => {
         <div className='input-footer'>
             <div className='input-block'>
                 <FormInput
-                    style={{ paddingRight: '110px' }}
+                    style={{ paddingRight: '40px' }}
                     type='text'
                     name='messageInput'
                     value={message}
@@ -38,9 +38,9 @@ const Chatbar = () => {
                     onKeyPress={(e) => (e.charCode === 13 ? newMessage() : null)}
                     button={
                         <CustomButton
-                            style={{ marginTop: '11px', position: 'absolute', right: '5px', width: '40px' }}
+                            infield={true}
                             onClick={() => newMessage()}>
-                            <FiSendIcon size="20px" style={{ color: "#fff" }} />
+                            <FiSendIcon style={{ color: "#fff" }} />
                         </CustomButton>}
                     required
                 />

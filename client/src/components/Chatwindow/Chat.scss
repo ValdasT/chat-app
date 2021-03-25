@@ -38,7 +38,7 @@
 }
 
 .message {
-  padding-bottom: 10px;
+  padding-bottom: 5px;
   @include animation("slide-up 0.3s");
 
   @include keyframes(slide-up) {
@@ -101,6 +101,53 @@
   .message-time {
     color: $grey-text-light;
     font-size: 12px;
-    padding: 0px 75px;
+    padding: 0px 5px;
+  }
+
+  @media (max-width: 40em) {
+    .userAvatar {
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+    }
+    .message-block {
+      .bubble {
+        max-width: 40em;
+        margin: 0px 0px;
+        padding: 10px;
+      }
+
+      .point-right {
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid $blue-light;
+        padding-left: 5px;
+        margin-top: 12px;
+      }
+
+      .point-left {
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-right: 5px solid $base-second-light;
+        padding-right: 5px;
+        margin-top: 12px;
+      }
+
+      .answer {
+        font-size: 0.7rem;
+        font-weight: 400;
+        line-height: 1.125rem;
+        letter-spacing: 0.16px;
+      }
+    }
+
+    .message-time {
+      font-size: 10px;
+      padding: 0px 5px;
+    }
   }
 }

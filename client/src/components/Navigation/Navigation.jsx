@@ -41,10 +41,10 @@ const Navigation = ({ setShowDropdown }) => {
                 </div>
                 {currentUser ?
                     <div>
-                        <div className='dropdown-navigation-element'>
-                            <RoundButton onClick={() => goToCurrentUserPage()} icon={<AiOutlineUser />} text={'User profile / settings'} />
+                        <div className='dropdown-navigation-element' onClick={() => goToCurrentUserPage()}>
+                            <RoundButton icon={<AiOutlineUser />} text={'User profile / settings'} />
                         </div>
-                        <div className='dropdown-navigation-element'>
+                        <div className='dropdown-navigation-element' onClick={handleLogout}>
                             <RoundButton onClick={handleLogout} icon={<GiExitDoor />} text={'Log out'} />
                         </div>
                     </div> : null

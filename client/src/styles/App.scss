@@ -165,6 +165,24 @@ body.dark-mode {
     }
   }
 
+  @media (max-width: 40em) {
+    .message {
+      .message-block {
+        .point-right {
+          border-left: 5px solid $primary-dark;
+        }
+
+        .point-left {
+          border-right: 5px solid $base-second-dark;
+        }
+
+        .message-time {
+          color: $grey-text-dark;
+        }
+      }
+    }
+  }
+
   .modal-content {
     background-color: $base-second-dark;
     box-shadow: 0 0 50px rgba(black, 0.5);

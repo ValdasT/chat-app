@@ -6,11 +6,12 @@ const CustomButton = ({
     children,
     inverted,
     icon,
+    infield,
     buttonSpinner,
     ...otherProps
 }) => (
         <button
-            className={`${inverted ? "inverted" : ""} custom-button`}
+            className={`${infield ? "input-button" : ""} ${inverted ? "inverted" : ""} custom-button`}
             {...otherProps}
         >
             {icon || buttonSpinner ? <div className='button-icon'>{buttonSpinner ? <SpinnerSmall /> : icon} </div> : null}
