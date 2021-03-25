@@ -1,26 +1,11 @@
-import React, { createContext, useReducer, memo, useState } from 'react';
+import React, { createContext, useReducer, memo, useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { saveMessage } from '../services/ApiCalls'
-import {enterChat, sendMessage} from '../services/SocketsFront'
+import useSockets from "../components/UseSockets/UseSockets";
 
 // Initial state
 const initialState = {
-    chatMessages: [
-        // {
-        //     id: uuidv4(),
-        //     createdAt: Date.now(),
-        //     creator: 'Johan Super',
-        //     message: `Hello dear friend!`
-
-        // },
-        // {
-        //     id: uuidv4(),
-        //     createdAt: Date.now(),
-        //     creator: 'me',
-        //     message: ` whoooop whooop!!!`
-
-        // },
-    ],
+    chatMessages: [],
     chatDoc: {}
 }
 
@@ -60,30 +45,33 @@ export const MessageContext = createContext(initialState);
 
 // Provider component
 export const MessageProvider = memo(({ children }) => {
-    // const { showAlert } = useContext(GlobalContext);
-    // const { user } = useUserSession();
     const [state, dispatch] = useReducer(messageReducer, initialState);
     const [loadingMessages, setLoadingMessages] = useState(false);
     const [loadingFriends, setLoadingFriends] = useState(false);
+    const [friendMessage, setFriendMessage] = useState();
+    const { sendMessage, messageFromSocket } = useSockets();
 
     // Actions
     const addMessage = async (message, user) => {
-        console.log('addd message')
-        sendMessage(message)
-        // let chatMessage = {
-        //     id: uuidv4(),
-        //     createdAt: Date.now(),
-        //     creator: user._id,
-        //     message: message
-        // }
+        let chatMessage = {
+            id: uuidv4(),
+            createdAt: Date.now(),
+            creator: user._id,
+            message: message
+        }
 
+        sendMessage(chatMessage, state.chatDoc)
         // await saveMessage(chatMessage, state.chatDoc)
-
-        // dispatch({
-        //     type: 'ADD_MESSAGE',
-        //     payload: chatMessage
-        // });
     }
+
+    useEffect(() => {
+        if (messageFromSocket.user && messageFromSocket.user.room === state.chatDoc._id) {
+            dispatch({
+                type: 'ADD_MESSAGE',
+                payload: messageFromSocket.message
+            });
+        }
+    }, [messageFromSocket, state.chatDoc])
 
     const editMessage = (message, id) => {
         message.id = id;
@@ -95,53 +83,21 @@ export const MessageProvider = memo(({ children }) => {
     }
 
     const setMessages = (user, messages) => {
-        enterChat(user, messages )
         dispatch({
             type: 'SET_MESSAGES',
             payload: messages
         });
     }
 
-    const getAnswer = async (message, recomendation) => {
-        // try {
-        //     let token = getLastToken(state.chatMessages);
-        //     let tempMessage = {
-        //         question: message,
-        //         loading: true,
-        //         id: uuidv4(),
-        //         token:token
-        //     }
-        //     addMessage({
-        //         message: tempMessage,
-        //         sender: 'hugo',
-        //     });
-
-        //     let res = await sendAnswer(tempMessage, token, user, recomendation);
-        //     if (res.id) {
-        //         editMessage({
-        //             message: res,
-        //             sender: 'hugo',
-        //         }, res.id);
-        //     } else {
-        //         addMessage({
-        //             message: res,
-        //             sender: 'hugo',
-        //         });
-        //     }
-        // } catch (err) {
-        //     showAlert('danger', err.name, err.message);
-        // }
-    };
-
     return (<MessageContext.Provider value={{
         chatMessages: state.chatMessages,
         addMessage,
         setMessages,
-        getAnswer,
         loadingMessages,
         setLoadingMessages,
         loadingFriends,
-        setLoadingFriends
+        setLoadingFriends,
+        setFriendMessage
     }}>
         {children}
     </MessageContext.Provider>);

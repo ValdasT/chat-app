@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react"
 import { handleError } from '../services/ErrorHandler'
 import { auth, googleProvider, facebookProvider } from "../utils/firebase"
 import { createUser, createSession, getToken, getUserForInint, logOutUser } from '../services/ApiCalls'
+import useSockets from "../components/UseSockets/UseSockets";
 
 const AuthContext = React.createContext()
 
@@ -12,6 +13,7 @@ export function useAuth() {
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
+    const { enterChats } = useSockets();
 
     const signUp = async (email, password, displayName) => {
         try {
@@ -103,11 +105,18 @@ export const AuthProvider = ({ children }) => {
                 setLoading(false)
             }
         })()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const getUserInfoFromDb = async () => {
-        let userProfile = await getUserForInint()
-        setCurrentUser(userProfile);
+        try {
+            let userProfile = await getUserForInint()
+            await enterChats(userProfile)
+            setCurrentUser(userProfile);
+        } catch (err) {
+            console.log(err);
+            throw handleError(err)
+        }
     }
 
     const value = {

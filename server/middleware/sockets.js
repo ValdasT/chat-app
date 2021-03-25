@@ -8,70 +8,37 @@ const init = (server) => {
 
     const io = socketio(server);
 
-    logger.info(`[${moduleName}] Initializing...`);
-
-
-    //     let interval;
-    // io.on("connection", (socket) => {
-    //   console.log("New client connected");
-    //   if (interval) {
-    //     clearInterval(interval);
-    //   }
-
-    //  interval = setInterval(() => getApiAndEmit(socket), 1000);
-    //   socket.on("disconnect", () => {
-    //     console.log("Client disconnected");
-    //     clearInterval(interval);
-    //   });
-    // });
-
-    // const getApiAndEmit = socket => {
-    //     const response = new Date();
-    //     console.log(response);
-    //     // Emitting a new message. Will be consumed by the client
-    //     socket.emit("FromAPI", response);
-    // };
-
-
-
+    logger.info(`[${moduleName}] Initializing sockets...`);
 
     io.on('connection', (socket) => {
-        console.log('New WebSocket connection')
+        console.log(`New WebSocket connection: ${socket.id}`)
 
 
         socket.on('join', (options, callback) => {
-            console.log('=================1')
-            console.log(options)
-            console.log('dsdsdsdsdssdsdsd')
-            console.log(socket.id)
-            console.log('=================')
-            const { error, user } = addUser({ id: socket.id, ...options })
+
+            const { error, users } = addUser({ id: socket.id, ...options })
 
             if (error) {
                 console.log(error)
                 callback(error)
             }
-
-            socket.join(user.room)
-
-            socket.emit('message', generateMessage(user.username, 'Welcome!'))
-            socket.broadcast.to(user.room).emit('message', generateMessage(user.username, `${user.username} has joined!`))
-            io.to(user.room).emit('roomData', {
-                room: user.room,
-                users: getUsersInRoom(user.room)
+            options.rooms.forEach(room => {
+                socket.join(room)
+                // socket.emit('message', generateMessage(user.username, 'Welcome!'))
+                // socket.broadcast.to(user.room).emit('message', generateMessage(user.username, `${user.username} has joined!`))
+                // io.to(user.room).emit('roomData', {
+                //     room: user.room,
+                //     users: getUsersInRoom(user.room)
+                // })
             })
-
             callback()
         })
 
 
-        socket.on('sendMessage', (message, callback) => {
-            const user = getUser(socket.id)
-
-            console.log(user)
-            console.log('send messssssssage')
-            socket.broadcast.to(user.room).emit('message', generateMessage(user.username, message))
-            io.to(user.room).emit('message', generateMessage(user.username, message))
+        socket.on('sendMessage', ({ message, chatRoom }, callback) => {
+            const user = getUser(socket.id, chatRoom._id)
+            // socket.broadcast.to(user.room).emit('message', generateMessage(user.username, message))
+            io.to(user.room).emit('message', { user, message })
             callback()
         })
 
@@ -82,96 +49,63 @@ const init = (server) => {
         // })
 
         socket.on('disconnect', () => {
-            const user = removeUser(socket.id)
+            const user = removeUsers(socket.id)
+            // console.log(`remove user` + user.username)
 
             if (user) {
-                io.to(user.room).emit('message', generateMessage(user.username, `${user.username} has left!`))
-                io.to(user.room).emit('roomData', {
-                    room: user.room,
-                    users: getUsersInRoom(user.room)
-                })
+                io.to(user.room).emit('message', `${user.username} has left!`)
+                // io.to(user.room).emit('roomData', {
+                //     room: user.room,
+                //     users: getUsersInRoom(user.room)
+                // })
             }
         })
 
-        const generateMessage = (username, text) => {
-            return {
-                username,
-                text,
-                createdAt: new Date().getTime()
-            }
-        }
-
-        const addUser = ({ id, username, room }) => {
+        const addUser = ({ id, username, rooms }) => {
             // Clean the data
             username = username.trim().toLowerCase()
-            room = room.trim().toLowerCase()
 
             // Validate the data
-            if (!username || !room) {
+            if (!username || !rooms) {
                 return {
                     error: 'Username and room are required!'
                 }
             }
 
-            // Check for existing user
-            // const existingUser = users.find((user) => {
-            //     return user.room === room && user.username === username
-            // })
+            if (rooms.length) {
+                rooms.forEach(room => {
+                    room = room.trim().toLowerCase()
+                    let user = { id, username, room }
+                    users.push(user)
 
-            // // Validate username
-            // if (existingUser) {
-            //     return {
-            //         error: 'Username is in use!'
-            //     }
-            // }
-
-
-            //Check for existing user
-            const existingUser = users.find((user) => {
-                return user.username === username
-            })
-
-            // Validate username
-            if (existingUser) {
-                console.log(`this is user is in the list`)
-                users = removeUser(username)
+                })
             }
-            // Store user
-            const user = { id, username, room }
-            users.push(user)
+            return { users }
+        }
+
+        const removeUsers = (id) => {
+            console.log('remove ' + id)
+            users = users.filter(user => user.id !== id)
             console.log(users)
-            return { user }
+            return users
+            // const index = users.findIndex((user) => user.username === username)
+
+            // if (index !== -1) {
+            //     console.log('<><><><><><><><' + index)
+            //     let res = users.splice(index - 1, 1)
+            //     return res
+            // } else return users
         }
 
-        const removeUser = (username) => {
-            console.log('remove ' + username)
-            const index = users.findIndex((user) => user.username === username)
 
-            if (index !== -1) {
-                console.log('<><><><><><><><' + index)
-                let res = users.splice(index - 1, 1)
-                return res
-            } else return users
-        }
-
-        const getUsersInRoom = (room) => {
-            //   room = room.trim().toLowerCase()
-            let result = users.filter((user) => user.room === room)
-            return result
-        }
-
-        const getUser = (id) => {
-            let res = users.find((user) => user.id === id)
+        const getUser = (id, room) => {
+            let res = users.find((user) => user.id === id && user.room === room)
             return res
         }
-        // const index = users.findIndex((user) => user.id === id)
 
-        // if (index !== -1) {
-        //     return users.splice(index, 1)[0]
-        // }
     })
 
-    logger.info(`[${moduleName}] Initializing... Done.`);
+    logger.info(`[${moduleName}] Initializing sockets... Done.`);
 }
 
 module.exports = {
