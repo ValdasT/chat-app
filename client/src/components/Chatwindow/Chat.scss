@@ -8,7 +8,7 @@
 
 .message-area {
   padding: 20px 10px;
-  max-height: 80vh;
+  max-height: 82vh;
   width: 100%;
   float: right;
   overflow-y: auto;
@@ -26,7 +26,7 @@
 }
 
 .no-messages {
-  animation: scale-in-picture 0.8s both;
+  @include animation("scale-in-picture 0.8s both");
   text-align: center;
   padding-top: 15%;
 }
@@ -37,20 +37,18 @@
   }
 }
 
+@keyframes message-entrance {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .message {
   padding-bottom: 5px;
-  @include animation("slide-up 0.3s");
-
-  @include keyframes(slide-up) {
-    0% {
-      transform: translateY(30px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
+  @include animation("message-entrance 0.3s");
 
   .message-block {
     display: flex;
