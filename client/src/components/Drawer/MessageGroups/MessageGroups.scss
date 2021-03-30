@@ -34,7 +34,7 @@
       width: 40px;
       .message-picture {
         margin: 0 5px;
-        animation: scale-in-picture 0.5s both;
+        animation: scale-in-picture 0.2s both;
         height: 30px;
         width: 30px;
         border-radius: 50%;
@@ -46,14 +46,18 @@
       }
     }
 
-    .message-name {
-      font-size: 12px;
-      animation: text-focus-in 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
-      padding: 5px;
-      justify-content: center;
-      align-items: center;
-      display: flex;
+    .chat-info {
+      display: block;
+      animation: text-focus-in 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+      .message-name {
+        font-size: 12px;
+      }
+
+      .last-message {
+        font-size: 12px;
+      }
     }
+
     &:hover {
       cursor: pointer;
       background-color: $light-grey-transperant;
@@ -72,7 +76,7 @@
       align-items: center;
       display: flex;
     }
-    .message-name {
+    .chat-info {
       display: none;
     }
     &:hover {
@@ -106,9 +110,15 @@
         height: 30px;
         width: 30px;
       }
-      .message-name {
-        font-size: 12px;
-        padding: 0 5px;
+
+      .chat-info {
+        .message-name {
+          font-size: 12px;
+        }
+
+        .last-message {
+          font-size: 10px;
+        }
       }
       .message-name-small {
         visibility: hidden;

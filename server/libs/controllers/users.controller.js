@@ -85,7 +85,7 @@ const getAllFriends = async (args) => {
     const { user } = args
     try {
         logger.info(`[${moduleName}] Get all friends...`);
-        let res = []
+        let friendsWithLastMessage = []
         const userDoc = await User.findById(user);
         if (userDoc.friends.length) {
             let friendsDocs = await Friend.find().where('_id').in(userDoc.friends).exec()
@@ -97,11 +97,30 @@ const getAllFriends = async (args) => {
                     return e.friend
                 }
             })
-            res = await User.find().where('_id').in(userProfileIds).select({
-                "name": 1, "email": 1, "surname": 1, "_id": 1, "picColor": 1
+            let friendsProfiles = await User.find().where('_id').in(userProfileIds).select({
+                "name": 1, "email": 1, "surname": 1, "_id": 1, "picColor": 1, 'messages': 1
             });
+            const usersChatsLastMessages = await Chat.find({ _id: { $in: userDoc.messages } }).select({ "messages": { "$slice": -1 } }).populate('messages');
+
+            friendsProfiles.forEach(profile => {
+                profile.messages.forEach(chatId => {
+                    usersChatsLastMessages.forEach(myChat => {
+                        if (chatId.toString() === myChat._id.toString()) {
+                            friendsWithLastMessage.push({
+                                profile: profile,
+                                lastMessage: myChat.messages.length ? myChat.messages[0] : {
+                                    message: '',
+                                    createdAt: '0'
+                                },
+                                chatId: myChat._id
+                            })
+                        }
+                    })
+                })
+            })
         }
-        return res
+
+        return friendsWithLastMessage.sort((a, b) => a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt)).reverse()
     } catch (err) {
         logger.error(`[${moduleName}] Get all friends error: `, err);
         throw err;

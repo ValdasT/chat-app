@@ -6,6 +6,7 @@ import { useAuth } from "../../../context/AuthContext"
 import { MessageContext } from '../../../context/MessageContext';
 import { getFriends, getMessages } from '../../../services/ApiCalls'
 import { RiEmotionSadLine } from 'react-icons/ri'
+import useSockets from "../../UseSockets/UseSockets";
 
 import './MessageGroups.scss'
 
@@ -13,18 +14,19 @@ const MessageGroups = ({ openDrawer }) => {
     const { showModal } = useContext(GlobalContext);
     const { currentUser } = useAuth()
     const { setMessages, loadingMessages, setLoadingMessages, setLoadingFriends } = useContext(MessageContext)
-    const [friendsMessages, setFriendMessages] = useState([])
+    const [friendsAndMessages, setFriendsAndMessages] = useState([])
     const [userMessages, setUserMessages] = useState('')
+    const { messageFromSocket } = useSockets();
 
     useEffect(() => {
         (async () => {
             try {
                 setLoadingMessages(true)
                 setLoadingFriends(true)
-                let users = await getFriends(currentUser._id)
-                setFriendMessages(users)
-                if (users.length) {
-                    await openMessage(users[0])
+                let friends = await getFriends(currentUser._id)
+                setFriendsAndMessages(friends)
+                if (friends.length) {
+                    await openMessage(friends[0])
                 } else {
                     setMessages(currentUser, { messages: [] })
                 }
@@ -39,12 +41,24 @@ const MessageGroups = ({ openDrawer }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser])
 
+    useEffect(() => {
+        if (messageFromSocket && messageFromSocket.user) {
+            friendsAndMessages.map(e => {
+                if (e.chatId === messageFromSocket.user.room) {
+                    return e.lastMessage = messageFromSocket.message
+                } return e
+            })
+            friendsAndMessages.sort((a, b) => a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt) || a.chatId.localeCompare(b.chatId)).reverse()
+        }
+
+    }, [messageFromSocket, friendsAndMessages])
+
     const openMessage = async user => {
-        if (user._id !== userMessages) {
-            setUserMessages(user._id)
+        if (user.profile._id !== userMessages) {
+            setUserMessages(user.profile._id)
             try {
                 setLoadingFriends(true)
-                let messages = await getMessages(user, currentUser)
+                let messages = await getMessages(user.profile, currentUser)
                 setTimeout(() => {
                     setLoadingFriends(false)
                     setMessages(currentUser, messages)
@@ -58,10 +72,11 @@ const MessageGroups = ({ openDrawer }) => {
 
     return (
         <div className='all-friends'>
-            {!loadingMessages ? friendsMessages.length ? friendsMessages.map(friend => (
+            {!loadingMessages ? friendsAndMessages.length ? friendsAndMessages.map(friend => (
                 <OneMessage
                     openDrawer={openDrawer}
-                    key={friend._id}
+                    currentUser={currentUser}
+                    key={friend.profile._id}
                     friend={friend}
                     openMessage={openMessage} />)) :
                 openDrawer ?

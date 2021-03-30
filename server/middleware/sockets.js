@@ -38,7 +38,9 @@ const init = (server) => {
         socket.on('sendMessage', ({ message, chatRoom }, callback) => {
             const user = getUser(socket.id, chatRoom._id)
             // socket.broadcast.to(user.room).emit('message', generateMessage(user.username, message))
-            io.to(user.room).emit('message', { user, message })
+            if (user) {
+                io.to(user.room).emit('message', { user, message })
+            }
             callback()
         })
 

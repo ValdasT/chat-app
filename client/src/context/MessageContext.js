@@ -55,13 +55,14 @@ export const MessageProvider = memo(({ children }) => {
     const addMessage = async (message, user) => {
         let chatMessage = {
             id: uuidv4(),
-            createdAt: Date.now(),
+            createdAt: Date.now().toString(),
             creator: user._id,
             message: message
         }
-
-        sendMessage(chatMessage, state.chatDoc)
-        // await saveMessage(chatMessage, state.chatDoc)
+        if (state.chatDoc._id) {
+            sendMessage(chatMessage, state.chatDoc)
+            // await saveMessage(chatMessage, state.chatDoc) 
+        }
     }
 
     useEffect(() => {
