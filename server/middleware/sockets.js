@@ -22,15 +22,19 @@ const init = (server) => {
                 console.log(error)
                 callback(error)
             }
-            options.rooms.forEach(room => {
-                socket.join(room)
-                // socket.emit('message', generateMessage(user.username, 'Welcome!'))
-                // socket.broadcast.to(user.room).emit('message', generateMessage(user.username, `${user.username} has joined!`))
-                // io.to(user.room).emit('roomData', {
-                //     room: user.room,
-                //     users: getUsersInRoom(user.room)
-                // })
-            })
+
+            if (options && options.rooms) {
+                options.rooms.forEach(room => {
+                    socket.join(room)
+                    // socket.emit('message', generateMessage(user.username, 'Welcome!'))
+                    // socket.broadcast.to(user.room).emit('message', generateMessage(user.username, `${user.username} has joined!`))
+                    // io.to(user.room).emit('roomData', {
+                    //     room: user.room,
+                    //     users: getUsersInRoom(user.room)
+                    // })
+                })
+            }
+          
             callback()
         })
 

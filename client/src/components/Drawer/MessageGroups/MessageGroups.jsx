@@ -4,7 +4,7 @@ import OneMessage from './OneMessage'
 import SpinnerSmall from '../../Spinner/SpinnerSmall'
 import { useAuth } from "../../../context/AuthContext"
 import { MessageContext } from '../../../context/MessageContext';
-import { getFriends, getMessages } from '../../../services/ApiCalls'
+import { getChats, getMessages } from '../../../services/ApiCalls'
 import { RiEmotionSadLine } from 'react-icons/ri'
 import useSockets from "../../UseSockets/UseSockets";
 
@@ -14,7 +14,7 @@ const MessageGroups = ({ openDrawer }) => {
     const { showModal } = useContext(GlobalContext);
     const { currentUser } = useAuth()
     const { setMessages, loadingMessages, setLoadingMessages, setLoadingFriends } = useContext(MessageContext)
-    const [friendsAndMessages, setFriendsAndMessages] = useState([])
+    const [chatsAndMessages, setChatsAndMessages] = useState([])
     const [userMessages, setUserMessages] = useState('')
     const { messageFromSocket } = useSockets();
 
@@ -23,12 +23,12 @@ const MessageGroups = ({ openDrawer }) => {
             try {
                 setLoadingMessages(true)
                 setLoadingFriends(true)
-                let friends = await getFriends(currentUser._id)
-                setFriendsAndMessages(friends)
-                if (friends.length) {
-                    await openMessage(friends[0])
+                let chats = await getChats(currentUser._id)
+                if (chats.length) {
+                    setChatsAndMessages(chats)
+                    await openMessage(chats[0])
                 } else {
-                    setMessages(currentUser, { messages: [] })
+                    setMessages({ messages: [] })
                 }
                 setLoadingMessages(false)
                 setLoadingFriends(false)
@@ -43,25 +43,25 @@ const MessageGroups = ({ openDrawer }) => {
 
     useEffect(() => {
         if (messageFromSocket && messageFromSocket.user) {
-            friendsAndMessages.map(e => {
-                if (e.chatId === messageFromSocket.user.room) {
-                    return e.lastMessage = messageFromSocket.message
+            chatsAndMessages.map(e => {
+                if (e._id === messageFromSocket.user.room) {
+                    return e.message = messageFromSocket.message
                 } return e
             })
-            friendsAndMessages.sort((a, b) => a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt) || a.chatId.localeCompare(b.chatId)).reverse()
+            chatsAndMessages.sort((a, b) => a.message.createdAt.localeCompare(b.message.createdAt) || a._id.localeCompare(b._id)).reverse()
         }
 
-    }, [messageFromSocket, friendsAndMessages])
+    }, [messageFromSocket, chatsAndMessages])
 
-    const openMessage = async user => {
-        if (user.profile._id !== userMessages) {
-            setUserMessages(user.profile._id)
+    const openMessage = async chat => {
+        if (chat._id !== userMessages) {
+            setUserMessages(chat._id)
             try {
                 setLoadingFriends(true)
-                let messages = await getMessages(user.profile, currentUser)
+                let messages = await getMessages(chat._id)
                 setTimeout(() => {
                     setLoadingFriends(false)
-                    setMessages(currentUser, messages)
+                    setMessages(messages, chat)
                 }, 100)
             } catch (err) {
                 setLoadingFriends(false)
@@ -72,12 +72,12 @@ const MessageGroups = ({ openDrawer }) => {
 
     return (
         <div className='all-friends'>
-            {!loadingMessages ? friendsAndMessages.length ? friendsAndMessages.map(friend => (
+            {!loadingMessages ? chatsAndMessages.length ? chatsAndMessages.map(chat => (
                 <OneMessage
                     openDrawer={openDrawer}
                     currentUser={currentUser}
-                    key={friend.profile._id}
-                    friend={friend}
+                    key={chat._id}
+                    chat={chat}
                     openMessage={openMessage} />)) :
                 openDrawer ?
                     <div className='no-friends'>

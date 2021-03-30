@@ -7,8 +7,7 @@ import otherLogo from '../../img/profile2.jpg'
 import { showTimeFromMS } from '../../utils/utils'
 import './Chat.scss';
 
-const ChatBubble = memo(({ message, currentUser }) => {
-
+const ChatBubble = memo(({ message, chatInfo, currentUser }) => {
     return (
         <div>
             {message.creator === currentUser._id ?

@@ -91,10 +91,24 @@ router.post('/get-friends', async (req, res, next) => {
     }
 });
 
+router.post('/get-chats', async (req, res, next) => {
+    const data = {
+        user: req.body.user
+    }
+    try {
+        logger.info(`[${moduleName}] Get all chats...`);
+        let users = await userController.getAllChatsInfo(data)
+        logger.info(`[${moduleName}] Get all chats... Done.`);
+        if (users) res.status(200).send(users);
+    } catch (err) {
+        logger.error(`[${moduleName}] Get all chats Error: `, err);
+        return next(err);
+    }
+});
+
 router.post('/get-messages', async (req, res, next) => {
     const data = {
-        friend: req.body.friend,
-        user: req.body.user
+        chatId: req.body.chatId,
     }
     try {
         logger.info(`[${moduleName}] Get messages...`);

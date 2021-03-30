@@ -82,45 +82,87 @@ const getAllInvites = async (invites) => {
 }
 
 const getAllFriends = async (args) => {
+    // const { user } = args
+    // try {
+    //     logger.info(`[${moduleName}] Get all friends...`);
+    //     let friendsWithLastMessage = []
+    //     const userDoc = await User.findById(user);
+    //     if (userDoc.friends.length) {
+    //         let friendsDocs = await Friend.find().where('_id').in(userDoc.friends).exec()
+    //         logger.info(`[${moduleName}] Get all friends...Done. Found:${friendsDocs.length}`);
+    //         let userProfileIds = friendsDocs.map(e => {
+    //             if (e.friend.toString() === user) {
+    //                 return e.creator
+    //             } else {
+    //                 return e.friend
+    //             }
+    //         })
+    //         let friendsProfiles = await User.find().where('_id').in(userProfileIds).select({
+    //             "name": 1, "email": 1, "surname": 1, "_id": 1, "picColor": 1, 'messages': 1
+    //         });
+
+    //         console.log(friendsProfiles)
+    //         console.log("<><><><><><><")
+    //         const usersChatsLastMessages = await Chat.find({ _id: { $in: userDoc.messages } }).select({ "messages": { "$slice": -1 } }).populate('messages');
+
+    //         friendsProfiles.forEach(profile => {
+    //             profile.messages.forEach(chatId => {
+    //                 usersChatsLastMessages.forEach(myChat => {
+    //                     if (chatId.toString() === myChat._id.toString()) {
+    //                         friendsWithLastMessage.push({
+    //                             profile: profile,
+    //                             lastMessage: myChat.messages.length ? myChat.messages[0] : {
+    //                                 message: '',
+    //                                 createdAt: '0'
+    //                             },
+    //                             chatId: myChat._id
+    //                         })
+    //                     }
+    //                 })
+    //             })
+    //         })
+    //     }
+
+    //     return friendsWithLastMessage.sort((a, b) => a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt)).reverse()
+    // } catch (err) {
+    //     logger.error(`[${moduleName}] Get all friends error: `, err);
+    //     throw err;
+    // }
+}
+
+const getAllChatsInfo = async (args) => {
     const { user } = args
+    let res = []
     try {
-        logger.info(`[${moduleName}] Get all friends...`);
-        let friendsWithLastMessage = []
+        logger.info(`[${moduleName}] Get all chats info...`);
         const userDoc = await User.findById(user);
-        if (userDoc.friends.length) {
-            let friendsDocs = await Friend.find().where('_id').in(userDoc.friends).exec()
-            logger.info(`[${moduleName}] Get all friends...Done. Found:${friendsDocs.length}`);
-            let userProfileIds = friendsDocs.map(e => {
-                if (e.friend.toString() === user) {
-                    return e.creator
-                } else {
-                    return e.friend
+        const usersChatsWithLastMessages = await Chat.find({ _id: { $in: userDoc.chats } }).select({ "messages": { "$slice": -1 } }).populate('messages').populate('users')
+        usersChatsWithLastMessages.forEach(chats => {
+            let userWithOutCurrentUser = []
+            chats.users.forEach(user => {
+                if (user._id.toString() !== userDoc._id.toString()) {
+                    userWithOutCurrentUser.push({
+                        _id: user._id,
+                        email: user.email,
+                        name: user.name,
+                        surname: user.surname,
+                        picColor: user.picColor
+                    })
                 }
             })
-            let friendsProfiles = await User.find().where('_id').in(userProfileIds).select({
-                "name": 1, "email": 1, "surname": 1, "_id": 1, "picColor": 1, 'messages': 1
-            });
-            const usersChatsLastMessages = await Chat.find({ _id: { $in: userDoc.messages } }).select({ "messages": { "$slice": -1 } }).populate('messages');
-
-            friendsProfiles.forEach(profile => {
-                profile.messages.forEach(chatId => {
-                    usersChatsLastMessages.forEach(myChat => {
-                        if (chatId.toString() === myChat._id.toString()) {
-                            friendsWithLastMessage.push({
-                                profile: profile,
-                                lastMessage: myChat.messages.length ? myChat.messages[0] : {
-                                    message: '',
-                                    createdAt: '0'
-                                },
-                                chatId: myChat._id
-                            })
-                        }
-                    })
-                })
+            res.push({
+                _id: chats._id,
+                users: userWithOutCurrentUser,
+                message: chats.messages.length ? chats.messages[0] : {
+                    message: '',
+                    createdAt: '0'
+                },
+                createdAt: chats.createdAt
             })
-        }
+        })
+        logger.info(`[${moduleName}] Get all chats info...`);
+        return res.sort((a, b) => a.message.createdAt.localeCompare(b.message.createdAt)).reverse()
 
-        return friendsWithLastMessage.sort((a, b) => a.lastMessage.createdAt.localeCompare(b.lastMessage.createdAt)).reverse()
     } catch (err) {
         logger.error(`[${moduleName}] Get all friends error: `, err);
         throw err;
@@ -128,42 +170,12 @@ const getAllFriends = async (args) => {
 }
 
 const getAllMessages = async (args) => {
-    const { friend, user } = args
+    const { chatId } = args
     try {
         logger.info(`[${moduleName}] Get messages...`);
-        const friendDoc = await User.findById(friend._id);
-        const userDoc = await User.findById(user._id);
-
-        if (!friendDoc || !userDoc) {
-            throw new Error('User not found.');
-        }
-        let currentChat;
-        if (userDoc.messages.length && friendDoc.messages.length) {
-            userDoc.messages.forEach(e => {
-                friendDoc.messages.forEach(el => {
-                    if (el.toString() === e.toString()) {
-                        currentChat = e
-                    }
-                })
-            })
-        }
-        if (!currentChat) {
-            logger.info(`[${moduleName}] Create and return new chat doc`);
-            const chat = new Chat({
-                createdAt: new Date().getTime(),
-            });
-
-            await chat.save();
-            friendDoc.messages.push(chat);
-            userDoc.messages.push(chat);
-            await friendDoc.save()
-            await userDoc.save()
-            return { messages: [] }
-        } else {
-            logger.info(`[${moduleName}] Return old chat doc`);
-            const chatMessages = await Chat.findById(currentChat).populate('messages');
-            return chatMessages
-        }
+        const chatMessages = await Chat.findById(chatId).populate('messages');
+        logger.info(`[${moduleName}] Get messages... Done`);
+        return chatMessages
     } catch (err) {
         logger.error(`[${moduleName}] Get all messages error: `, err);
         throw err;
@@ -296,6 +308,15 @@ const acceptRequest = async data => {
             })
         })
         await Invite.deleteOne({ _id: currentInvite._id });
+
+        const chat = new Chat({
+            createdAt: new Date().getTime(),
+        });
+        chat.users.push(creator)
+        chat.users.push(user)
+        await chat.save();
+        creator.chats.push(chat);
+        user.chats.push(chat);
         creator.friends.push(friend);
         user.friends.push(friend);
         creator.invites.pull(currentInvite._id);
@@ -440,6 +461,7 @@ module.exports = {
     getUserById,
     updateUser,
     getAllFriends,
+    getAllChatsInfo,
     searchUsers,
     createRequest,
     acceptRequest,

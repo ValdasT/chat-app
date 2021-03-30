@@ -43,10 +43,10 @@ const userSchema = new Schema({
             ref: 'Friend'
         }
     ],
-    messages: [
+    chats: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Message'
+            ref: 'Chat'
         }
     ],
     invites: [

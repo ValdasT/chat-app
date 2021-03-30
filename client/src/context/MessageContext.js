@@ -6,7 +6,8 @@ import useSockets from "../components/UseSockets/UseSockets";
 // Initial state
 const initialState = {
     chatMessages: [],
-    chatDoc: {}
+    chatDoc: {},
+    chatInfo: {}
 }
 
 // Reducer
@@ -25,8 +26,9 @@ const messageReducer = (state, action) => {
         case 'SET_MESSAGES':
             return {
                 ...state,
-                chatMessages: [...action.payload.messages],
-                chatDoc: { ...action.payload }
+                chatMessages: [...action.payload.messages.messages],
+                chatDoc: { ...action.payload.messages },
+                chatInfo: { ...action.payload.chatInfo }
 
             }
         case 'EDIT_MESSAGE':
@@ -54,7 +56,7 @@ export const MessageProvider = memo(({ children }) => {
     // Actions
     const addMessage = async (message, user) => {
         let chatMessage = {
-            id: uuidv4(),
+            _id: uuidv4(),
             createdAt: Date.now().toString(),
             creator: user._id,
             message: message
@@ -83,15 +85,21 @@ export const MessageProvider = memo(({ children }) => {
         });
     }
 
-    const setMessages = (user, messages) => {
+    const setMessages = (messages, chatInfo) => {
+        let chat = {
+            messages,
+            chatInfo
+        }
         dispatch({
             type: 'SET_MESSAGES',
-            payload: messages
+            payload: chat
         });
     }
 
     return (<MessageContext.Provider value={{
         chatMessages: state.chatMessages,
+        chatDoc: state.chatDoc,
+        chatInfo: state.chatInfo,
         addMessage,
         setMessages,
         loadingMessages,

@@ -33,7 +33,7 @@ const useSockets = () => {
 
     const enterChats = (user) => {
         return new Promise((resolve, reject) => {
-            let rooms = user.messages;
+            let rooms = user.chats;
             let username = user._id
             socket.emit('join', { username, rooms }, (err, res) => {
                 if (err) {

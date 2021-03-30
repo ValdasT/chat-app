@@ -6,7 +6,14 @@ const reactionSchema = new Schema({
         type: String,
         required: true
     },
-    createdAt: Date,
+    messages: {
+        type: Schema.Types.ObjectId,
+        ref: 'Message'
+    },
+    createdAt: {
+        type: String,
+        required: true
+    },
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'User'

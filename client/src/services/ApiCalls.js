@@ -54,10 +54,16 @@ const getFriends = async (user) => {
     return await performCall('POST', '/users/get-friends', body)
 };
 
-const getMessages = async (friend, user) => {
+const getChats = async (user) => {
     const body = JSON.stringify({
-        friend: friend,
         user: user
+    })
+    return await performCall('POST', '/users/get-chats', body)
+};
+
+const getMessages = async (chatId) => {
+    const body = JSON.stringify({
+        chatId
     })
     return await performCall('POST', '/users/get-messages', body)
 };
@@ -144,6 +150,7 @@ export {
     updateUser,
     getUser,
     getFriends,
+    getChats,
     searchUsers,
     sendRequest,
     acceptRequest,
