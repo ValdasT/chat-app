@@ -4,7 +4,7 @@ import UserTyping from '../Spinner/UserTyping'
 import SpinnerSmall from '../Spinner/SpinnerSmall'
 import { MessageContext } from '../../context/MessageContext';
 import { useAuth } from "../../context/AuthContext"
-import { RiEmotionSadLine } from 'react-icons/ri'
+import { RiEmotionSadLine, RiTestTubeFill } from 'react-icons/ri'
 import useSockets from "../UseSockets/UseSockets";
 
 const ChatList = () => {
@@ -29,7 +29,7 @@ const ChatList = () => {
                             <RiEmotionSadLine className='message-icon' style={{ fontSize: "30px" }} />
                             <div>There are no messages.</div>
                         </div>}
-                    {userTypingFromSocket ?
+                    {userTypingFromSocket && userTypingMessage.map(e => { if (e.room === chatInfo._id) return e.message })[0] ?
                         <div className='user-typing-container'>
                             <div className='user-typing-text'>{userTypingMessage.map(e => { if (e.room === chatInfo._id) return e.message })}:</div>
                             <UserTyping />

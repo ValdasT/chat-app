@@ -11,17 +11,21 @@ const useSockets = () => {
 
     useEffect(() => {
         // Listens for incoming messages
+        let isMounted = true;
         socket.on('message', (message) => {
-            if (friendTyping.length) {
-                friendTyping = friendTyping.filter(el => el.userId !== message.user.username)
-                if (!friendTyping.length) {
-                    setUserTypingFromSocket(false)
-                } else {
-                    setUserTypingMessage(userTypingString(friendTyping))
+            if (isMounted) {
+                if (friendTyping.length) {
+                    friendTyping = friendTyping.filter(el => el.userId !== message.user.username)
+                    if (!friendTyping.length) {
+                        setUserTypingFromSocket(false)
+                    } else {
+                        setUserTypingMessage(userTypingString(friendTyping))
+                    }
                 }
+                setMessageFromSocket(message)
             }
-            setMessageFromSocket(message)
         })
+        return () => { isMounted = false };
     }, []);
 
     const removeElementFromArr = () => {
@@ -39,17 +43,21 @@ const useSockets = () => {
     }
 
     useEffect(() => {
+        let isMounted = true;
         (async () => {
             // Listens for user typing messages info
             socket.on('getUserTyping', async ({ userTyping }) => {
                 friendTyping.push(userTyping)
-                if (userTypingFromSocket !== true) {
-                    setUserTypingFromSocket(true)
-                    setUserTypingMessage(userTypingString(friendTyping))
+                if (isMounted) {
+                    if (userTypingFromSocket !== true) {
+                        setUserTypingFromSocket(true)
+                        setUserTypingMessage(userTypingString(friendTyping))
+                    }
+                    await removeElementFromArr()
                 }
-                await removeElementFromArr()
             })
         })()
+        return () => { isMounted = false };
     }, [])
 
     // Sends a message to the server that
@@ -62,7 +70,6 @@ const useSockets = () => {
                     alert(err)
                     reject(err)
                 }
-                console.log('Message delivered!')
                 resolve(res)
             })
         })
