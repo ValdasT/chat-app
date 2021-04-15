@@ -1,20 +1,34 @@
+@import "../../styles/Collors.scss";
+
 .wrapper {
-  padding: 15px;
+  padding:10px;
   width: 100px;
   position: relative;
   left: 50px;
   top: 15px;
   transform: translate(-50%, -50%);
-}
-
-.circle {
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  border-radius: 50%;
-  left: 15%;
-  transform-origin: 50%;
-  animation: circle .5s alternate infinite ease;
+  .circle {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    border-radius: 50%;
+    left: 15%;
+    transform-origin: 50%;
+    animation: circle .5s alternate infinite ease;
+  }
+  .shadow {
+    width: 10px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: rgba(177, 177, 177, 0.5);
+    position: absolute;
+    top: 33px;
+    transform-origin: 50%;
+    z-index: -1;
+    left: 15%;
+    filter: blur(1px);
+    animation: shadow .5s alternate infinite ease;
+  }
 }
 
 @keyframes circle {
@@ -23,17 +37,17 @@
     height: 5px;
     border-radius: 50px 50px 30px 30px;
     transform: scaleX(1.7);
-    background-color: #a6c8ff;
+    background-color: $action-light;
   }
   40% {
     height: 10px;
     border-radius: 50%;
     transform: scaleX(1);
-    background-color: #4589ff;
+    background-color: $primary-light-darker;
   }
   100% {
     top: 0%;
-    background-color: #0043ce;
+    background-color: $primary-dark;
   }
 }
 .circle:nth-child(2) {
@@ -44,25 +58,6 @@
   left: auto;
   right: 38%;
   animation-delay: 0.3s;
-}
-
-.circle:nth-child(4) {
-    left: auto;
-    right: 20%;
-    animation-delay: 0.4s;
-  }
-.shadow {
-  width: 10px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: rgba(177, 177, 177, 0.5);
-  position: absolute;
-  top: 33px;
-  transform-origin: 50%;
-  z-index: -1;
-  left: 15%;
-  filter: blur(1px);
-  animation: shadow .5s alternate infinite ease;
 }
 
 @keyframes shadow {
@@ -88,8 +83,3 @@
   animation-delay: 0.3s;
 }
 
-.shadow:nth-child(7) {
-    left: auto;
-    right: 20%;
-    animation-delay: 0.4s;
-  }

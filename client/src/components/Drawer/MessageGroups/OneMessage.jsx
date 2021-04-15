@@ -18,7 +18,7 @@ const OneMessage = ({ chat, openDrawer, currentUser, openMessage }) => {
 
     return (
         <div>
-            {chat.lenght > 0 ? 'GROUP CHAT!' :
+            {chat.length > 0 ? 'GROUP CHAT!' :
                 <div className={openDrawer ? 'one-message' : 'one-message-small'} onClick={() => openMessage(chat)}>
                     <div className='picture-space'>
                         <div style={{ background: chat.users[0].picColor }} className='message-picture'>{firstLetters(chat.users[0])}</div>

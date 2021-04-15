@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
-import './LoadingAnswer.css';
+import './UserTyping.scss';
 
-const LoadingAnswer = memo(() => {
+const UserTyping = memo(() => {
 
     return (
         <div className="wrapper">
@@ -17,4 +17,4 @@ const LoadingAnswer = memo(() => {
     );
 })
 
-export default LoadingAnswer;
+export default UserTyping;

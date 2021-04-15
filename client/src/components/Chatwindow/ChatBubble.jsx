@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import Message from './Message';
-import LoadingAnswer from '../Spinner/LoadingAnswer';
 import { v4 as uuidv4 } from 'uuid';
 import logo from '../../img/profile.jpeg'
 import otherLogo from '../../img/profile2.jpg'

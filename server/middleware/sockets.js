@@ -34,7 +34,7 @@ const init = (server) => {
                     // })
                 })
             }
-          
+
             callback()
         })
 
@@ -45,6 +45,18 @@ const init = (server) => {
             if (user) {
                 io.to(user.room).emit('message', { user, message })
             }
+            callback()
+        })
+
+        socket.on('sendUserTyping', ({ user, chatRoom }, callback) => {
+            const userTyping = {
+                room: chatRoom._id,
+                userName: user.name,
+                userId: user._id,
+                time: new Date().getTime()
+            }
+            socket.broadcast.to(chatRoom._id).emit('getUserTyping', { userTyping })
+            // io.to(chatRoom._id).emit('getUserTyping', {userTyping})
             callback()
         })
 
