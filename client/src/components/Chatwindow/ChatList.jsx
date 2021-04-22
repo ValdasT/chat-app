@@ -4,7 +4,7 @@ import UserTyping from '../Spinner/UserTyping'
 import SpinnerSmall from '../Spinner/SpinnerSmall'
 import { MessageContext } from '../../context/MessageContext';
 import { useAuth } from "../../context/AuthContext"
-import { RiEmotionSadLine, RiTestTubeFill } from 'react-icons/ri'
+import { RiEmotionSadLine } from 'react-icons/ri'
 import useSockets from "../UseSockets/UseSockets";
 
 const ChatList = () => {

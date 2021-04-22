@@ -1,19 +1,23 @@
 import React, { memo } from 'react';
 import Message from './Message';
-import { v4 as uuidv4 } from 'uuid';
-import logo from '../../img/profile.jpeg'
-import otherLogo from '../../img/profile2.jpg'
+import UserPhoto from '../UserPhoto/UserPhoto'
 import { showTimeFromMS } from '../../utils/utils'
 import './Chat.scss';
 
 const ChatBubble = memo(({ message, chatInfo, currentUser }) => {
+
+    const getUserinfo = () => {
+        let user = chatInfo.users.find(user => user._id === message.creator)
+        return user ? user : currentUser
+    }
+
     return (
         <div>
             {message.creator === currentUser._id ?
                 <div className='message'>
                     <div className='message-block' style={{ flexDirection: "row-reverse" }}>
                         <div>
-                            <img className='userAvatar' id={`Hugo avatar ${uuidv4()} `} alt={currentUser.name} src={logo} />
+                            <UserPhoto userInfo={getUserinfo()} />
                         </div>
                         <div className="point-right"></div>
                         <div className="bubble">
@@ -26,8 +30,7 @@ const ChatBubble = memo(({ message, chatInfo, currentUser }) => {
                 <div className='message'>
                     <div className='message-block'>
                         <div>
-                            <img className='userAvatar' id={`Profile avatar ${uuidv4()} `} alt={`first-name last-name`}
-                                src={otherLogo} />
+                            <UserPhoto userInfo={getUserinfo()} />
                         </div>
                         <div className="point-left"></div>
                         <div className="bubble bubble-left">
