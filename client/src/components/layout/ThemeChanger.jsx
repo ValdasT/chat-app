@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import RoundButton from '../CustomButtons/RoundButton/Roundbutton';
+import { GlobalContext } from '../../context/GlobalState';
 import { IoMoonOutline, IoSunnyOutline } from 'react-icons/io5'
 
 const ThemeChanger = () => {
-    const [themeState, setThemeState] = useState(false);
+    const { themeState, setThemeState } = useContext(GlobalContext);
 
     const handleChange = () => {
         setThemeState(!themeState);

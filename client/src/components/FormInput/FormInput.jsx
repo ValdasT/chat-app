@@ -2,10 +2,11 @@ import React from 'react';
 
 import './FormInput.scss';
 
-const FormInput = ({ handleChange, label, button, ...otherProps }) => (
+const FormInput = ({ handleChange, label, useRef, button, getLasCursorLocation, moveCursorToLastLoacation, ...otherProps }) => (
+
     <div className='group'>
-        <input autoComplete="off" className='form-input' onChange={handleChange} {...otherProps} />
-        {button? button : null}
+        <input autoComplete="off" className='form-input' ref={useRef} onBlur={e => getLasCursorLocation(e)} onFocus={e => moveCursorToLastLoacation(e)} onChange={handleChange} {...otherProps} />
+        {button ? button : null}
         {label ? (
             <label
                 className={`${

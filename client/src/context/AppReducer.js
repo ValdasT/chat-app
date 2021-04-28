@@ -10,11 +10,16 @@ const AppReducer = (state, action) => {
         ...state,
         modalsArray: state.modalsArray.filter(modal => modal.id !== action.payload)
       }
-      case 'SPINNER':
-        return {
-          ...state,
-          spinner: action.payload
-        }
+    case 'SPINNER':
+      return {
+        ...state,
+        spinner: action.payload
+      }
+    case 'THEME':
+      return {
+        ...state,
+        themeState: action.payload
+      }
     default:
       throw new Error(`unknown action type: ${action.type}`);;
   }

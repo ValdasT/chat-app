@@ -10,14 +10,27 @@
   box-shadow: 0px -4px 4px -4px rgba(0, 0, 0, 0.36);
 
   .input-block {
-    padding: 0px 40px;
+    display: flex;
+    padding: 0px 20px 0 40px;
+    .type-field {
+      flex: 1;
+    }
+    .buttons-near-field {
+      margin: 12px 10px;
+      padding-left: 30px;
+      position: relative;
+    }
   }
 }
 
 @media (max-width: 40em) {
   .input-footer {
     .input-block {
-      padding: 0px 20px;
+      padding: 0px 5px 0px 15px;
+      .buttons-near-field {
+        margin: 8px 10px;
+        padding-left: 18px;
+      }
     }
   }
 }
