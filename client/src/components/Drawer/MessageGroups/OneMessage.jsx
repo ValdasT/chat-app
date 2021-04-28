@@ -5,12 +5,12 @@ const OneMessage = ({ chat, openDrawer, currentUser, openMessage }) => {
     const shortMessage = (lastMessage) => {
         let message = ''
         if (lastMessage && lastMessage.message) {
-            if (lastMessage.message.length < 30) {
+            if (lastMessage.message.length < 28) {
                 message = lastMessage.creator === currentUser._id ? `You: ${lastMessage.message}` :
                     `${chat.users[0].name}: ${lastMessage.message}`
             } else {
-                message = lastMessage.creator === currentUser._id ? `You: ${lastMessage.message.substring(0, 30)}...` :
-                    `${chat.users[0].name}: ${lastMessage.message.substring(0, 30)}...`
+                message = lastMessage.creator === currentUser._id ? `You: ${lastMessage.message.substring(0, 28)}...` :
+                    `${chat.users[0].name}: ${lastMessage.message.substring(0, 28)}... `
             }
         }
         return message

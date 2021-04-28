@@ -32,8 +32,8 @@ const ThemeChanger = () => {
 
     return (
         <div style={{ width: '100%' }} onClick={handleChange}>
-            {themeState ? <RoundButton icon={<IoMoonOutline />} text={'Dark mode'} />
-                : <RoundButton icon={<IoSunnyOutline />} text={'Light mode'} />}
+            {themeState ? <RoundButton icon={<IoMoonOutline />} />
+                : <RoundButton icon={<IoSunnyOutline />} />}
         </div>
     );
 };

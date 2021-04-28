@@ -1,10 +1,11 @@
 import React from 'react';
-import ThemeMode from '../layout/ThemeChanger'
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAuth } from "../../context/AuthContext"
 import RoundButton from '../CustomButtons/RoundButton/Roundbutton'
 import { AiOutlineUser } from 'react-icons/ai'
 import { GiExitDoor } from 'react-icons/gi'
+import { MdEventNote } from 'react-icons/md'
+import { BiMessageRoundedDetail } from 'react-icons/bi'
 import './Navigation.scss'
 
 const Navigation = ({ setShowDropdown }) => {
@@ -36,11 +37,14 @@ const Navigation = ({ setShowDropdown }) => {
         <div>
             <div className="close-navigation" onClick={() => setShowDropdown(false)}></div>
             <div className="dropdown-navigation" >
-                <div className='dropdown-navigation-element'>
-                    <ThemeMode />
-                </div>
                 {currentUser ?
                     <div>
+                        <div className='dropdown-navigation-element' onClick={() => history.push("/test")}>
+                            <RoundButton icon={<MdEventNote />} text={'Just Page'} />
+                        </div>
+                        <div className='dropdown-navigation-element' onClick={() => history.push("/")}>
+                            <RoundButton onClick={() => history.push("/")} icon={<BiMessageRoundedDetail />} text={'Messages'} />
+                        </div>
                         <div className='dropdown-navigation-element' onClick={() => goToCurrentUserPage()}>
                             <RoundButton icon={<AiOutlineUser />} text={'User profile / settings'} />
                         </div>
