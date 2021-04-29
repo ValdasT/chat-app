@@ -23,8 +23,8 @@ const Header = () => {
                 {currentUser ? null : <Link to='/login'>
                     <RoundButton icon={<IoLogInOutline />} />
                 </Link>}
-                <RoundButton onClick={() => setShowDropdown(!showDropDown)}
-                    icon={< RiArrowDownSLine className={showDropDown ? 'spinn' : 'spinn-back'} />} />
+                {currentUser ? <RoundButton onClick={() => setShowDropdown(!showDropDown)}
+                    icon={< RiArrowDownSLine className={showDropDown ? 'spinn' : 'spinn-back'} />} /> : null}
                 {showDropDown ? <Navigation setShowDropdown={setShowDropdown} /> : null}
             </div>
         </div>

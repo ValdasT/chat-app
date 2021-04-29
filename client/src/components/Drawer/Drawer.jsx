@@ -2,6 +2,7 @@ import React, { Fragment, useState, memo } from 'react';
 import MessageGroups from './MessageGroups/MessageGroups'
 import { IoIosArrowForward } from 'react-icons/io';
 import { BiSearchAlt } from 'react-icons/bi'
+import { VscClose } from 'react-icons/vsc'
 import FormInputSmall from '../FormInput/FormInputSmall';
 
 import './Drawer.scss';
@@ -19,10 +20,8 @@ const Drawer = memo(() => {
         setSearchValue(value);
     };
 
-    const search = () => {
-        if (searchValue.length) {
-            console.log(searchValue);
-        }
+    const clearField = () => {
+        setSearchValue('')
     }
 
     return (
@@ -44,17 +43,16 @@ const Drawer = memo(() => {
                                     value={searchValue}
                                     onChange={handleChange}
                                     label='Search'
-                                    onKeyPress={(e) => (e.charCode === 13 ? search() : null)}
                                     button={
-                                        <div onClick={search} className='search-button'>
-                                            <BiSearchAlt />
+                                        <div onClick={clearField} className='search-button'>
+                                            {searchValue.length ? <VscClose /> : <BiSearchAlt />}
                                         </div>
                                     }
                                 />
                             </div> : null}
                         <div>
                             <div className='message-groups'>
-                                <MessageGroups openDrawer={openDrawer} />
+                                <MessageGroups openDrawer={openDrawer} searchValue={searchValue} />
                             </div>
                         </div>
                     </div>

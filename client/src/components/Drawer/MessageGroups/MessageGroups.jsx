@@ -10,11 +10,12 @@ import useSockets from "../../UseSockets/UseSockets";
 
 import './MessageGroups.scss'
 
-const MessageGroups = ({ openDrawer }) => {
+const MessageGroups = ({ openDrawer, searchValue }) => {
     const { showModal } = useContext(GlobalContext);
     const { currentUser } = useAuth()
     const { setMessages, loadingMessages, setLoadingMessages, setLoadingFriends } = useContext(MessageContext)
     const [chatsAndMessages, setChatsAndMessages] = useState([])
+    const [searchResults, setSearchResults] = useState([])
     const [userMessages, setUserMessages] = useState('')
     const { messageFromSocket } = useSockets();
 
@@ -26,6 +27,7 @@ const MessageGroups = ({ openDrawer }) => {
                 let chats = await getChats(currentUser._id)
                 if (chats.length) {
                     setChatsAndMessages(chats)
+                    setSearchResults(chats)
                     await openMessage(chats[0])
                 } else {
                     setMessages({ messages: [] })
@@ -53,6 +55,20 @@ const MessageGroups = ({ openDrawer }) => {
 
     }, [messageFromSocket, chatsAndMessages])
 
+    useEffect(() => {
+        if (chatsAndMessages && chatsAndMessages.length) {
+            let newsSearchResults = chatsAndMessages.filter(element => {
+                return element.users.some(subElement => {
+                    let name = subElement.name.toLowerCase() + ` ${subElement.surname ? subElement.surname.toLowerCase() : ''}`
+                    let search = searchValue.toLowerCase()
+                    return name.includes(search)
+                });
+            });
+            setSearchResults(newsSearchResults)
+        }
+    }, [searchValue])
+
+
     const openMessage = async chat => {
         if (chat._id !== userMessages) {
             setUserMessages(chat._id)
@@ -72,7 +88,7 @@ const MessageGroups = ({ openDrawer }) => {
 
     return (
         <div className='all-friends'>
-            {!loadingMessages ? chatsAndMessages.length ? chatsAndMessages.map(chat => (
+            {!loadingMessages ? searchResults.length ? searchResults.map(chat => (
                 <OneMessage
                     openDrawer={openDrawer}
                     currentUser={currentUser}
@@ -84,7 +100,7 @@ const MessageGroups = ({ openDrawer }) => {
                         <div>
                             <RiEmotionSadLine className='message-icon' />
                         </div>
-                        <div>Friends list is empty.</div>
+                        <div>{searchValue ? `Can't find anything.` : `Friends list is empty.`}</div>
                     </div> : null
                 : <SpinnerSmall style={{ width: '50px ', height: '50px ' }} />}
         </div>
