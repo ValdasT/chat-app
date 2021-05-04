@@ -6,7 +6,7 @@ import Navigation from '../Navigation/Navigation'
 import ThemeMode from '../layout/ThemeChanger'
 import { useAuth } from "../../context/AuthContext"
 import { RiArrowDownSLine } from 'react-icons/ri'
-import { IoLogInOutline } from 'react-icons/io5';
+import { IoLogInOutline, IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 import './Header.scss';
 
 const Header = () => {
@@ -15,6 +15,10 @@ const Header = () => {
 
     return (
         <div className="header">
+            <div className='logo'>
+                <div className='logo-text'>Let's go!</div>
+                <IoChatbubbleEllipsesOutline className='logo-icon' />
+            </div>
             {currentUser ? <SearchInput /> : null}
             <div className="navigation">
                 <div className='dropdown-navigation-element'>

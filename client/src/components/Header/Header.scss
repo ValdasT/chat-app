@@ -10,12 +10,38 @@
   justify-content: center;
   align-items: center;
 
+  .logo {
+    display: flex;
+    margin: 10px;
+    left: 20px;
+    position: absolute;
+    font-size: 30px;
+    font-weight: 600;
+    color: $primary-dark-darker;
+    .logo-text {
+      font-family: "Caveat";
+      font-size: 30px;
+      font-weight: 600;
+    }
+    .logo-icon {
+      padding: 10px;
+    }
+  }
+
   .navigation {
     position: absolute;
     top: 0;
     right: 0;
     display: flex;
     padding: 10px 10px 0 0;
+  }
+}
+
+@media (max-width: 40em) {
+  .header {
+    .logo {
+      display: none;
+    }
   }
 }
 
