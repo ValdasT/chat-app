@@ -6,12 +6,13 @@ import Navigation from '../Navigation/Navigation'
 import ThemeMode from '../layout/ThemeChanger'
 import { useAuth } from "../../context/AuthContext"
 import { RiArrowDownSLine } from 'react-icons/ri'
-import { IoLogInOutline, IoChatbubbleEllipsesOutline } from 'react-icons/io5';
+import { IoLogInOutline, IoChatbubbleEllipsesOutline, IoNotificationsOutline } from 'react-icons/io5';
 import './Header.scss';
 
 const Header = () => {
     const { currentUser } = useAuth()
     const [showDropDown, setShowDropdown] = useState(false)
+    const [showNotifications, setShowNotifications] = useState(false)
 
     return (
         <div className="header">
@@ -27,6 +28,10 @@ const Header = () => {
                 {currentUser ? null : <Link to='/login'>
                     <RoundButton icon={<IoLogInOutline />} />
                 </Link>}
+                {currentUser ? <div><RoundButton onClick={() => setShowNotifications(!showDropDown)}
+                    icon={< IoNotificationsOutline className='bell' />} />
+                    <div onClick={() => setShowNotifications(!showDropDown)} className='new-notifications'>2</div></div> : null}
+                {showNotifications ? <Navigation setShowNotifications={setShowNotifications} /> : null}
                 {currentUser ? <RoundButton onClick={() => setShowDropdown(!showDropDown)}
                     icon={< RiArrowDownSLine className={showDropDown ? 'spinn' : 'spinn-back'} />} /> : null}
                 {showDropDown ? <Navigation setShowDropdown={setShowDropdown} /> : null}
