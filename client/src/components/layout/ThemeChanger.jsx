@@ -28,6 +28,7 @@ const ThemeChanger = () => {
         } else {
             setThemeState(true)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -37,7 +37,7 @@ const Chatbar = () => {
                 setMessage(value);
             }
         } else {
-            if (cursorsStartposition == cursorsEndposition) {
+            if (cursorsStartposition === cursorsEndposition) {
                 setMessage(message.substring(0, cursorsStartposition) + event + message.substring(cursorsStartposition, message.length));
                 setCursorsStartposition(cursorsStartposition + event.length)
                 setCursorsEndposition(cursorsStartposition + event.length)

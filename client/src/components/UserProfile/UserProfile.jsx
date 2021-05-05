@@ -3,6 +3,7 @@ import CustomButton from '../CustomButtons/Button/CustomButton'
 import { firstLetters } from '../../utils/utils'
 import { sendRequest, acceptRequest, cancelRequest, unfriend, getButtonStatus } from '../../services/ApiCalls'
 import { AiOutlineUsergroupAdd, AiOutlineUsergroupDelete, AiOutlineUserAdd } from 'react-icons/ai'
+import useSockets from "../UseSockets/UseSockets";
 
 import './UserProfile.scss'
 
@@ -10,10 +11,13 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal }) => {
     const [loadingButton, setLoadingButton] = useState(false)
     const [buttonStatus, setButtonStatus] = useState('none')
 
+    const { sendNotification } = useSockets();
+
     const sendFriendRequest = async () => {
         try {
             setLoadingButton(true)
             let res = await sendRequest(userInfo, currentUser, 'friend')
+            sendNotification(currentUser, res.notification)
             setButtonStatus(res.buttonStatus)
             setLoadingButton(false)
         } catch (err) {
@@ -26,6 +30,7 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal }) => {
         try {
             setLoadingButton(true)
             let res = await acceptRequest(userInfo, currentUser)
+            sendNotification(currentUser, res.notification)
             setButtonStatus(res.buttonStatus)
             setLoadingButton(false)
         } catch (err) {

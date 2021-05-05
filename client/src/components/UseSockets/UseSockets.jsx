@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { userTypingString } from '../../utils/utils'
 import socketIOClient from "socket.io-client";
 const socket = socketIOClient();
@@ -28,7 +28,28 @@ const useSockets = () => {
         return () => { isMounted = false };
     }, []);
 
-    const removeElementFromArr = () => {
+    useEffect(() => {
+        // Listens for incoming notification
+        let isMounted = true;
+        socket.on('newNotification', (notification) => {
+            if (isMounted) {
+
+                console.log(notification)
+                // if (friendTyping.length) {
+                //     friendTyping = friendTyping.filter(el => el.userId !== message.user.username)
+                //     if (!friendTyping.length) {
+                //         setUserTypingFromSocket(false)
+                //     } else {
+                //         setUserTypingMessage(userTypingString(friendTyping))
+                //     }
+                // }
+                // setMessageFromSocket(message)
+            }
+        })
+        return () => { isMounted = false };
+    }, []);
+
+    const removeElementFromArr = useCallback(() => {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 friendTyping = friendTyping.filter(el => el.time > ((new Date().getTime()) - 1900))
@@ -40,7 +61,7 @@ const useSockets = () => {
                 resolve()
             }, 2000)
         })
-    }
+    }, [])
 
     useEffect(() => {
         let isMounted = true;
@@ -58,7 +79,7 @@ const useSockets = () => {
             })
         })()
         return () => { isMounted = false };
-    }, [])
+    }, [friendTyping, removeElementFromArr, userTypingFromSocket])
 
     // Sends a message to the server that
     // forwards it to all users in the same room
@@ -104,7 +125,29 @@ const useSockets = () => {
         })
     }
 
-    return { messageFromSocket, sendMessage, enterChats, userTyping, userTypingFromSocket, setUserTypingFromSocket, userTypingMessage };
+    const sendNotification = async (user, notification) => {
+        return new Promise((resolve, reject) => {
+            socket.emit('sendNotification', { user, notification }, (err, res) => {
+                if (err) {
+                    console.log(err)
+                    alert(err)
+                    reject(err)
+                }
+                resolve(res)
+            })
+        })
+    }
+
+    return {
+        messageFromSocket,
+        sendMessage,
+        enterChats,
+        userTyping,
+        userTypingFromSocket,
+        setUserTypingFromSocket,
+        userTypingMessage,
+        sendNotification
+    };
 };
 
 export default useSockets

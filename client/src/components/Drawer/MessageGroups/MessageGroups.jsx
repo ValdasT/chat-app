@@ -66,6 +66,7 @@ const MessageGroups = ({ openDrawer, searchValue }) => {
             });
             setSearchResults(newsSearchResults)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchValue])
 
 

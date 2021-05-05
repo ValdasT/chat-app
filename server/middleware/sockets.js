@@ -22,6 +22,8 @@ const init = (server) => {
                 console.log(error)
                 callback(error)
             }
+            console.log('rooms::::::::::')
+            console.log(options)
 
             if (options && options.rooms) {
                 options.rooms.forEach(room => {
@@ -33,6 +35,9 @@ const init = (server) => {
                     //     users: getUsersInRoom(user.room)
                     // })
                 })
+
+                // add user as room to send basic notifications
+                socket.join(options.username)
             }
 
             callback()
@@ -57,6 +62,14 @@ const init = (server) => {
             }
             socket.broadcast.to(chatRoom._id).emit('getUserTyping', { userTyping })
             // io.to(chatRoom._id).emit('getUserTyping', {userTyping})
+            callback()
+        })
+
+        socket.on('sendNotification', ({ user, notification }, callback) => {
+            const userRoomInfo = getUser(undefined, notification.notifiee)
+            if (userRoomInfo) {
+                socket.broadcast.to(userRoomInfo.room).emit('newNotification', { notification })
+            }
             callback()
         })
 
@@ -98,6 +111,9 @@ const init = (server) => {
 
                 })
             }
+
+            //add user as room for basic notifications
+            users.push({ id, username, room: username })
             return { users }
         }
 
@@ -117,7 +133,12 @@ const init = (server) => {
 
 
         const getUser = (id, room) => {
-            let res = users.find((user) => user.id === id && user.room === room)
+            let res
+            if (id) {
+                res = users.find((user) => user.id === id && user.room === room)
+            } else {
+                res = users.find((user) => user.room === room)
+            }
             return res
         }
 
