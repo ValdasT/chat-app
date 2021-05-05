@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useAuth } from "../../context/AuthContext"
-import RoundButton from '../CustomButtons/RoundButton/Roundbutton'
+import { useAuth } from "../../../context/AuthContext"
+import RoundButton from '../../CustomButtons/RoundButton/Roundbutton'
 import { AiOutlineUser } from 'react-icons/ai'
 import { GiExitDoor } from 'react-icons/gi'
 import { MdEventNote } from 'react-icons/md'

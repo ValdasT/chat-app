@@ -2,7 +2,8 @@ import React, { memo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import RoundButton from '../CustomButtons/RoundButton/Roundbutton'
 import SearchInput from '../FormInput/SearchInput/SearchInput'
-import Navigation from '../Navigation/Navigation'
+import Navigation from './Navigation/Navigation'
+import Notifications from './Notifications/Notifications'
 import ThemeMode from '../layout/ThemeChanger'
 import { useAuth } from "../../context/AuthContext"
 import { RiArrowDownSLine } from 'react-icons/ri'
@@ -31,7 +32,7 @@ const Header = () => {
                 {currentUser ? <div><RoundButton onClick={() => setShowNotifications(!showDropDown)}
                     icon={< IoNotificationsOutline className='bell' />} />
                     <div onClick={() => setShowNotifications(!showDropDown)} className='new-notifications'>2</div></div> : null}
-                {showNotifications ? <Navigation setShowNotifications={setShowNotifications} /> : null}
+                {showNotifications ? <Notifications setShowNotifications={setShowNotifications} /> : null}
                 {currentUser ? <RoundButton onClick={() => setShowDropdown(!showDropDown)}
                     icon={< RiArrowDownSLine className={showDropDown ? 'spinn' : 'spinn-back'} />} /> : null}
                 {showDropDown ? <Navigation setShowDropdown={setShowDropdown} /> : null}

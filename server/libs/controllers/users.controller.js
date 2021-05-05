@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Invite = require('../models/invite')
+const Notification = require('../models/notification')
 const Friend = require('../models/friend')
 const Chat = require('../models/chat')
 const Message = require('../models/message')
@@ -258,7 +259,18 @@ const createRequest = async args => {
         createdAt: new Date().getTime(),
         type: type
     });
+    const notification = new Notification({
+        notifier: currentUser._id,
+        notifiee: userData._id,
+        notifyAbout: 'Friend request.',
+        type: 'Friend request',
+        createdAt: new Date().getTime(),
+        url: `/users/${currentUser._id}`,
+        seen: false
+    });
     try {
+        let newNotification = await notification.save();
+        invite.notificationDoc = newNotification._id;
         await invite.save();
         logger.info(`[${moduleName}] Create invite in db... Done. ${type}`);
         const creator = await User.findById(currentUser._id);
@@ -273,7 +285,8 @@ const createRequest = async args => {
         user = await user.save()
         let response = {
             user: user,
-            buttonStatus: await getButtonStatus({ friendDoc: userData, currentUser: currentUser })
+            buttonStatus: await getButtonStatus({ friendDoc: userData, currentUser: currentUser }),
+            notification: newNotification
         }
         return response;
     } catch (err) {
@@ -292,6 +305,16 @@ const acceptRequest = async data => {
         connectedAt: new Date().getTime(),
     });
 
+    const notification = new Notification({
+        notifier: currentUser._id,
+        notifiee: friendDoc._id,
+        notifyAbout: 'Friend request accepted.',
+        type: 'Friend request accepted',
+        createdAt: new Date().getTime(),
+        url: `/users/${currentUser._id}`,
+        seen: false
+    });
+
     try {
         await friend.save();
         let creator = await User.findById(currentUser._id);
@@ -308,6 +331,7 @@ const acceptRequest = async data => {
             })
         })
         await Invite.deleteOne({ _id: currentInvite._id });
+        let newNotification = await notification.save();
 
         const chat = new Chat({
             createdAt: new Date().getTime(),
@@ -325,7 +349,8 @@ const acceptRequest = async data => {
         user = await user.save()
         let response = {
             user: user,
-            buttonStatus: await getButtonStatus({ friendDoc: friendDoc, currentUser: currentUser })
+            buttonStatus: await getButtonStatus({ friendDoc: friendDoc, currentUser: currentUser }),
+            notification: newNotification
         }
         return response;
     } catch (err) {
@@ -351,7 +376,9 @@ const cancelRequest = async data => {
                 }
             })
         })
-        await Invite.deleteOne({ _id: currentInvite._id });
+        let inviteFromDb = await Invite.findById(currentInvite);
+        await Invite.deleteOne({ _id: inviteFromDb._id });
+        await Notification.deleteOne({ _id: inviteFromDb.notificationDoc });
         creator.invites.pull(currentInvite._id);
         user.invites.pull(currentInvite._id);
         await creator.save()

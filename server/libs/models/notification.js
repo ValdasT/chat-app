@@ -1,16 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const inviteSchema = new Schema({
-    invitor: {
+const notificationSchema = new Schema({
+    notifier: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    invitee: {
+    notifiee: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    invitedTo: {
+    notifyAbout: {
         type: String,
         required: true 
     },
@@ -22,10 +22,14 @@ const inviteSchema = new Schema({
         type: String,
         required: true
     },
-    notificationDoc: {
-        type: Schema.Types.ObjectId,
-        ref: 'Notification'
+    url: {
+        type: String,
+        required: true
+    },
+    seen: {
+        type: Boolean,
+        required: true
     },
 });
 
-module.exports = mongoose.model('Invite', inviteSchema);
+module.exports = mongoose.model('Notification', notificationSchema);
