@@ -26,6 +26,19 @@ body.dark-mode {
 
   .dropdown-notifications {
     background-color: $base-third-dark;
+    .dropdown-notifications-element {
+      &:hover {
+        background-color: $light-grey-transperant;
+      }
+      .notification-text {
+        .notification-time {
+          color: $grey-text-dark;
+        }
+      }
+    }
+    .new-notification-element {
+      background-color: $blue-darker;
+    }
   }
 
   .drawerBox {

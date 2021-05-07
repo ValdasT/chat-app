@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react"
 import { handleError } from '../services/ErrorHandler'
 import { auth, googleProvider, facebookProvider } from "../utils/firebase"
-import { createUser, createSession, getToken, getUserForInint, logOutUser } from '../services/ApiCalls'
+import { createUser, createSession, getToken, getUserForInint, logOutUser, getAllNotifications } from '../services/ApiCalls'
 import useSockets from "../components/UseSockets/UseSockets";
 
 const AuthContext = React.createContext()
@@ -12,6 +12,7 @@ export function useAuth() {
 
 export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState()
+    const [allNotifications, setAllNotifications] = useState([])
     const [loading, setLoading] = useState(true)
     const { enterChats } = useSockets();
 
@@ -113,6 +114,8 @@ export const AuthProvider = ({ children }) => {
             let userProfile = await getUserForInint()
             await enterChats(userProfile)
             setCurrentUser(userProfile);
+            let allNotifications = await getAllNotifications(userProfile)
+            setAllNotifications(allNotifications)
         } catch (err) {
             console.log(err);
             throw handleError(err)
@@ -121,6 +124,8 @@ export const AuthProvider = ({ children }) => {
 
     const value = {
         currentUser,
+        setAllNotifications,
+        allNotifications,
         logIn,
         signUp,
         logOut,

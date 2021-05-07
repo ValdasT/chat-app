@@ -47,6 +47,10 @@ const getUser = async (user) => {
     return await performCall('POST', '/users/get-user', body)
 };
 
+const getAllNotifications = async (user) => {
+    return await performCall('GET', `/users/get-notifications/${user._id}`)
+};
+
 const getFriends = async (user) => {
     const body = JSON.stringify({
         user: user
@@ -157,6 +161,7 @@ export {
     cancelRequest,
     getAllInvites,
     getButtonStatus,
-    unfriend
+    unfriend,
+    getAllNotifications
 }
 

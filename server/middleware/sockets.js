@@ -22,8 +22,6 @@ const init = (server) => {
                 console.log(error)
                 callback(error)
             }
-            console.log('rooms::::::::::')
-            console.log(options)
 
             if (options && options.rooms) {
                 options.rooms.forEach(room => {

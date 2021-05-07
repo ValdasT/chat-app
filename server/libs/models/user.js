@@ -15,6 +15,10 @@ const userSchema = new Schema({
         type: String,
         required: false
     },
+    profilePic: {
+        type: String,
+        required: false
+    },
     gender: {
         type: String,
         required: false

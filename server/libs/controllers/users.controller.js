@@ -6,7 +6,7 @@ const Chat = require('../models/chat')
 const Message = require('../models/message')
 const logger = require('../utils/logger');
 const moduleName = module.filename.split('/').slice(-1);
-const { getRandomCollor } = require('../utils/utils')
+const { getRandomCollor, NOTIFICATIONS_ABOUT } = require('../utils/utils')
 
 const createUser = async userData => {
     logger.info(`[${moduleName}] Creating user profile in db... `, userData);
@@ -262,14 +262,22 @@ const createRequest = async args => {
     const notification = new Notification({
         notifier: currentUser._id,
         notifiee: userData._id,
-        notifyAbout: 'Friend request.',
+        notifyAbout: NOTIFICATIONS_ABOUT.sendFriendRequest,
         type: 'Friend request',
         createdAt: new Date().getTime(),
         url: `/users/${currentUser._id}`,
-        seen: false
+        seen: false,
+        clicked: false
     });
     try {
-        let newNotification = await notification.save();
+        let newNotification = await (await notification.save()).toObject();
+        newNotification.notifier = {
+            _id: currentUser._id,
+            name: currentUser.name,
+            surname: currentUser.surname,
+            profilePic: currentUser.profilePic,
+            picColor: currentUser.picColor
+        }
         invite.notificationDoc = newNotification._id;
         await invite.save();
         logger.info(`[${moduleName}] Create invite in db... Done. ${type}`);
@@ -308,11 +316,12 @@ const acceptRequest = async data => {
     const notification = new Notification({
         notifier: currentUser._id,
         notifiee: friendDoc._id,
-        notifyAbout: 'Friend request accepted.',
+        notifyAbout: NOTIFICATIONS_ABOUT.acceptedFriendRequest,
         type: 'Friend request accepted',
         createdAt: new Date().getTime(),
         url: `/users/${currentUser._id}`,
-        seen: false
+        seen: false,
+        clicked: false
     });
 
     try {
@@ -331,7 +340,14 @@ const acceptRequest = async data => {
             })
         })
         await Invite.deleteOne({ _id: currentInvite._id });
-        let newNotification = await notification.save();
+        let newNotification = await (await notification.save()).toObject();
+        newNotification.notifier = {
+            _id: currentUser._id,
+            name: currentUser.name,
+            surname: currentUser.surname,
+            profilePic: currentUser.profilePic,
+            picColor: currentUser.picColor
+        }
 
         const chat = new Chat({
             createdAt: new Date().getTime(),
@@ -427,6 +443,18 @@ const unfriendFriend = async data => {
     }
 }
 
+const getAllNotifications = async user => {
+    logger.info(`[${moduleName}] getting all notifications... `);
+    try {
+        const response = await Notification.find({ notifiee: { $in: user } }).populate('notifier', '_id name surname picColor profilePic')
+        logger.info(`[${moduleName}] getting all notifications... Done `);
+        return response;
+    } catch (err) {
+        logger.error(`[${moduleName}] getting all notifications error: `, err);
+        throw err;
+    }
+}
+
 const getButtonStatus = async data => {
     const { friendDoc, currentUser } = data
     logger.info(`[${moduleName}] Calculate status... `);
@@ -497,5 +525,6 @@ module.exports = {
     getAllMessages,
     saveMessage,
     getButtonStatus,
-    unfriendFriend
+    unfriendFriend,
+    getAllNotifications
 }

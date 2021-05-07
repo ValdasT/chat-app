@@ -2,6 +2,11 @@ const admin = require("firebase-admin");
 const logger = require('../utils/logger');
 const moduleName = module.filename.split('/').slice(-1);
 
+const NOTIFICATIONS_ABOUT = {
+    sendFriendRequest: 'Send a friend request',
+    acceptedFriendRequest: 'Accepted your friend request',
+}
+
 const colors = [
     "#11b8b8",
     "#0000ff",
@@ -58,5 +63,6 @@ const decodeSession = (session) => {
 
 module.exports = {
     getRandomCollor,
-    decodeSession
+    decodeSession,
+    NOTIFICATIONS_ABOUT
 }

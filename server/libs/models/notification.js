@@ -12,7 +12,7 @@ const notificationSchema = new Schema({
     },
     notifyAbout: {
         type: String,
-        required: true 
+        required: true
     },
     createdAt: {
         type: String,
@@ -27,6 +27,10 @@ const notificationSchema = new Schema({
         required: true
     },
     seen: {
+        type: Boolean,
+        required: true
+    },
+    clicked: {
         type: Boolean,
         required: true
     },

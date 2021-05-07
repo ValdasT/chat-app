@@ -5,6 +5,7 @@ const socket = socketIOClient();
 
 const useSockets = () => {
     const [messageFromSocket, setMessageFromSocket] = useState({});
+    const [notificationFromSocket, setNotificationFromSocket] = useState({});
     const [userTypingFromSocket, setUserTypingFromSocket] = useState(false);
     const [userTypingMessage, setUserTypingMessage] = useState([]);
     let friendTyping = []
@@ -33,17 +34,7 @@ const useSockets = () => {
         let isMounted = true;
         socket.on('newNotification', (notification) => {
             if (isMounted) {
-
-                console.log(notification)
-                // if (friendTyping.length) {
-                //     friendTyping = friendTyping.filter(el => el.userId !== message.user.username)
-                //     if (!friendTyping.length) {
-                //         setUserTypingFromSocket(false)
-                //     } else {
-                //         setUserTypingMessage(userTypingString(friendTyping))
-                //     }
-                // }
-                // setMessageFromSocket(message)
+                setNotificationFromSocket(notification)
             }
         })
         return () => { isMounted = false };
@@ -146,7 +137,8 @@ const useSockets = () => {
         userTypingFromSocket,
         setUserTypingFromSocket,
         userTypingMessage,
-        sendNotification
+        sendNotification,
+        notificationFromSocket
     };
 };
 

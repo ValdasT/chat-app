@@ -24,6 +24,8 @@
 
 .dropdown-notifications {
   min-width: 200px;
+  max-height: 230px;
+  overflow-y: scroll;
   top: 50px;
   right: 5px;
   font-size: 12px;
@@ -31,23 +33,34 @@
   position: absolute;
   border-bottom: none;
   background-color: $base-white;
-  max-height: 400px;
   overflow-y: auto;
   border-radius: 0px 0px 5px 5px;
-  padding-bottom: 5px;
   box-shadow: 0px 4px 10px -4px rgba(0, 0, 0, 0.75);
   animation: slide-in-notifications 0.3s both;
 
   .dropdown-notifications-element {
-    overflow-x: none;
     display: flex;
     flex-direction: row;
-    padding: 5px 10px;
+    padding: 0px 10px;
 
     &:hover {
       cursor: pointer;
       background-color: $light-grey-transperant;
     }
+
+    .notification-text {
+      margin: 5px 15px 0;
+      flex: 1;
+      .notification-time {
+        position: relative;
+        text-align: right;
+        color: $grey-text-light;
+        font-size: 10px;
+      }
+    }
+  }
+  .new-notification-element {
+    background-color: $blue-lightes;
   }
 }
 

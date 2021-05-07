@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import RoundButton from '../CustomButtons/RoundButton/Roundbutton'
 import SearchInput from '../FormInput/SearchInput/SearchInput'
@@ -8,12 +8,20 @@ import ThemeMode from '../layout/ThemeChanger'
 import { useAuth } from "../../context/AuthContext"
 import { RiArrowDownSLine } from 'react-icons/ri'
 import { IoLogInOutline, IoChatbubbleEllipsesOutline, IoNotificationsOutline } from 'react-icons/io5';
+import useSockets from "../UseSockets/UseSockets";
 import './Header.scss';
 
 const Header = () => {
-    const { currentUser } = useAuth()
+    const { currentUser, allNotifications, setAllNotifications } = useAuth()
     const [showDropDown, setShowDropdown] = useState(false)
     const [showNotifications, setShowNotifications] = useState(false)
+    const { notificationFromSocket } = useSockets();
+
+    useEffect(() => {
+        if (notificationFromSocket.notification) {
+            setAllNotifications(allNotifications => [...allNotifications, notificationFromSocket.notification])
+        }
+    }, [notificationFromSocket])
 
     return (
         <div className="header">
@@ -31,8 +39,9 @@ const Header = () => {
                 </Link>}
                 {currentUser ? <div><RoundButton onClick={() => setShowNotifications(!showDropDown)}
                     icon={< IoNotificationsOutline className='bell' />} />
-                    <div onClick={() => setShowNotifications(!showDropDown)} className='new-notifications'>2</div></div> : null}
-                {showNotifications ? <Notifications setShowNotifications={setShowNotifications} /> : null}
+                    {allNotifications.length ? <div onClick={() => setShowNotifications(!showDropDown)}
+                        className='new-notifications'>{allNotifications.length}</div> : null} </div> : null}
+                {showNotifications ? <Notifications allNotifications={allNotifications} setShowNotifications={setShowNotifications} /> : null}
                 {currentUser ? <RoundButton onClick={() => setShowDropdown(!showDropDown)}
                     icon={< RiArrowDownSLine className={showDropDown ? 'spinn' : 'spinn-back'} />} /> : null}
                 {showDropDown ? <Navigation setShowDropdown={setShowDropdown} /> : null}
