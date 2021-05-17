@@ -56,6 +56,19 @@ router.get('/get-notifications/:user', async (req, res, next) => {
     }
 });
 
+router.post('/update-seen-notifications', async (req, res, next) => {
+    const data = { notifications: req.body.notifications }
+    try {
+        logger.info(`[${moduleName}] Update seen notifications...`);
+        let info = await userController.updateNotifications(data)
+        logger.info(`[${moduleName}] Update seen notifications... Done.`);
+        res.status(200).send(info);
+    } catch (err) {
+        logger.error(`[${moduleName}] Update seen notifications error: `, err);
+        return next(err);
+    }
+});
+
 router.get('/get-user-for-init', async (req, res, next) => {
     const sessionCookie = req.cookies.session || "";
     let decodedClaims = await decodeSession(sessionCookie)

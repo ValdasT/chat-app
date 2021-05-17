@@ -51,6 +51,13 @@ const getAllNotifications = async (user) => {
     return await performCall('GET', `/users/get-notifications/${user._id}`)
 };
 
+const updateSeenNotifications = async (notifications) => {
+    const body = JSON.stringify({
+        notifications: notifications,
+    })
+    return await performCall('POST', `/users/update-seen-notifications`, body)
+};
+
 const getFriends = async (user) => {
     const body = JSON.stringify({
         user: user
@@ -162,6 +169,7 @@ export {
     getAllInvites,
     getButtonStatus,
     unfriend,
-    getAllNotifications
+    getAllNotifications,
+    updateSeenNotifications
 }
 

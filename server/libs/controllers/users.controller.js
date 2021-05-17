@@ -446,11 +446,24 @@ const unfriendFriend = async data => {
 const getAllNotifications = async user => {
     logger.info(`[${moduleName}] getting all notifications... `);
     try {
-        const response = await Notification.find({ notifiee: { $in: user } }).populate('notifier', '_id name surname picColor profilePic')
+        const response = await Notification.find({ notifiee: { $in: user } }).sort({ createdAt: -1 }).populate('notifier', '_id name surname picColor profilePic')
         logger.info(`[${moduleName}] getting all notifications... Done `);
         return response;
     } catch (err) {
         logger.error(`[${moduleName}] getting all notifications error: `, err);
+        throw err;
+    }
+}
+
+const updateNotifications = async data => {
+    const { notifications } = data
+    logger.info(`[${moduleName}] updating notifications... `);
+    try {
+        let resInfo = await Notification.updateMany({ _id: { $in: notifications } }, { $set: { seen: true } })
+        logger.info(`[${moduleName}] updating notifications... Done `);
+        return resInfo;
+    } catch (err) {
+        logger.error(`[${moduleName}] updating notifications error: `, err);
         throw err;
     }
 }
@@ -526,5 +539,6 @@ module.exports = {
     saveMessage,
     getButtonStatus,
     unfriendFriend,
-    getAllNotifications
+    getAllNotifications,
+    updateNotifications
 }

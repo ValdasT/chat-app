@@ -4,9 +4,8 @@ import UserPhoto from '../../UserPhoto/UserPhoto'
 import { showTimeFromMS } from '../../../utils/utils'
 import './Notifications.scss'
 
-const Notifications = ({ setShowNotifications, allNotifications }) => {
+const Notifications = ({ setShowNotifications, allNotifications, setAllNotifications }) => {
     const history = useHistory()
-
 
     return (
         <div>

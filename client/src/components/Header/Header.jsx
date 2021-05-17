@@ -5,6 +5,7 @@ import SearchInput from '../FormInput/SearchInput/SearchInput'
 import Navigation from './Navigation/Navigation'
 import Notifications from './Notifications/Notifications'
 import ThemeMode from '../layout/ThemeChanger'
+import { updateSeenNotifications } from '../../services/ApiCalls'
 import { useAuth } from "../../context/AuthContext"
 import { RiArrowDownSLine } from 'react-icons/ri'
 import { IoLogInOutline, IoChatbubbleEllipsesOutline, IoNotificationsOutline } from 'react-icons/io5';
@@ -19,9 +20,24 @@ const Header = () => {
 
     useEffect(() => {
         if (notificationFromSocket.notification) {
-            setAllNotifications(allNotifications => [...allNotifications, notificationFromSocket.notification])
+            setAllNotifications(allNotifications => [notificationFromSocket.notification, ...allNotifications])
         }
     }, [notificationFromSocket])
+
+    const showNewNotificationNumber = (notifications) => {
+        let notSeenNotifications = notifications.filter(e => !e.seen)
+        return notSeenNotifications.length
+    }
+
+    const showNotificationsDropdown = async () => {
+        setShowNotifications(true)
+        const seenNotifications = allNotifications.filter(e => !e.seen).map(e => e._id)
+        if (seenNotifications.length) {
+            await updateSeenNotifications(seenNotifications)
+            setAllNotifications(allNotifications.map(notification => notification.seen === false ?
+                { ...notification, seen: true } : notification))
+        }
+    }
 
     return (
         <div className="header">
@@ -37,11 +53,11 @@ const Header = () => {
                 {currentUser ? null : <Link to='/login'>
                     <RoundButton icon={<IoLogInOutline />} />
                 </Link>}
-                {currentUser ? <div><RoundButton onClick={() => setShowNotifications(!showDropDown)}
+                {currentUser ? <div><RoundButton onClick={() => showNotificationsDropdown()}
                     icon={< IoNotificationsOutline className='bell' />} />
-                    {allNotifications.length ? <div onClick={() => setShowNotifications(!showDropDown)}
-                        className='new-notifications'>{allNotifications.length}</div> : null} </div> : null}
-                {showNotifications ? <Notifications allNotifications={allNotifications} setShowNotifications={setShowNotifications} /> : null}
+                    {showNewNotificationNumber(allNotifications) ? <div onClick={() => showNotificationsDropdown()}
+                        className='new-notifications'>{showNewNotificationNumber(allNotifications)}</div> : null} </div> : null}
+                {showNotifications ? <Notifications allNotifications={allNotifications} setAllNotifications={setAllNotifications} setShowNotifications={setShowNotifications} /> : null}
                 {currentUser ? <RoundButton onClick={() => setShowDropdown(!showDropDown)}
                     icon={< RiArrowDownSLine className={showDropDown ? 'spinn' : 'spinn-back'} />} /> : null}
                 {showDropDown ? <Navigation setShowDropdown={setShowDropdown} /> : null}
