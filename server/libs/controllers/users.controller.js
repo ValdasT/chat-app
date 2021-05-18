@@ -456,12 +456,20 @@ const getAllNotifications = async user => {
 }
 
 const updateNotifications = async data => {
-    const { notifications } = data
+    const { notifications, notification } = data
     logger.info(`[${moduleName}] updating notifications... `);
     try {
-        let resInfo = await Notification.updateMany({ _id: { $in: notifications } }, { $set: { seen: true } })
-        logger.info(`[${moduleName}] updating notifications... Done `);
-        return resInfo;
+        if (notification) {
+            let notificationDoc = await Notification.findById(notification);
+            notificationDoc.clicked = true
+            notificationDoc = await notificationDoc.save()
+            logger.info(`[${moduleName}] updating notification... Done`);
+            return notificationDoc
+        } else {
+            let resInfo = await Notification.updateMany({ _id: { $in: notifications } }, { $set: { seen: true } })
+            logger.info(`[${moduleName}] updating notifications... Done`);
+            return resInfo;
+        }
     } catch (err) {
         logger.error(`[${moduleName}] updating notifications error: `, err);
         throw err;

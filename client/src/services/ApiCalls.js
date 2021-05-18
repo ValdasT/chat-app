@@ -58,6 +58,13 @@ const updateSeenNotifications = async (notifications) => {
     return await performCall('POST', `/users/update-seen-notifications`, body)
 };
 
+const updateClickedNotification = async (notification) => {
+    const body = JSON.stringify({
+        notification: notification,
+    })
+    return await performCall('POST', `/users/update-clicked-notification`, body)
+};
+
 const getFriends = async (user) => {
     const body = JSON.stringify({
         user: user
@@ -170,6 +177,7 @@ export {
     getButtonStatus,
     unfriend,
     getAllNotifications,
-    updateSeenNotifications
+    updateSeenNotifications,
+    updateClickedNotification
 }
 
