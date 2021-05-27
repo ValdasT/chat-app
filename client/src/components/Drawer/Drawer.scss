@@ -1,13 +1,44 @@
 @import "../../styles/Collors.scss";
 
-.drawerBox {
+.drawer-box {
   height: 90vh;
-  // padding-bottom: 60px;
   word-break: keep-all;
   border-radius: 0px 20px 20px 0px;
   background-color: $base-white;
   box-shadow: 5px 0px 5px -4px rgba(0, 0, 0, 0.25);
-  // overflow-y: auto;
+  .expand-button {
+    float: right;
+    font-size: 15px;
+    padding: 3px;
+    margin: 2px 3px;
+    text-align: center;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background-color: $sub-color-light;
+    color: $white-text;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $primary-light;
+    }
+
+    .open-button {
+      @include transform(rotate(180deg));
+      transition-duration: 0.5s;
+      margin-right: 2px;
+    }
+
+    .close-button {
+      transition-duration: 0.5s;
+    }
+  }
+  .drawer-body {
+    display: inline-block;
+    height: 80vh;
+    overflow-y: scroll;
+    width: 100%;
+  }
 }
 
 @include keyframes(slide-in) {
@@ -46,16 +77,6 @@
   }
 }
 
-.open-button {
-  @include transform(rotate(180deg));
-  transition-duration: 0.5s;
-  margin-right: 2px;
-}
-
-.close-button {
-  transition-duration: 0.5s;
-}
-
 .open-drawer {
   @include animation("slide-in 0.3s ease-in forwards");
 }
@@ -67,24 +88,6 @@
 @media (max-width: 40em) {
   .open-drawer {
     @include animation("slide-in-mobile 0.2s ease-in forwards");
-  }
-}
-
-.expand-button {
-  float: right;
-  font-size: 15px;
-  padding: 3px;
-  margin: 2px 3px;
-  text-align: center;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  background-color: $sub-color-light;
-  color: $white-text;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $primary-light;
   }
 }
 

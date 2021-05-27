@@ -17,14 +17,13 @@ const init = (server) => {
         socket.on('join', (options, callback) => {
 
             const { error, users } = addUser({ id: socket.id, ...options })
-
             if (error) {
                 console.log(error)
                 callback(error)
             }
-
             if (options && options.rooms) {
                 options.rooms.forEach(room => {
+                    console.log(room)
                     socket.join(room)
                     // socket.emit('message', generateMessage(user.username, 'Welcome!'))
                     // socket.broadcast.to(user.room).emit('message', generateMessage(user.username, `${user.username} has joined!`))
@@ -38,6 +37,18 @@ const init = (server) => {
                 socket.join(options.username)
             }
 
+            callback()
+        })
+
+        socket.on('joinNewChat', (options, callback) => {
+            const { error, users } = addUser({ id: socket.id, ...options })
+            if (error) {
+                console.log(error)
+                callback(error)
+            }
+            if (options && options.rooms) {
+                socket.join(options.rooms[0])
+            }
             callback()
         })
 
@@ -63,10 +74,10 @@ const init = (server) => {
             callback()
         })
 
-        socket.on('sendNotification', ({ user, notification }, callback) => {
+        socket.on('sendNotification', ({ user, notification, newChat }, callback) => {
             const userRoomInfo = getUser(undefined, notification.notifiee)
             if (userRoomInfo) {
-                socket.broadcast.to(userRoomInfo.room).emit('newNotification', { notification })
+                socket.broadcast.to(userRoomInfo.room).emit('newNotification', { notification }, newChat, notification.notifiee)
             }
             callback()
         })
@@ -90,6 +101,10 @@ const init = (server) => {
             }
         })
 
+        socket.on('disconnectUser', () => {
+            removeUsers(socket.id)
+        })
+
         const addUser = ({ id, username, rooms }) => {
             // Clean the data
             username = username.trim().toLowerCase()
@@ -106,7 +121,6 @@ const init = (server) => {
                     room = room.trim().toLowerCase()
                     let user = { id, username, room }
                     users.push(user)
-
                 })
             }
 

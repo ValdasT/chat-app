@@ -354,7 +354,7 @@ const acceptRequest = async data => {
         });
         chat.users.push(creator)
         chat.users.push(user)
-        await chat.save();
+        let newChat = await chat.save();
         creator.chats.push(chat);
         user.chats.push(chat);
         creator.friends.push(friend);
@@ -366,7 +366,8 @@ const acceptRequest = async data => {
         let response = {
             user: user,
             buttonStatus: await getButtonStatus({ friendDoc: friendDoc, currentUser: currentUser }),
-            notification: newNotification
+            notification: newNotification,
+            newChat: newChat
         }
         return response;
     } catch (err) {

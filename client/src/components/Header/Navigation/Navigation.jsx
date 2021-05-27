@@ -1,6 +1,7 @@
 import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useAuth } from "../../../context/AuthContext"
+import useSockets from "../../UseSockets/UseSockets";
 import RoundButton from '../../CustomButtons/RoundButton/Roundbutton'
 import { AiOutlineUser } from 'react-icons/ai'
 import { GiExitDoor } from 'react-icons/gi'
@@ -10,12 +11,14 @@ import './Navigation.scss'
 
 const Navigation = ({ setShowDropdown }) => {
     const { currentUser, logOut } = useAuth()
+    const { disconectUser } = useSockets();
     const history = useHistory()
     const location = useLocation();
 
     const handleLogout = async () => {
         try {
             await logOut()
+            await disconectUser()
             history.push("/login")
         } catch (err) {
             console.log(err);

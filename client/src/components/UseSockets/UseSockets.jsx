@@ -8,6 +8,7 @@ const useSockets = () => {
     const [notificationFromSocket, setNotificationFromSocket] = useState({});
     const [userTypingFromSocket, setUserTypingFromSocket] = useState(false);
     const [userTypingMessage, setUserTypingMessage] = useState([]);
+    const [newChatFromSocket, setNewChatFromSocket] = useState({});
     let friendTyping = []
 
     useEffect(() => {
@@ -32,9 +33,15 @@ const useSockets = () => {
     useEffect(() => {
         // Listens for incoming notification
         let isMounted = true;
-        socket.on('newNotification', (notification) => {
+        socket.on('newNotification', (notification, newChat, currentUserId) => {
             if (isMounted) {
                 setNotificationFromSocket(notification)
+
+                if (newChat) {
+                    setNewChatFromSocket(newChat)
+                    //add new chat in sockets with friend
+                    enterNewChat(currentUserId, [newChat._id])
+                }
             }
         })
         return () => { isMounted = false };
@@ -103,6 +110,32 @@ const useSockets = () => {
         })
     }
 
+    const enterNewChat = (username, rooms) => {
+        return new Promise((resolve, reject) => {
+            socket.emit('joinNewChat', { username, rooms }, (err, res) => {
+                if (err) {
+                    console.log(err)
+                    alert(err)
+                    reject(err)
+                }
+                resolve(res)
+            })
+        })
+    }
+
+    const disconectUser = () => {
+        return new Promise((resolve, reject) => {
+            socket.emit('disconnectUser', (err, res) => {
+                if (err) {
+                    console.log(err)
+                    alert(err)
+                    reject(err)
+                }
+                resolve(res)
+            })
+        })
+    }
+
     const userTyping = async (user, chatRoom) => {
         return new Promise((resolve, reject) => {
             socket.emit('sendUserTyping', { user, chatRoom }, (err, res) => {
@@ -116,9 +149,9 @@ const useSockets = () => {
         })
     }
 
-    const sendNotification = async (user, notification) => {
+    const sendNotification = async (user, notification, newChat) => {
         return new Promise((resolve, reject) => {
-            socket.emit('sendNotification', { user, notification }, (err, res) => {
+            socket.emit('sendNotification', { user, notification, newChat }, (err, res) => {
                 if (err) {
                     console.log(err)
                     alert(err)
@@ -133,12 +166,15 @@ const useSockets = () => {
         messageFromSocket,
         sendMessage,
         enterChats,
+        enterNewChat,
+        disconectUser,
         userTyping,
         userTypingFromSocket,
         setUserTypingFromSocket,
         userTypingMessage,
         sendNotification,
-        notificationFromSocket
+        notificationFromSocket,
+        newChatFromSocket
     };
 };
 

@@ -27,34 +27,32 @@ const Drawer = memo(() => {
     return (
         <Fragment>
             <div className={openDrawer ?
-                'drawerBox open-drawer' :
-                'drawerBox close-drawer'}>
-                <div className='drawerbody'>
-                    <div>
-                        <div onClick={openCloseDrawer} className='expand-button'>
-                            <IoIosArrowForward className={openDrawer ? 'open-button' : 'close-button'} />
-                        </div>
-                        {openDrawer ?
-                            <div>
-                                <FormInputSmall
-                                    style={{ paddingRight: '30px' }}
-                                    type='text'
-                                    name='messageInput'
-                                    value={searchValue}
-                                    onChange={handleChange}
-                                    label='Search'
-                                    button={
-                                        <div onClick={clearField} className='search-button'>
-                                            {searchValue.length ? <VscClose /> : <BiSearchAlt />}
-                                        </div>
-                                    }
-                                />
-                            </div> : null}
+                'drawer-box open-drawer' :
+                'drawer-box close-drawer'}>
+                <div>
+                    <div onClick={openCloseDrawer} className='expand-button'>
+                        <IoIosArrowForward className={openDrawer ? 'open-button' : 'close-button'} />
+                    </div>
+                    {openDrawer ?
                         <div>
-                            <div className='message-groups'>
-                                <MessageGroups openDrawer={openDrawer} searchValue={searchValue} />
-                            </div>
-                        </div>
+                            <FormInputSmall
+                                style={{ paddingRight: '30px' }}
+                                type='text'
+                                name='messageInput'
+                                value={searchValue}
+                                onChange={handleChange}
+                                label='Search'
+                                button={
+                                    <div onClick={clearField} className='search-button'>
+                                        {searchValue.length ? <VscClose /> : <BiSearchAlt />}
+                                    </div>
+                                }
+                            />
+                        </div> : null}
+                </div>
+                <div className='drawer-body'>
+                    <div className='message-groups'>
+                        <MessageGroups openDrawer={openDrawer} searchValue={searchValue} />
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@ const MessageGroups = ({ openDrawer, searchValue }) => {
     const [chatsAndMessages, setChatsAndMessages] = useState([])
     const [searchResults, setSearchResults] = useState([])
     const [userMessages, setUserMessages] = useState('')
-    const { messageFromSocket } = useSockets();
+    const { messageFromSocket, newChatFromSocket } = useSockets();
 
     useEffect(() => {
         (async () => {
@@ -42,6 +42,34 @@ const MessageGroups = ({ openDrawer, searchValue }) => {
         })()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser])
+
+    useEffect(() => {
+        if (Object.keys(newChatFromSocket).length !== 0) {
+            let userWithOutCurrentUser = []
+            newChatFromSocket.users.forEach(user => {
+                if (user._id.toString() !== currentUser._id.toString()) {
+                    userWithOutCurrentUser.push({
+                        _id: user._id,
+                        email: user.email,
+                        name: user.name,
+                        surname: user.surname,
+                        picColor: user.picColor
+                    })
+                }
+            })
+            let chat = {
+                _id: newChatFromSocket._id,
+                users: userWithOutCurrentUser,
+                message: {
+                    message: '',
+                    createdAt: '0'
+                },
+                createdAt: newChatFromSocket.createdAt
+            }
+            setSearchResults([chat, ...searchResults])
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newChatFromSocket])
 
     useEffect(() => {
         if (messageFromSocket && messageFromSocket.user) {

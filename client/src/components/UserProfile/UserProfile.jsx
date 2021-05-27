@@ -11,7 +11,7 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal }) => {
     const [loadingButton, setLoadingButton] = useState(false)
     const [buttonStatus, setButtonStatus] = useState('none')
 
-    const { sendNotification } = useSockets();
+    const { sendNotification, enterNewChat } = useSockets();
 
     const sendFriendRequest = async () => {
         try {
@@ -30,7 +30,9 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal }) => {
         try {
             setLoadingButton(true)
             let res = await acceptRequest(userInfo, currentUser)
-            sendNotification(currentUser, res.notification)
+            setUserInfo(res.user)
+            enterNewChat(currentUser._id, [res.newChat._id])
+            sendNotification(currentUser, res.notification, res.newChat)
             setButtonStatus(res.buttonStatus)
             setLoadingButton(false)
         } catch (err) {
