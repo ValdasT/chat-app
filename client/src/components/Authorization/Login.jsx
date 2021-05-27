@@ -87,7 +87,10 @@ const LogIn = ({ setForm }) => {
                     <CustomButton type='submit'> Sign in </CustomButton>
                 </div>
             </form>
-            <div onClick={setForm}>Don't have an account? Sign up now</div>
+            <div onClick={setForm} className='more-login-options'>
+                <div style={{ paddingRight: "10px" }}>Don't have an account?</div>
+                <CustomButton inverted={true}> Sign up </CustomButton>
+            </div>
         </div>
     )
 }

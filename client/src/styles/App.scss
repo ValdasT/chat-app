@@ -107,6 +107,12 @@ body.dark-mode {
       background-color: $primary-dark-darker;
       box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
     }
+
+    &.inverted {
+      background-color:white !important;
+      color: black !important;
+    }
+
     &:disabled {
       background-color: #666666;
       color: #bbbbbb;
