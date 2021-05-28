@@ -1,10 +1,9 @@
 @import "../../styles/Collors.scss";
 
 .drawer-box {
-  height: 90vh;
   word-break: keep-all;
-  border-radius: 0px 20px 20px 0px;
   background-color: $base-white;
+  border-radius: 0 10px 10px 0;
   box-shadow: 5px 0px 5px -4px rgba(0, 0, 0, 0.25);
   .expand-button {
     float: right;
@@ -34,10 +33,17 @@
     }
   }
   .drawer-body {
-    display: inline-block;
-    height: 80vh;
+    height: calc(90vh - 110px);
+    padding-bottom: 100px;
     overflow-y: scroll;
     width: 100%;
+  }
+
+  @media (max-width: 40em) {
+    .drawer-body {
+      height: calc(85vh - 100px);
+      padding-bottom: 90px;
+    }
   }
 }
 

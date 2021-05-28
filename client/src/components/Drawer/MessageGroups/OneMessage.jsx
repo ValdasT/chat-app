@@ -24,8 +24,8 @@ const OneMessage = ({ chat, openDrawer, currentUser, openMessage }) => {
                         <div style={{ background: chat.users[0].picColor }} className='message-picture'>{firstLetters(chat.users[0])}</div>
                     </div>
                     <div className='chat-info'>
-                        <div className='message-name'>{`${chat.users[0].name} ${chat.users[0].surname ? chat.users[0].surname : ''}`}</div>
-                        <div className='last-message'>{shortMessage(chat.message)}</div>
+                        <div className={`${chat.message.message.length ? '' : 'no-message'} message-name`}>{`${chat.users[0].name} ${chat.users[0].surname ? chat.users[0].surname : ''}`}</div>
+                       <div className='last-message'>{shortMessage(chat.message)}</div>
                     </div>
                 </div>}
         </div>

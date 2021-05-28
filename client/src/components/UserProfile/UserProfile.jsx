@@ -31,8 +31,12 @@ const UserProfile = ({ userInfo, setUserInfo, currentUser, showModal }) => {
             setLoadingButton(true)
             let res = await acceptRequest(userInfo, currentUser)
             setUserInfo(res.user)
-            enterNewChat(currentUser._id, [res.newChat._id])
-            sendNotification(currentUser, res.notification, res.newChat)
+            if (Object.keys(res.newChat).length !== 0) {
+                enterNewChat(currentUser._id, [res.newChat._id])
+                sendNotification(currentUser, res.notification, res.newChat)
+            } else {
+                sendNotification(currentUser, res.notification)
+            }
             setButtonStatus(res.buttonStatus)
             setLoadingButton(false)
         } catch (err) {

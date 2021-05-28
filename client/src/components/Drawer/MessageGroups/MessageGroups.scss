@@ -29,9 +29,9 @@
 .all-friends {
   .one-message {
     display: flex;
-    padding: 5px;
+    padding: 6px 5px;
     .picture-space {
-      width: 40px;
+      margin-top: 5px;
       .message-picture {
         margin: 0 5px;
         animation: scale-in-picture 0.2s both;
@@ -50,7 +50,10 @@
       display: block;
       animation: text-focus-in 0.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
       .message-name {
-        font-size: 12px;
+        font-size: 14px;
+      }
+      .no-message {
+        margin-top: 8px;
       }
 
       .last-message {

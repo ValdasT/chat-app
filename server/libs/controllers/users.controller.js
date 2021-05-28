@@ -349,14 +349,20 @@ const acceptRequest = async data => {
             picColor: currentUser.picColor
         }
 
-        const chat = new Chat({
-            createdAt: new Date().getTime(),
-        });
-        chat.users.push(creator)
-        chat.users.push(user)
-        let newChat = await chat.save();
-        creator.chats.push(chat);
-        user.chats.push(chat);
+        let oldChat = await Chat.find({ users: { $all: [friendDoc._id, currentUser._id] }, chatType: { $in: 'FRIENDS' } })
+        let newChat = {}
+        if (!oldChat.length) {
+            const chat = new Chat({
+                createdAt: new Date().getTime(),
+                chatType: 'FRIENDS'
+            });
+            chat.users.push(creator)
+            chat.users.push(user)
+            newChat = await chat.save();
+            creator.chats.push(chat);
+            user.chats.push(chat);
+        }
+
         creator.friends.push(friend);
         user.friends.push(friend);
         creator.invites.pull(currentInvite._id);

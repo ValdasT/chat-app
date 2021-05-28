@@ -10,6 +10,10 @@ const chatSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     }],
+    chatType: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: String,
         required: true
