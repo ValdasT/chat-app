@@ -2,7 +2,7 @@
 ## Usage
 [Chat-App.webm](https://user-images.githubusercontent.com/35199948/191189036-827d18ec-21e1-4b5c-8354-c578b4d6e8d3.webm)
 
--Live chat application.
+- Live chat application.
 React was used to develop the front end of this application, while Node.js was used to create the back end. This project also uses the MongoDB database for its data. To enable real-time, bi-directional communication between web clients and servers Socket.IO event-driven library has been used.
 
 ## Start project localy
